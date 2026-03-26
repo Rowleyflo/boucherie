@@ -1,0 +1,17 @@
+---
+export interface Props {
+  text: string;
+  align?: 'left' | 'center' | 'right';
+  color?: 'muted' | 'rouge';
+}
+const { text, align = 'left', color = 'muted' } = Astro.props;
+---
+
+<p class:list={[
+  'section-label',
+  align === 'center' && 'text-center',
+  align === 'right' && 'text-right',
+  color === 'rouge' ? 'text-rouge-600' : 'text-cream-500',
+]}>
+  {text}
+</p>

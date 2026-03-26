@@ -1,0 +1,368 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { contact } from '../data/contact';
+import { getCollection } from 'astro:content';
+import MenuCard from '../components/MenuCard.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/products';
+
+const featuredMenus = (await getCollection('menus'))
+  .filter(m => m.data.featured)
+  .sort((a, b) => a.data.pricePerPerson - b.data.pricePerPerson);
+
+const featuredProducts = products.filter(p => p.featured);
+---
+
+<Layout
+  title="Chez Guillaume — Boucherie Artisanale à Montbeton (82)"
+  description="Boucherie artisanale Chez Guillaume à Montbeton. Viandes fraîches de producteurs locaux, charcuteries maison, et traiteur pour vos événements. Ouvert du mardi au dimanche."
+>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- HERO — 3 panneaux style Haverick Meats           -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <section class="relative min-h-screen flex flex-col overflow-hidden">
+
+    <!-- Background : photo plein-écran avec overlay -->
+    <div class="absolute inset-0 z-0">
+      <!-- Image de fond (à remplacer par une vraie photo) -->
+      <div
+        class="absolute inset-0 bg-dark-950"
+        style="background-image: url('/images/hero-boucherie.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;"
+      ></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-dark-950/80 via-dark-950/50 to-dark-950/90"></div>
+    </div>
+
+    <!-- Contenu hero -->
+    <div class="relative z-10 flex-1 flex flex-col">
+
+      <!-- Spacer pour la nav -->
+      <div class="h-20"></div>
+
+      <!-- Panneaux 3 colonnes -->
+      <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 max-w-7xl mx-auto w-full px-0 lg:px-0">
+
+        <!-- Panneau GAUCHE — Boucherie -->
+        <div class="dark-card lg:border-r lg:border-r-dark-600 p-10 lg:p-12 flex flex-col justify-between min-h-[60vh] lg:min-h-0">
+          <div>
+            <!-- Icône cuisine -->
+            <div class="w-12 h-12 flex items-center justify-center border border-dark-500 text-cream-500 mb-8">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+
+            <p class="section-label text-cream-400 mb-6">Boucherie</p>
+
+            <h2 class="font-serif text-cream-200 text-lg font-normal leading-loose uppercase tracking-ultra mb-8">
+              Découvrez<br />notre sélection<br />de viandes<br />fraîches
+            </h2>
+
+            <p class="text-cream-500 text-sm leading-relaxed max-w-xs">
+              Viandes de qualité issues d'éleveurs locaux, découpées et préparées artisanalement chaque matin.
+            </p>
+          </div>
+
+          <a href="/boucherie" class="link-serif flex items-center gap-2 mt-8">
+            Voir nos produits
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Panneau CENTRE — Hero principal -->
+        <div class="relative flex flex-col items-center justify-between py-12 px-8 lg:px-12 text-center min-h-[70vh] lg:min-h-0"
+             style="background: rgba(10,10,10,0.7);">
+
+          <div class="w-full">
+            <p class="section-label text-cream-500 mb-6">
+              L'histoire de chez nous ·
+              <span class="text-cream-600">Boucherie Artisanale</span>
+            </p>
+
+            <!-- Titre hero italique — style Haverick -->
+            <h1 class="font-serif italic font-medium text-cream-50 leading-none mb-2" style="font-size: clamp(3.5rem, 8vw, 7rem);">
+              Chez
+            </h1>
+            <h1 class="font-serif italic font-medium text-cream-50 leading-none mb-6" style="font-size: clamp(3.5rem, 8vw, 7rem);">
+              Guillaume
+            </h1>
+
+            <!-- Image centrale (badge/produit) -->
+            <div class="relative mx-auto w-40 h-40 lg:w-56 lg:h-56 my-6">
+              <div
+                class="w-full h-full rounded-full overflow-hidden border-2 border-dark-600"
+                style="background-image: url('/images/viande-coupe.jpg'); background-size: cover; background-position: center; background-color: #1a1a1a;"
+              ></div>
+              <!-- Badge qualité -->
+              <div class="absolute -bottom-2 -right-2 w-14 h-14 bg-rouge-600 rounded-full flex items-center justify-center border-2 border-dark-950">
+                <span class="font-serif text-cream-100 text-xs italic leading-none text-center">
+                  Artisan<br />82
+                </span>
+              </div>
+            </div>
+
+            <p class="section-label text-cream-500 mt-6 mb-2">
+              Boucher · Charcutier · Traiteur
+            </p>
+            <p class="text-cream-400 text-sm">496 Route de Montauban — Montbeton</p>
+          </div>
+
+          <!-- Scroll indicator -->
+          <div class="flex flex-col items-center gap-2 text-cream-600 mt-8">
+            <p class="section-label" style="font-size: 0.55rem;">Découvrir</p>
+            <div class="w-px h-8 bg-gradient-to-b from-cream-600 to-transparent animate-pulse"></div>
+          </div>
+        </div>
+
+        <!-- Panneau DROIT — Traiteur -->
+        <div class="dark-card lg:border-l lg:border-l-dark-600 p-10 lg:p-12 flex flex-col justify-between min-h-[60vh] lg:min-h-0">
+          <div>
+            <!-- Icône traiteur -->
+            <div class="w-12 h-12 flex items-center justify-center border border-dark-500 text-cream-500 mb-8">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+              </svg>
+            </div>
+
+            <p class="section-label text-cream-400 mb-6">Traiteur</p>
+
+            <h2 class="font-serif text-cream-200 text-lg font-normal leading-loose uppercase tracking-ultra mb-8">
+              Réservez<br />votre événement<br />sur mesure
+            </h2>
+
+            <p class="text-cream-500 text-sm leading-relaxed max-w-xs">
+              Brazéro, cocktail dînatoire, repas assis — nous organisons vos événements avec les meilleurs produits de la boucherie.
+            </p>
+          </div>
+
+          <a href="/traiteur" class="link-serif flex items-center gap-2 mt-8">
+            Nos formules
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- NOTRE HISTOIRE — section texte éditoriale       -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <section class="bg-dark-900 py-24 lg:py-36">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="section-label text-cream-500 mb-6">Notre Métier</p>
+      <h2 class="font-serif italic text-cream-100 mb-8 leading-tight" style="font-size: clamp(2.5rem, 5vw, 4rem);">
+        Le goût du travail<br />bien fait
+      </h2>
+      <div class="divider mx-auto"></div>
+      <p class="text-cream-400 text-base lg:text-lg leading-relaxed mb-6 max-w-2xl mx-auto">
+        Chez Guillaume, chaque matin nous sélectionnons les meilleures pièces chez nos producteurs locaux pour vous proposer une viande fraîche, traçable et découpée selon vos envies.
+      </p>
+      <p class="text-cream-500 text-base leading-relaxed max-w-2xl mx-auto">
+        Notre boucherie perpétue le savoir-faire artisanal dans le respect des traditions. Pas de compromis sur la qualité — seulement des produits que nous serions fiers de servir à notre propre table.
+      </p>
+
+      <a href="/a-propos" class="btn-outline mt-12">
+        Notre histoire
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- PRODUITS EN VEDETTE — deux colonnes             -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <section class="bg-dark-800 py-24 lg:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 mb-14">
+        <div>
+          <p class="section-label text-cream-500 mb-3">Nos Spécialités</p>
+          <h2 class="font-serif italic text-cream-100" style="font-size: clamp(2rem, 4vw, 3rem);">
+            À la boucherie
+          </h2>
+        </div>
+        <a href="/boucherie" class="link-serif flex items-center gap-2 flex-shrink-0">
+          Voir tout notre catalogue →
+        </a>
+      </div>
+
+      <!-- Style "scroll horizontal" avec image et texte côte à côte -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
+
+        <!-- Image grande -->
+        <div class="lg:col-span-3 relative overflow-hidden min-h-[320px] lg:min-h-[440px]"
+             style="background-color: #1a1a1a; background-image: url('/images/viande-boeuf.jpg'); background-size: cover; background-position: center;">
+          <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 via-transparent to-transparent"></div>
+          <div class="absolute bottom-8 left-8">
+            <p class="section-label text-cream-400 mb-2">Sélection du boucher</p>
+            <h3 class="font-serif italic text-cream-100 text-3xl">Bœuf local</h3>
+          </div>
+        </div>
+
+        <!-- Cartes produits -->
+        <div class="lg:col-span-2 flex flex-col gap-4">
+          {featuredProducts.slice(0, 3).map(p => (
+            <ProductCard
+              name={p.name}
+              description={p.description}
+              category={p.category === 'boucherie' ? 'Boucherie' : 'Charcuterie'}
+            />
+          ))}
+        </div>
+      </div>
+
+      <!-- Deuxième rangée -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div class="lg:col-span-2 flex flex-col gap-4">
+          {featuredProducts.slice(3).map(p => (
+            <ProductCard
+              name={p.name}
+              description={p.description}
+            />
+          ))}
+          <a href="/charcuterie" class="dark-card p-6 flex items-center justify-between group hover:border-rouge-600/40 transition-colors">
+            <span class="section-label text-cream-500 group-hover:text-cream-300">Voir notre charcuterie</span>
+            <svg class="w-4 h-4 text-cream-600 group-hover:text-rouge-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Image droite -->
+        <div class="lg:col-span-3 relative overflow-hidden min-h-[280px]"
+             style="background-color: #1c1414; background-image: url('/images/charcuterie.jpg'); background-size: cover; background-position: center;">
+          <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 via-transparent to-transparent"></div>
+          <div class="absolute bottom-8 right-8 text-right">
+            <p class="section-label text-cream-400 mb-2">Préparations maison</p>
+            <h3 class="font-serif italic text-cream-100 text-3xl">Charcuterie</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- TRAITEUR — Menus en vedette                     -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <section class="relative py-24 lg:py-36 overflow-hidden">
+    <!-- Background photo -->
+    <div class="absolute inset-0 z-0"
+         style="background-color: #0a0a0a; background-image: url('/images/traiteur-brazero.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
+      <div class="absolute inset-0 bg-dark-950/85"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <p class="section-label text-rouge-600 mb-4">Service Traiteur</p>
+        <h2 class="font-serif italic text-cream-100 mb-4" style="font-size: clamp(2.5rem, 5vw, 4rem);">
+          Vos événements,<br />notre expertise
+        </h2>
+        <div class="divider mx-auto"></div>
+        <p class="text-cream-400 max-w-xl mx-auto mt-4">
+          Du brazéro en plein air au cocktail dînatoire élégant — Guillaume s'occupe de tout pour que vous profitiez pleinement de votre événement.
+        </p>
+      </div>
+
+      <!-- Cartes menus -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {featuredMenus.map(m => (
+          <MenuCard
+            title={m.data.title}
+            tag={m.data.tag}
+            description={m.data.description}
+            pricePerPerson={m.data.pricePerPerson}
+            minPeople={m.data.minPeople}
+            slug={m.slug}
+            featured={m.data.featured}
+          />
+        ))}
+
+        <!-- Carte "Sur mesure" -->
+        <div class="dark-card ring-1 ring-rouge-600/30 p-8 flex flex-col justify-between">
+          <div>
+            <div class="absolute top-0 left-0 right-0 h-px bg-rouge-600"></div>
+            <p class="section-label text-rouge-600 mb-4">Sur Mesure</p>
+            <h3 class="font-serif text-2xl italic text-cream-100 mb-4">
+              Votre menu créé ensemble
+            </h3>
+            <p class="text-cream-500 text-sm leading-relaxed">
+              Un projet particulier ? Composez votre menu sur mesure — choix des entrées, plats, desserts, nombre de convives — et recevez un devis personnalisé.
+            </p>
+          </div>
+          <a href="/traiteur/sur-mesure" class="btn-rouge mt-8 justify-center text-[10px]">
+            Composer mon menu
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <a href="/traiteur" class="btn-outline">
+          Tous nos menus traiteur
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- CTA PANNEAUX — style bas de page Haverick       -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 z-0"
+         style="background-color: #111; background-image: url('/images/boucherie-ambiance.jpg'); background-size: cover; background-position: center; opacity: 0.4;">
+    </div>
+    <div class="absolute inset-0 z-0 bg-dark-900/80"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Panneau boucherie -->
+      <div class="dark-card p-10 text-center flex flex-col items-center">
+        <div class="w-14 h-14 flex items-center justify-center border border-dark-500 text-cream-500 mb-6">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+        <p class="section-label text-cream-400 mb-4">Boucherie & Charcuterie</p>
+        <h3 class="font-serif text-cream-200 text-base font-normal leading-loose uppercase tracking-ultra mb-6">
+          Découvrez quelles<br />variétés vous<br />pouvez commander
+        </h3>
+        <a href="/boucherie" class="link-serif">
+          Nos produits →
+        </a>
+      </div>
+
+      <!-- Panneau traiteur -->
+      <div class="dark-card p-10 text-center flex flex-col items-center">
+        <div class="w-14 h-14 flex items-center justify-center border border-dark-500 text-cream-500 mb-6">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+        </div>
+        <p class="section-label text-cream-400 mb-4">Service Traiteur</p>
+        <h3 class="font-serif text-cream-200 text-base font-normal leading-loose uppercase tracking-ultra mb-6">
+          Réservez votre<br />événement ou<br />commandez en ligne
+        </h3>
+        <a href="/traiteur" class="link-serif">
+          Voir nos menus →
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>

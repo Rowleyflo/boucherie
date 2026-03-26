@@ -1,0 +1,109 @@
+---
+import '../styles/global.css';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import { contact } from '../data/contact';
+import { openingHoursSchema } from '../data/hours';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical = Astro.url.href,
+  ogImage = '/og-default.jpg',
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title.includes('Chez Guillaume')
+  ? title
+  : `${title} | Chez Guillaume — Boucherie Montbeton`;
+
+// Schema.org JSON-LD — LocalBusiness
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': ['LocalBusiness', 'FoodEstablishment'],
+  name: 'Chez Guillaume — Boucherie',
+  description: 'Boucherie artisanale, charcutier et traiteur à Montbeton (82). Viandes fraîches de producteurs locaux, charcuterie maison et prestations traiteur.',
+  url: 'https://boucheriechezguillaume.fr',
+  telephone: '+33563272998',
+  email: 'Chezguillaume82290@gmail.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '496 Route de Montauban',
+    addressLocality: 'Montbeton',
+    postalCode: '82290',
+    addressCountry: 'FR',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 44.0267,
+    longitude: 1.3536,
+  },
+  openingHoursSpecification: [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday','Wednesday','Thursday','Friday','Saturday'], opens: '08:00', closes: '12:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday','Wednesday','Thursday','Friday','Saturday'], opens: '15:30', closes: '19:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Sunday'], opens: '09:00', closes: '12:30' },
+  ],
+  priceRange: '€€',
+  servesCuisine: 'Boucherie, Charcuterie, Traiteur',
+  sameAs: [
+    'https://www.facebook.com/people/Boucherie-Chez-Guillaume/61559543176738/',
+  ],
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Chez Guillaume — Boucherie Montbeton" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Geo / Local SEO -->
+    <meta name="geo.region" content="FR-82" />
+    <meta name="geo.placename" content="Montbeton" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+
+  <body class="bg-dark-900 text-cream-100 font-sans">
+    <Navigation />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

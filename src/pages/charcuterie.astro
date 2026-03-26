@@ -1,0 +1,109 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products, categories } from '../data/products';
+import { contact } from '../data/contact';
+
+const charcuterieProducts = products.filter(p => p.category === 'charcuterie');
+const epicerieProducts    = products.filter(p => p.category === 'epicerie');
+---
+
+<Layout
+  title="Charcuterie & Épicerie Fine"
+  description="Charcuteries artisanales préparées maison chez Guillaume à Montbeton. Saucisses maison, pâtés, terrines, plats cuisinés et épicerie fine. Commandez par téléphone."
+>
+
+  <!-- Hero -->
+  <section class="relative min-h-[55vh] flex items-end overflow-hidden">
+    <div class="absolute inset-0 z-0"
+         style="background-color: #140c0a; background-image: url('/images/charcuterie.jpg'); background-size: cover; background-position: center;">
+      <div class="absolute inset-0 bg-gradient-to-b from-dark-950/60 via-dark-950/30 to-dark-950/95"></div>
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 pb-16 w-full">
+      <p class="section-label text-rouge-600 mb-4">Chez Guillaume</p>
+      <h1 class="font-serif italic text-cream-100 leading-tight mb-4" style="font-size: clamp(2.5rem, 5vw, 5rem);">
+        Charcuterie<br />&amp; Épicerie Fine
+      </h1>
+      <div class="divider"></div>
+      <p class="text-cream-400 max-w-xl text-lg">{categories.charcuterie.description}</p>
+    </div>
+  </section>
+
+
+  <!-- Charcuterie section -->
+  <section class="bg-dark-900 py-20">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+        <div class="lg:col-span-1">
+          <p class="section-label text-cream-500 mb-4">Préparations maison</p>
+          <h2 class="font-serif italic text-cream-100 text-3xl lg:text-4xl mb-4 leading-snug">
+            Charcuterie
+          </h2>
+          <div class="divider"></div>
+          <p class="text-cream-400 leading-relaxed mb-4">
+            Nos saucisses, pâtés et terrines sont préparés chaque jour dans notre laboratoire, selon des recettes transmises et affinées avec soin.
+          </p>
+          <p class="text-cream-500 leading-relaxed text-sm">
+            Nous réalisons également des plateaux de charcuterie sur commande pour vos événements, apéritifs et réceptions.
+          </p>
+        </div>
+
+        <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {charcuterieProducts.map(p => (
+            <ProductCard
+              name={p.name}
+              description={p.description}
+              featured={p.featured}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Épicerie fine -->
+  <section class="bg-dark-800 py-20">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-10">
+        <p class="section-label text-cream-500 mb-3">Notre sélection</p>
+        <h2 class="font-serif italic text-cream-100 text-3xl">Épicerie Fine</h2>
+        <div class="divider mt-4"></div>
+        <p class="text-cream-400 mt-4 max-w-xl">{categories.epicerie.description}</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {epicerieProducts.map(p => (
+          <ProductCard
+            name={p.name}
+            description={p.description}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CTA commande -->
+  <section class="bg-dark-900 py-16 border-t border-dark-700">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <p class="section-label text-cream-500 mb-4">Commande sur mesure</p>
+      <h2 class="font-serif italic text-cream-100 text-3xl mb-4">
+        Plateaux & préparations à la commande
+      </h2>
+      <p class="text-cream-400 max-w-lg mx-auto mb-8">
+        Vous organisez un événement ? Contactez-nous pour un plateau de charcuterie personnalisé, un assortiment fromages-charcuterie, ou des plats cuisinés pour votre réception.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={contact.phone.href} class="btn-rouge">
+          {contact.phone.display}
+        </a>
+        <a href="/contact" class="btn-outline">
+          Formulaire de contact
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>

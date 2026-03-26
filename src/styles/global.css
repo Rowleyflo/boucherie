@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    @apply bg-dark-900 text-cream-100 scroll-smooth;
+    font-size: 16px;
+  }
+
+  body {
+    @apply font-sans antialiased leading-relaxed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif leading-tight;
+  }
+
+  ::selection {
+    @apply bg-rouge-600 text-cream-100;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-rouge-600 outline-offset-2;
+  }
+}
+
+@layer components {
+  /* Label de section — uppercase très espacé, style Haverick */
+  .section-label {
+    @apply text-xs font-sans font-medium tracking-ultra uppercase text-cream-400;
+  }
+
+  /* Titre hero serif italique */
+  .hero-title {
+    @apply font-serif italic font-medium text-cream-100;
+  }
+
+  /* Carte semi-transparente sombre */
+  .dark-card {
+    background: rgba(17, 17, 17, 0.88);
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Bouton CTA rouge */
+  .btn-rouge {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-rouge-600 text-cream-100 text-xs font-sans font-medium tracking-ultra uppercase transition-colors hover:bg-rouge-500 focus-visible:ring-2 focus-visible:ring-rouge-600;
+  }
+
+  /* Bouton outline crème */
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 border border-cream-400 text-cream-300 text-xs font-sans font-medium tracking-ultra uppercase transition-colors hover:border-cream-100 hover:text-cream-100;
+  }
+
+  /* Lien discret en italique (style Haverick "Contact us →") */
+  .link-serif {
+    @apply font-serif italic text-cream-300 hover:text-cream-100 transition-colors text-sm;
+  }
+
+  /* Séparateur décoratif */
+  .divider {
+    @apply w-12 h-px bg-rouge-600 my-6;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Overlay sombre sur images de fond */
+  .bg-overlay::before {
+    content: '';
+    @apply absolute inset-0 bg-dark-900/60 z-0;
+  }
+}
+
+/* Scrollbar custom */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111111;
+}
+::-webkit-scrollbar-thumb {
+  background: #2E2E2E;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C41818;
+}

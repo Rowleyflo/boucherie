@@ -1,0 +1,429 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { contact } from '../../data/contact';
+
+const starters = [
+  'Terrine de campagne maison',
+  'Plateau de charcuteries',
+  'Verrines de tartare de bœuf',
+  'Velouté de légumes',
+  'Salade de gésiers',
+  'Mini-brochettes apéritives',
+];
+
+const mains = [
+  'Entrecôte grillée au brazéro',
+  'Rôti de bœuf basse température',
+  'Gigot d\'agneau aux herbes',
+  'Rôti de veau à la crème',
+  'Brochettes de poulet marinées',
+  'Merguez & chipolatas maison',
+  'Côtes d\'agneau grillées',
+];
+
+const sides = [
+  'Gratin dauphinois',
+  'Pommes de terre sarladaises',
+  'Haricots verts à l\'ail',
+  'Ratatouille provençale',
+  'Salade verte',
+  'Pain artisanal',
+];
+
+const desserts = [
+  'Tarte aux fruits de saison',
+  'Île flottante',
+  'Mousse au chocolat',
+  'Café et mignardises',
+  'Tarte aux pommes maison',
+];
+---
+
+<Layout
+  title="Menu Sur Mesure — Traiteur"
+  description="Composez votre menu traiteur sur mesure chez Guillaume à Montbeton. Choisissez vos entrées, plats, accompagnements et desserts. Devis gratuit et personnalisé."
+>
+
+  <!-- Hero -->
+  <section class="relative min-h-[45vh] flex items-end overflow-hidden">
+    <div class="absolute inset-0 z-0"
+         style="background-color: #0a0808; background-image: url('/images/traiteur-brazero.jpg'); background-size: cover; background-position: center;">
+      <div class="absolute inset-0 bg-dark-950/80"></div>
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 pb-14 w-full">
+      <a href="/traiteur" class="link-serif flex items-center gap-2 mb-6 text-xs">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+        </svg>
+        Retour aux menus
+      </a>
+      <p class="section-label text-rouge-600 mb-3">Exclusif</p>
+      <h1 class="font-serif italic text-cream-100 leading-tight mb-4" style="font-size: clamp(2.5rem, 5vw, 5rem);">
+        Menu Sur Mesure
+      </h1>
+      <div class="divider"></div>
+      <p class="text-cream-400 max-w-xl">
+        Composez votre menu étape par étape. Nous vous rappelons sous 24h avec un devis personnalisé.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- Formulaire multi-étapes Alpine.js -->
+  <section class="bg-dark-900 py-20">
+    <div class="max-w-4xl mx-auto px-6">
+
+      <div
+        x-data="{
+          step: 1,
+          totalSteps: 4,
+          form: {
+            nom: '',
+            telephone: '',
+            email: '',
+            date: '',
+            personnes: '',
+            type_evenement: '',
+            lieu: '',
+            starters: [],
+            mains: [],
+            sides: [],
+            desserts: [],
+            budget: '',
+            message: '',
+          },
+          submitted: false,
+          loading: false,
+          nextStep() { if (this.step < this.totalSteps) this.step++ },
+          prevStep() { if (this.step > 1) this.step-- },
+          async submitForm() {
+            this.loading = true;
+            const formEl = document.getElementById('surMesureForm');
+            const data = new FormData(formEl);
+            // Ajout des sélections checkbox
+            data.append('entrées', this.form.starters.join(', '));
+            data.append('plats', this.form.mains.join(', '));
+            data.append('accompagnements', this.form.sides.join(', '));
+            data.append('desserts', this.form.desserts.join(', '));
+            try {
+              const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data });
+              if (res.ok) { this.submitted = true; }
+            } catch(e) { console.error(e); }
+            this.loading = false;
+          }
+        }"
+      >
+
+        <!-- Progress bar -->
+        <div class="mb-10">
+          <div class="flex items-center justify-between mb-3">
+            <span class="section-label text-cream-600">Étape <span x-text="step"></span> sur <span x-text="totalSteps"></span></span>
+            <span class="section-label text-cream-600" x-text="['Votre événement', 'Vos plats', 'Vos coordonnées', 'Récapitulatif'][step-1]"></span>
+          </div>
+          <div class="h-px bg-dark-600 relative">
+            <div class="h-px bg-rouge-600 transition-all duration-500" :style="`width: ${(step/totalSteps)*100}%`"></div>
+          </div>
+        </div>
+
+
+        <!-- Formulaire caché pour Web3Forms -->
+        <form id="surMesureForm">
+          <input type="hidden" name="access_key" value={contact.web3forms.accessKey} />
+          <input type="hidden" name="subject" value="Commande Menu Sur Mesure — Chez Guillaume" />
+          <input type="hidden" name="from_name" value="Site Chez Guillaume" />
+          <input type="hidden" name="type" value="menu-sur-mesure" />
+          <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
+
+          <!-- ÉTAPE 1 : Événement -->
+          <div x-show="step === 1" x-transition>
+            <div class="dark-card p-8 mb-6">
+              <p class="section-label text-rouge-600 mb-2">Étape 1</p>
+              <h2 class="font-serif italic text-cream-100 text-2xl mb-6">Votre événement</h2>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label class="section-label text-cream-600 block mb-1.5">Date de l'événement *</label>
+                  <input type="date" name="date" x-model="form.date" required
+                    class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors" />
+                </div>
+                <div>
+                  <label class="section-label text-cream-600 block mb-1.5">Nombre de personnes *</label>
+                  <input type="number" name="personnes_total" x-model="form.personnes" min="10" required
+                    class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors placeholder:text-cream-600"
+                    placeholder="Min. 10" />
+                </div>
+                <div>
+                  <label class="section-label text-cream-600 block mb-1.5">Type d'événement</label>
+                  <select name="type_evenement" x-model="form.type_evenement"
+                    class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors">
+                    <option value="">Sélectionner...</option>
+                    <option>Mariage</option>
+                    <option>Anniversaire</option>
+                    <option>Entreprise</option>
+                    <option>Fête de famille</option>
+                    <option>Repas associatif</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="section-label text-cream-600 block mb-1.5">Lieu</label>
+                  <input type="text" name="lieu" x-model="form.lieu"
+                    class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors placeholder:text-cream-600"
+                    placeholder="Ville, salle..." />
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="section-label text-cream-600 block mb-1.5">Budget indicatif (€/personne)</label>
+                  <select name="budget" x-model="form.budget"
+                    class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors">
+                    <option value="">Pas de contrainte</option>
+                    <option value="15-20">15 – 20 €</option>
+                    <option value="20-30">20 – 30 €</option>
+                    <option value="30-40">30 – 40 €</option>
+                    <option value="40+">40 € et plus</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <button type="button" @click="nextStep()" class="btn-rouge" :disabled="!form.date || !form.personnes">
+                Étape suivante →
+              </button>
+            </div>
+          </div>
+
+
+          <!-- ÉTAPE 2 : Composition du menu -->
+          <div x-show="step === 2" x-transition>
+            <div class="dark-card p-8 mb-6 space-y-8">
+              <div>
+                <p class="section-label text-rouge-600 mb-2">Étape 2</p>
+                <h2 class="font-serif italic text-cream-100 text-2xl mb-2">Composez votre menu</h2>
+                <p class="text-cream-500 text-sm">Sélectionnez autant d'items que vous souhaitez dans chaque catégorie.</p>
+              </div>
+
+              <!-- Entrées -->
+              <div>
+                <p class="section-label text-cream-400 mb-3">Entrées</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {starters.map(item => (
+                    <label class="flex items-center gap-3 p-3 border border-dark-500 cursor-pointer transition-colors hover:border-dark-400"
+                           :class="form.starters.includes(`${item}`) ? 'border-rouge-600/60 bg-rouge-600/10' : ''">
+                      <input type="checkbox" :value="`${item}`" x-model="form.starters" class="sr-only" />
+                      <span class="w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors"
+                            :class="form.starters.includes(`${item}`) ? 'border-rouge-600 bg-rouge-600' : 'border-dark-400'">
+                        <svg x-show="form.starters.includes(`${item}`)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                      </span>
+                      <span class="text-cream-300 text-sm">{item}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Plats -->
+              <div>
+                <p class="section-label text-cream-400 mb-3">Plats principaux</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {mains.map(item => (
+                    <label class="flex items-center gap-3 p-3 border border-dark-500 cursor-pointer transition-colors hover:border-dark-400"
+                           :class="form.mains.includes(`${item}`) ? 'border-rouge-600/60 bg-rouge-600/10' : ''">
+                      <input type="checkbox" :value="`${item}`" x-model="form.mains" class="sr-only" />
+                      <span class="w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors"
+                            :class="form.mains.includes(`${item}`) ? 'border-rouge-600 bg-rouge-600' : 'border-dark-400'">
+                        <svg x-show="form.mains.includes(`${item}`)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                      </span>
+                      <span class="text-cream-300 text-sm">{item}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Accompagnements -->
+              <div>
+                <p class="section-label text-cream-400 mb-3">Accompagnements</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {sides.map(item => (
+                    <label class="flex items-center gap-3 p-3 border border-dark-500 cursor-pointer transition-colors hover:border-dark-400"
+                           :class="form.sides.includes(`${item}`) ? 'border-rouge-600/60 bg-rouge-600/10' : ''">
+                      <input type="checkbox" :value="`${item}`" x-model="form.sides" class="sr-only" />
+                      <span class="w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors"
+                            :class="form.sides.includes(`${item}`) ? 'border-rouge-600 bg-rouge-600' : 'border-dark-400'">
+                        <svg x-show="form.sides.includes(`${item}`)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                      </span>
+                      <span class="text-cream-300 text-sm">{item}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Desserts -->
+              <div>
+                <p class="section-label text-cream-400 mb-3">Desserts</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {desserts.map(item => (
+                    <label class="flex items-center gap-3 p-3 border border-dark-500 cursor-pointer transition-colors hover:border-dark-400"
+                           :class="form.desserts.includes(`${item}`) ? 'border-rouge-600/60 bg-rouge-600/10' : ''">
+                      <input type="checkbox" :value="`${item}`" x-model="form.desserts" class="sr-only" />
+                      <span class="w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors"
+                            :class="form.desserts.includes(`${item}`) ? 'border-rouge-600 bg-rouge-600' : 'border-dark-400'">
+                        <svg x-show="form.desserts.includes(`${item}`)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                      </span>
+                      <span class="text-cream-300 text-sm">{item}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between">
+              <button type="button" @click="prevStep()" class="btn-outline">← Retour</button>
+              <button type="button" @click="nextStep()" class="btn-rouge">Étape suivante →</button>
+            </div>
+          </div>
+
+
+          <!-- ÉTAPE 3 : Coordonnées -->
+          <div x-show="step === 3" x-transition>
+            <div class="dark-card p-8 mb-6">
+              <p class="section-label text-rouge-600 mb-2">Étape 3</p>
+              <h2 class="font-serif italic text-cream-100 text-2xl mb-6">Vos coordonnées</h2>
+
+              <div class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="section-label text-cream-600 block mb-1.5">Nom complet *</label>
+                    <input type="text" name="nom" x-model="form.nom" required
+                      class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors placeholder:text-cream-600"
+                      placeholder="Votre nom" />
+                  </div>
+                  <div>
+                    <label class="section-label text-cream-600 block mb-1.5">Téléphone *</label>
+                    <input type="tel" name="telephone" x-model="form.telephone" required
+                      class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors placeholder:text-cream-600"
+                      placeholder="06 xx xx xx xx" />
+                  </div>
+                </div>
+                <div>
+                  <label class="section-label text-cream-600 block mb-1.5">Email *</label>
+                  <input type="email" name="email" x-model="form.email" required
+                    class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors placeholder:text-cream-600"
+                    placeholder="votre@email.fr" />
+                </div>
+                <div>
+                  <label class="section-label text-cream-600 block mb-1.5">Remarques, allergies, besoins particuliers</label>
+                  <textarea name="message" x-model="form.message" rows="4"
+                    class="w-full bg-dark-700 border border-dark-500 text-cream-100 px-4 py-3 text-sm focus:outline-none focus:border-rouge-600 transition-colors resize-none placeholder:text-cream-600"
+                    placeholder="Allergies, régimes alimentaires, demandes spéciales..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between">
+              <button type="button" @click="prevStep()" class="btn-outline">← Retour</button>
+              <button type="button" @click="nextStep()" class="btn-rouge"
+                :disabled="!form.nom || !form.telephone || !form.email">
+                Récapitulatif →
+              </button>
+            </div>
+          </div>
+
+
+          <!-- ÉTAPE 4 : Récapitulatif -->
+          <div x-show="step === 4" x-transition>
+            <div x-show="!submitted">
+              <div class="dark-card p-8 mb-6 space-y-6">
+                <div>
+                  <p class="section-label text-rouge-600 mb-2">Étape 4</p>
+                  <h2 class="font-serif italic text-cream-100 text-2xl mb-2">Récapitulatif</h2>
+                  <p class="text-cream-500 text-sm">Vérifiez votre commande avant envoi.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p class="section-label text-cream-600 mb-1">Événement</p>
+                    <p class="text-cream-300" x-text="form.type_evenement || 'Non précisé'"></p>
+                  </div>
+                  <div>
+                    <p class="section-label text-cream-600 mb-1">Date</p>
+                    <p class="text-cream-300" x-text="form.date"></p>
+                  </div>
+                  <div>
+                    <p class="section-label text-cream-600 mb-1">Personnes</p>
+                    <p class="text-cream-300" x-text="form.personnes"></p>
+                  </div>
+                  <div>
+                    <p class="section-label text-cream-600 mb-1">Lieu</p>
+                    <p class="text-cream-300" x-text="form.lieu || 'Non précisé'"></p>
+                  </div>
+                </div>
+
+                <div class="border-t border-dark-600 pt-4 space-y-3 text-sm">
+                  <div x-show="form.starters.length > 0">
+                    <p class="section-label text-cream-600 mb-1">Entrées sélectionnées</p>
+                    <p class="text-cream-300" x-text="form.starters.join(', ')"></p>
+                  </div>
+                  <div x-show="form.mains.length > 0">
+                    <p class="section-label text-cream-600 mb-1">Plats sélectionnés</p>
+                    <p class="text-cream-300" x-text="form.mains.join(', ')"></p>
+                  </div>
+                  <div x-show="form.sides.length > 0">
+                    <p class="section-label text-cream-600 mb-1">Accompagnements</p>
+                    <p class="text-cream-300" x-text="form.sides.join(', ')"></p>
+                  </div>
+                  <div x-show="form.desserts.length > 0">
+                    <p class="section-label text-cream-600 mb-1">Desserts</p>
+                    <p class="text-cream-300" x-text="form.desserts.join(', ')"></p>
+                  </div>
+                </div>
+
+                <div class="border-t border-dark-600 pt-4 space-y-2 text-sm">
+                  <div>
+                    <p class="section-label text-cream-600 mb-1">Contact</p>
+                    <p class="text-cream-300" x-text="`${form.nom} — ${form.telephone} — ${form.email}`"></p>
+                  </div>
+                  <div x-show="form.message">
+                    <p class="section-label text-cream-600 mb-1">Notes</p>
+                    <p class="text-cream-400 italic text-xs" x-text="form.message"></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-between">
+                <button type="button" @click="prevStep()" class="btn-outline">← Modifier</button>
+                <button type="button" @click="submitForm()" class="btn-rouge" :disabled="loading">
+                  <span x-show="!loading">Envoyer ma demande</span>
+                  <span x-show="loading">Envoi en cours...</span>
+                  <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Message de confirmation -->
+            <div x-show="submitted" class="dark-card p-12 text-center border-t border-rouge-600">
+              <div class="w-14 h-14 rounded-full bg-rouge-600/20 flex items-center justify-center mx-auto mb-6">
+                <svg class="w-7 h-7 text-rouge-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <h2 class="font-serif italic text-cream-100 text-3xl mb-4">Demande envoyée !</h2>
+              <p class="text-cream-400 mb-2">Merci <span class="text-cream-200" x-text="form.nom"></span>,</p>
+              <p class="text-cream-400 mb-6">Guillaume vous recontacte sous 24h pour affiner votre menu et vous envoyer un devis.</p>
+              <a href="/" class="btn-outline">Retour à l'accueil</a>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </section>
+
+</Layout>

@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Merci — Votre message a été envoyé"
+  description="Votre demande a bien été reçue. Chez Guillaume vous recontacte sous 24h."
+  noindex={true}
+>
+  <section class="min-h-screen flex items-center justify-center bg-dark-900 py-20">
+    <div class="max-w-lg mx-auto px-6 text-center">
+      <div class="w-20 h-20 rounded-full bg-rouge-600/20 flex items-center justify-center mx-auto mb-8">
+        <svg class="w-10 h-10 text-rouge-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <p class="section-label text-rouge-600 mb-4">Message reçu</p>
+      <h1 class="font-serif italic text-cream-100 text-4xl mb-6">Merci !</h1>
+      <div class="divider mx-auto"></div>
+      <p class="text-cream-400 mt-6 mb-4 leading-relaxed">
+        Votre demande a bien été transmise à Guillaume. Vous recevrez une réponse sous 24 à 48 heures.
+      </p>
+      <p class="text-cream-500 text-sm mb-10">
+        Pour toute urgence, appelez directement au <a href="tel:+33563272998" class="text-cream-300 hover:text-rouge-500 transition-colors">05 63 27 29 98</a>.
+      </p>
+      <a href="/" class="btn-outline">Retour à l'accueil</a>
+    </div>
+  </section>
+</Layout>

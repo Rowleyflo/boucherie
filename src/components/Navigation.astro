@@ -1,0 +1,116 @@
+---
+import { contact } from '../data/contact';
+
+const navLinks = [
+  { href: '/boucherie',   label: 'Boucherie' },
+  { href: '/charcuterie', label: 'Charcuterie' },
+  { href: '/traiteur',    label: 'Traiteur' },
+  { href: '/a-propos',    label: 'À Propos' },
+  { href: '/contact',     label: 'Contact' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  id="nav"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+  x-data="{ scrolled: false, open: false }"
+  x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 40)"
+  :class="scrolled ? 'bg-dark-900/95 backdrop-blur-sm border-b border-dark-700' : 'bg-transparent'"
+>
+  <nav class="max-w-7xl mx-auto px-6 flex items-center justify-between h-20">
+
+    <!-- Nav gauche (desktop) -->
+    <ul class="hidden lg:flex items-center gap-8">
+      {navLinks.slice(0, 2).map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              'section-label transition-colors hover:text-cream-100',
+              currentPath.startsWith(link.href) ? 'text-cream-100' : 'text-cream-500'
+            ]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Logo centré -->
+    <a href="/" class="flex-shrink-0 mx-auto lg:mx-0 lg:absolute lg:left-1/2 lg:-translate-x-1/2">
+      <span class="font-serif text-xl font-semibold text-cream-100 tracking-wide">
+        Chez Guillaume
+      </span>
+      <span class="block text-center text-cream-500" style="font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;">
+        Boucherie · Montbeton
+      </span>
+    </a>
+
+    <!-- Nav droite (desktop) -->
+    <ul class="hidden lg:flex items-center gap-8">
+      {navLinks.slice(2).map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              'section-label transition-colors hover:text-cream-100',
+              currentPath.startsWith(link.href) ? 'text-cream-100' : 'text-cream-500'
+            ]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Hamburger mobile -->
+    <button
+      class="lg:hidden text-cream-300 hover:text-cream-100 transition-colors"
+      @click="open = !open"
+      aria-label="Menu"
+    >
+      <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Menu mobile -->
+  <div
+    x-show="open"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 -translate-y-2"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100 translate-y-0"
+    x-transition:leave-end="opacity-0 -translate-y-2"
+    class="lg:hidden bg-dark-900/98 backdrop-blur-sm border-t border-dark-700"
+  >
+    <ul class="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-4">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              'section-label block py-2 transition-colors hover:text-cream-100',
+              currentPath.startsWith(link.href) ? 'text-cream-100' : 'text-cream-500'
+            ]}
+            @click="open = false"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li class="pt-4 border-t border-dark-600">
+        <a href={contact.phone.href} class="section-label text-rouge-600 hover:text-rouge-500">
+          {contact.phone.display}
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>

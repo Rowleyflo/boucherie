@@ -1,0 +1,35 @@
+---
+import { hours } from '../data/hours';
+---
+
+<div class="dark-card p-8">
+  <p class="section-label text-cream-500 mb-6">Horaires d'ouverture</p>
+  <ul class="space-y-3">
+    {hours.map(h => {
+      const isToday = new Date().getDay() === ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'].indexOf(h.day);
+      return (
+        <li class:list={[
+          'flex items-center justify-between text-sm py-2 border-b border-dark-600 last:border-0',
+          isToday && 'text-cream-100 font-medium'
+        ]}>
+          <span class:list={['font-sans', isToday ? 'text-cream-100' : 'text-cream-400']}>
+            {isToday && <span class="inline-block w-1.5 h-1.5 rounded-full bg-rouge-600 mr-2 align-middle"></span>}
+            {h.day}
+          </span>
+          {h.closed
+            ? <span class="text-cream-600 text-xs uppercase tracking-widest">Fermé</span>
+            : <span class:list={['text-right', isToday ? 'text-cream-200' : 'text-cream-400']}>
+                {h.slots!.map((s, i) => (
+                  <span>
+                    {i > 0 && <span class="text-dark-500 mx-1">·</span>}
+                    {s.open}–{s.close}
+                  </span>
+                ))}
+              </span>
+          }
+        </li>
+      );
+    })}
+  </ul>
+  <p class="text-cream-600 text-xs mt-4">* Horaires susceptibles d'être modifiés les jours fériés.</p>
+</div>

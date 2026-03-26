@@ -1,0 +1,60 @@
+---
+export interface Props {
+  title: string;
+  tag: string;
+  description: string;
+  pricePerPerson: number;
+  minPeople: number;
+  slug: string;
+  featured?: boolean;
+}
+const { title, tag, description, pricePerPerson, minPeople, slug, featured = false } = Astro.props;
+---
+
+<article class:list={[
+  'dark-card group relative overflow-hidden flex flex-col transition-all duration-300 hover:border-dark-500',
+  featured && 'ring-1 ring-rouge-600/40',
+]}>
+  {featured && <div class="absolute top-0 left-0 right-0 h-px bg-rouge-600"></div>}
+
+  <div class="p-8 flex flex-col flex-1">
+    <!-- Tag -->
+    <p class="section-label text-rouge-600 mb-4">{tag}</p>
+
+    <!-- Titre -->
+    <h3 class="font-serif text-2xl italic text-cream-100 mb-4 leading-snug">
+      {title}
+    </h3>
+
+    <!-- Description -->
+    <p class="text-cream-500 text-sm leading-relaxed mb-6 flex-1">
+      {description}
+    </p>
+
+    <!-- Divider -->
+    <div class="divider my-0 mb-6"></div>
+
+    <!-- Prix + personnes -->
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <span class="section-label text-cream-600 block mb-1">À partir de</span>
+        <span class="font-serif text-3xl text-cream-100">{pricePerPerson}€</span>
+        <span class="text-cream-500 text-xs"> / pers.</span>
+      </div>
+      <div class="text-right">
+        <span class="section-label text-cream-600 block mb-1">Minimum</span>
+        <span class="text-cream-300 text-sm">{minPeople} personnes</span>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="flex gap-3">
+      <a href={`/traiteur/${slug}`} class="btn-rouge flex-1 justify-center text-[10px]">
+        Voir le menu
+      </a>
+      <a href={`/traiteur/${slug}#reserver`} class="btn-outline flex-1 justify-center text-[10px]">
+        Réserver
+      </a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MenuCard from '../../components/MenuCard.astro';
+import { getCollection } from 'astro:content';
+import { contact } from '../../data/contact';
+
+const allMenus = (await getCollection('menus'))
+  .sort((a, b) => a.data.pricePerPerson - b.data.pricePerPerson);
+---
+
+<Layout
+  title="Traiteur — Menus & Événements sur Mesure"
+  description="Service traiteur Chez Guillaume à Montbeton. Brazéro festif, cocktail dînatoire, repas assis. Réservez votre événement ou composez un menu sur mesure."
+>
+
+  <!-- Hero traiteur -->
+  <section class="relative min-h-[60vh] flex items-end overflow-hidden">
+    <div class="absolute inset-0 z-0"
+         style="background-color: #0a0808; background-image: url('/images/traiteur-brazero.jpg'); background-size: cover; background-position: center;">
+      <div class="absolute inset-0 bg-gradient-to-b from-dark-950/50 via-dark-950/30 to-dark-950/95"></div>
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 pb-16 w-full">
+      <p class="section-label text-rouge-600 mb-4">Chez Guillaume</p>
+      <h1 class="font-serif italic text-cream-100 leading-tight mb-4" style="font-size: clamp(2.5rem, 6vw, 5.5rem);">
+        Service Traiteur
+      </h1>
+      <div class="divider"></div>
+      <p class="text-cream-400 max-w-xl text-lg">
+        Mariages, anniversaires, réceptions d'entreprise — Guillaume s'occupe de votre événement avec les meilleurs produits de la boucherie.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- Intro -->
+  <section class="bg-dark-900 py-20">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="section-label text-cream-500 mb-4">Notre savoir-faire</p>
+      <h2 class="font-serif italic text-cream-100 text-3xl lg:text-4xl mb-6 leading-snug">
+        Du brazéro au repas gastronomique
+      </h2>
+      <div class="divider mx-auto"></div>
+      <p class="text-cream-400 leading-relaxed mt-4 max-w-2xl mx-auto">
+        Nous proposons trois formules traiteur adaptées à tous vos événements. Chaque formule est entièrement préparée avec nos viandes et charcuteries artisanales.
+        Et si rien ne correspond exactement à votre projet, nous créons votre menu sur mesure.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- Grille menus -->
+  <section class="bg-dark-800 py-20">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-12">
+        <p class="section-label text-cream-500 mb-3">Nos formules</p>
+        <h2 class="font-serif italic text-cream-100 text-3xl">Choisissez votre menu</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        {allMenus.map(m => (
+          <MenuCard
+            title={m.data.title}
+            tag={m.data.tag}
+            description={m.data.description}
+            pricePerPerson={m.data.pricePerPerson}
+            minPeople={m.data.minPeople}
+            slug={m.slug}
+            featured={m.data.featured}
+          />
+        ))}
+
+        <!-- Carte sur-mesure -->
+        <div class="dark-card ring-1 ring-rouge-600/40 p-8 flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-px bg-rouge-600"></div>
+          <div>
+            <p class="section-label text-rouge-600 mb-4">Exclusif</p>
+            <h3 class="font-serif text-2xl italic text-cream-100 mb-4 leading-snug">
+              Menu Sur Mesure
+            </h3>
+            <p class="text-cream-500 text-sm leading-relaxed mb-6">
+              Composez votre menu étape par étape : entrées, plats, accompagnements, desserts. Nous adaptons tout à vos envies, votre budget et le nombre de vos convives.
+            </p>
+            <ul class="space-y-2 mb-6">
+              {['Choix de chaque plat', 'Devis personnalisé', 'Livraison ou service sur place', 'Minimum 10 personnes'].map(item => (
+                <li class="flex items-center gap-2 text-cream-400 text-xs">
+                  <span class="w-1.5 h-1.5 rounded-full bg-rouge-600 flex-shrink-0"></span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <a href="/traiteur/sur-mesure" class="btn-rouge justify-center text-[10px]">
+            Composer mon menu
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Processus réservation -->
+  <section class="bg-dark-900 py-20">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <p class="section-label text-cream-500 mb-3">Comment ça marche</p>
+        <h2 class="font-serif italic text-cream-100 text-3xl">Réservez en 3 étapes</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          { n: '01', title: 'Choisissez', text: 'Sélectionnez une de nos formules ou optez pour le menu sur mesure.' },
+          { n: '02', title: 'Réservez', text: 'Remplissez le formulaire de réservation avec la date et le nombre de convives.' },
+          { n: '03', title: 'On s\'occupe de tout', text: 'Guillaume vous confirme et prépare votre événement avec soin.' },
+        ].map(step => (
+          <div class="dark-card p-8 text-center">
+            <span class="font-serif italic text-rouge-600/40 block mb-4" style="font-size: 4rem; line-height: 1;">{step.n}</span>
+            <h3 class="font-serif text-cream-100 text-xl mb-3">{step.title}</h3>
+            <p class="text-cream-500 text-sm leading-relaxed">{step.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-12 text-center">
+        <p class="text-cream-500 text-sm mb-4">Une question ? Appelez-nous directement.</p>
+        <a href={contact.phone.href} class="btn-rouge">
+          {contact.phone.display}
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
