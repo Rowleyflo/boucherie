@@ -1,0 +1,498 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import ProductCard from '../components/ProductCard.astro';
+import MenuCard from '../components/MenuCard.astro';
+import HoursTable from '../components/HoursTable.astro';
+---
+
+<Layout
+  title="Design Système | Chez Guillaume"
+  description="Documentation du design système — couleurs, typographie, composants, utilitaires."
+  noindex={true}
+>
+  <div class="max-w-7xl mx-auto px-6 pt-32 pb-24 space-y-32">
+
+    <!-- En-tête -->
+    <header class="border-b border-dark-600 pb-12">
+      <p class="section-label text-rouge-600 mb-4">Documentation</p>
+      <h1 class="font-serif text-5xl italic text-cream-100 mb-4">Design Système</h1>
+      <p class="text-cream-500 text-sm max-w-xl leading-relaxed">
+        Référence complète des couleurs, typographies, composants et utilitaires du projet <em>Chez Guillaume — Boucherie à Montbeton</em>.
+      </p>
+    </header>
+
+    <!-- ─── COULEURS ─── -->
+    <section>
+      <SectionLabel text="01 — Couleurs" />
+      <h2 class="font-serif text-3xl italic text-cream-100 mt-3 mb-10">Palette</h2>
+
+      <!-- Dark -->
+      <div class="mb-10">
+        <p class="text-cream-500 text-xs uppercase tracking-ultra mb-4">Dark — Fonds & surfaces</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {[
+            { name: 'dark-950', hex: '#080808', cls: 'bg-dark-950' },
+            { name: 'dark-900', hex: '#111111', cls: 'bg-dark-900' },
+            { name: 'dark-800', hex: '#1A1A1A', cls: 'bg-dark-800' },
+            { name: 'dark-700', hex: '#242424', cls: 'bg-dark-700' },
+            { name: 'dark-600', hex: '#2E2E2E', cls: 'bg-dark-600' },
+            { name: 'dark-500', hex: '#3A3A3A', cls: 'bg-dark-500' },
+          ].map(c => (
+            <div class="dark-card overflow-hidden">
+              <div class={`h-16 ${c.cls} border-b border-dark-600`}></div>
+              <div class="p-3">
+                <p class="font-mono text-cream-100 text-xs">{c.name}</p>
+                <p class="font-mono text-cream-500 text-xs">{c.hex}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Cream -->
+      <div class="mb-10">
+        <p class="text-cream-500 text-xs uppercase tracking-ultra mb-4">Cream — Textes</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
+          {[
+            { name: 'cream-50',  hex: '#FDFAF5', cls: 'bg-cream-50' },
+            { name: 'cream-100', hex: '#F5F0E8', cls: 'bg-cream-100' },
+            { name: 'cream-200', hex: '#EAE3D6', cls: 'bg-cream-200' },
+            { name: 'cream-300', hex: '#D4CBBA', cls: 'bg-cream-300' },
+            { name: 'cream-400', hex: '#B8AD9A', cls: 'bg-cream-400' },
+            { name: 'cream-500', hex: '#9A9485', cls: 'bg-cream-500' },
+            { name: 'cream-600', hex: '#7A7268', cls: 'bg-cream-600' },
+          ].map(c => (
+            <div class="dark-card overflow-hidden">
+              <div class={`h-16 ${c.cls} border-b border-dark-600`}></div>
+              <div class="p-3">
+                <p class="font-mono text-cream-100 text-xs">{c.name}</p>
+                <p class="font-mono text-cream-500 text-xs">{c.hex}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Rouge -->
+      <div>
+        <p class="text-cream-500 text-xs uppercase tracking-ultra mb-4">Rouge — Accent & CTA</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {[
+            { name: 'rouge-400', hex: '#E83535', cls: 'bg-rouge-400' },
+            { name: 'rouge-500', hex: '#D42020', cls: 'bg-rouge-500' },
+            { name: 'rouge-600', hex: '#C41818', cls: 'bg-rouge-600' },
+            { name: 'rouge-700', hex: '#A01212', cls: 'bg-rouge-700' },
+            { name: 'rouge-800', hex: '#7A0D0D', cls: 'bg-rouge-800' },
+          ].map(c => (
+            <div class="dark-card overflow-hidden">
+              <div class={`h-16 ${c.cls} border-b border-dark-600`}></div>
+              <div class="p-3">
+                <p class="font-mono text-cream-100 text-xs">{c.name}</p>
+                <p class="font-mono text-cream-500 text-xs">{c.hex}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TYPOGRAPHIE ─── -->
+    <section>
+      <SectionLabel text="02 — Typographie" />
+      <h2 class="font-serif text-3xl italic text-cream-100 mt-3 mb-10">Polices & styles</h2>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Playfair Display -->
+        <div class="dark-card p-8 space-y-6">
+          <div>
+            <p class="section-label text-cream-500 mb-2">Playfair Display — Serif</p>
+            <p class="text-cream-600 text-xs mb-6">Titres, hero, citations éditoriales</p>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <p class="text-cream-600 text-xs mb-1">Regular 400</p>
+              <p class="font-serif text-3xl text-cream-100 font-normal">Boucherie Artisanale</p>
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-1">Medium 500</p>
+              <p class="font-serif text-3xl text-cream-100 font-medium">Boucherie Artisanale</p>
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-1">SemiBold 600</p>
+              <p class="font-serif text-3xl text-cream-100 font-semibold">Boucherie Artisanale</p>
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-1">Bold 700</p>
+              <p class="font-serif text-3xl text-cream-100 font-bold">Boucherie Artisanale</p>
+            </div>
+            <div class="pt-2 border-t border-dark-600">
+              <p class="text-cream-600 text-xs mb-1">Italic 400–700</p>
+              <p class="font-serif text-3xl italic text-cream-100">Chez Guillaume</p>
+              <p class="font-serif text-2xl italic text-cream-300 font-medium">Traiteur · Charcutier</p>
+              <p class="font-serif text-xl italic text-cream-500">Montbeton, Tarn-et-Garonne</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- DM Sans -->
+        <div class="dark-card p-8 space-y-6">
+          <div>
+            <p class="section-label text-cream-500 mb-2">DM Sans — Sans-serif</p>
+            <p class="text-cream-600 text-xs mb-6">Corps de texte, labels, navigation, boutons</p>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <p class="text-cream-600 text-xs mb-1">Light 300</p>
+              <p class="font-sans text-base text-cream-100 font-light">Viandes fraîches de producteurs locaux, charcuterie maison et prestations traiteur sur mesure.</p>
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-1">Regular 400</p>
+              <p class="font-sans text-base text-cream-100 font-normal">Viandes fraîches de producteurs locaux, charcuterie maison et prestations traiteur sur mesure.</p>
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-1">Medium 500</p>
+              <p class="font-sans text-base text-cream-100 font-medium">Viandes fraîches de producteurs locaux, charcuterie maison.</p>
+            </div>
+            <div class="pt-2 border-t border-dark-600">
+              <p class="text-cream-600 text-xs mb-2">Letter-spacing — Labels</p>
+              <p class="font-sans text-xs uppercase tracking-ultra text-cream-400">tracking-ultra — 0.35em</p>
+              <p class="font-sans text-xs uppercase tracking-max text-cream-500 mt-1">tracking-max — 0.5em</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scale typographique -->
+      <div class="dark-card p-8 mt-8">
+        <p class="section-label text-cream-500 mb-6">Échelle typographique</p>
+        <div class="space-y-3 divide-y divide-dark-600">
+          {[
+            { label: 'text-xs  — 12px', cls: 'text-xs',   sample: 'Boucherie Chez Guillaume' },
+            { label: 'text-sm  — 14px', cls: 'text-sm',   sample: 'Boucherie Chez Guillaume' },
+            { label: 'text-base — 16px', cls: 'text-base', sample: 'Boucherie Chez Guillaume' },
+            { label: 'text-lg  — 18px', cls: 'text-lg',   sample: 'Boucherie Chez Guillaume' },
+            { label: 'text-xl  — 20px', cls: 'text-xl',   sample: 'Boucherie Chez Guillaume' },
+            { label: 'text-2xl — 24px', cls: 'text-2xl',  sample: 'Boucherie Chez Guillaume' },
+            { label: 'text-3xl — 30px', cls: 'text-3xl',  sample: 'Boucherie Chez Guillaume' },
+            { label: 'text-4xl — 36px', cls: 'text-4xl',  sample: 'Chez Guillaume' },
+            { label: 'text-5xl — 48px', cls: 'text-5xl',  sample: 'Chez Guillaume' },
+          ].map(({ label, cls, sample }) => (
+            <div class="flex items-baseline gap-6 py-3 first:pt-0 last:pb-0">
+              <span class="font-mono text-cream-600 text-xs w-36 shrink-0">{label}</span>
+              <span class={`font-serif italic text-cream-100 ${cls}`}>{sample}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── BOUTONS ─── -->
+    <section>
+      <SectionLabel text="03 — Boutons" />
+      <h2 class="font-serif text-3xl italic text-cream-100 mt-3 mb-10">Actions</h2>
+
+      <div class="dark-card p-8 space-y-8">
+        <div>
+          <p class="text-cream-600 text-xs mb-4">.btn-rouge — CTA principal</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#" class="btn-rouge">Découvrir nos menus</a>
+            <a href="#" class="btn-rouge">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+              Nous appeler
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-cream-600 text-xs mb-4">.btn-outline — Action secondaire</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#" class="btn-outline">En savoir plus</a>
+            <a href="#" class="btn-outline">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/>
+              </svg>
+              Voir la carte
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-cream-600 text-xs mb-4">.link-serif — Lien discret italique</p>
+          <div class="flex flex-wrap gap-8">
+            <a href="#" class="link-serif">Contactez-nous →</a>
+            <a href="#" class="link-serif">Voir tous les menus →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── LABELS ─── -->
+    <section>
+      <SectionLabel text="04 — Labels & séparateurs" />
+      <h2 class="font-serif text-3xl italic text-cream-100 mt-3 mb-10">Éléments d'interface</h2>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        <div class="dark-card p-8 space-y-6">
+          <p class="text-cream-600 text-xs mb-2">.section-label — via composant SectionLabel</p>
+          <div class="space-y-4">
+            <div>
+              <p class="text-cream-600 text-xs mb-2">color="muted" (défaut)</p>
+              <SectionLabel text="Nos Produits" />
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-2">color="rouge"</p>
+              <SectionLabel text="Nouveauté" color="rouge" />
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-2">align="center"</p>
+              <SectionLabel text="Section Centrée" align="center" />
+            </div>
+          </div>
+        </div>
+
+        <div class="dark-card p-8 space-y-6">
+          <p class="text-cream-600 text-xs mb-2">.divider — Séparateur rouge décoratif</p>
+          <div>
+            <p class="font-serif text-xl italic text-cream-100">Titre de section</p>
+            <div class="divider"></div>
+            <p class="text-cream-500 text-sm">Texte de description qui suit le titre et le séparateur rouge caractéristique du design system.</p>
+          </div>
+
+          <div class="pt-4 border-t border-dark-600">
+            <p class="text-cream-600 text-xs mb-3">Séparateur horizontal standard</p>
+            <hr class="border-dark-600" />
+          </div>
+
+          <div class="pt-4 border-t border-dark-600">
+            <p class="text-cream-600 text-xs mb-3">Indicateur rouge inline</p>
+            <div class="flex items-center gap-3">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-rouge-600"></span>
+              <span class="text-cream-300 text-sm">Ouvert aujourd'hui</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CARTES ─── -->
+    <section>
+      <SectionLabel text="05 — Cartes" />
+      <h2 class="font-serif text-3xl italic text-cream-100 mt-3 mb-10">Composants de contenu</h2>
+
+      <!-- dark-card générique -->
+      <div class="mb-10">
+        <p class="text-cream-600 text-xs uppercase tracking-ultra mb-4">.dark-card — Carte générique</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="dark-card p-6">
+            <p class="section-label text-cream-500 mb-3">Carte simple</p>
+            <p class="font-serif text-xl italic text-cream-100 mb-2">Titre de carte</p>
+            <p class="text-cream-500 text-sm">Contenu quelconque. La dark-card est le composant de base pour toutes les surfaces élevées.</p>
+          </div>
+          <div class="dark-card p-6 ring-1 ring-rouge-600/30">
+            <div class="absolute top-0 left-0 right-0 h-px bg-rouge-600 relative"></div>
+            <p class="section-label text-rouge-600 mb-3 mt-2">featured=true</p>
+            <p class="font-serif text-xl italic text-cream-100 mb-2">Carte mise en avant</p>
+            <p class="text-cream-500 text-sm">Avec <code class="text-rouge-600 font-mono text-xs">ring-1 ring-rouge-600/30</code> et barre rouge en haut.</p>
+          </div>
+          <div class="dark-card p-6">
+            <div class="w-10 h-10 mb-4 flex items-center justify-center border border-dark-500 text-cream-500">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg>
+            </div>
+            <p class="font-serif text-xl italic text-cream-100 mb-2">Avec icône</p>
+            <p class="text-cream-500 text-sm">Icône carrée bordurée avec hover rouge.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ProductCard -->
+      <div class="mb-10">
+        <p class="text-cream-600 text-xs uppercase tracking-ultra mb-4">ProductCard — Carte produit boucherie/charcuterie</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ProductCard
+            name="Entrecôte de bœuf"
+            description="Bœuf Limousin élevé en plein air. Persillé généreux, idéale au gril."
+            category="Bœuf"
+          />
+          <ProductCard
+            name="Côtelettes d'agneau"
+            description="Agneau du Quercy, tendreté remarquable, cuisson rosée recommandée."
+            category="Agneau"
+            featured={true}
+          />
+          <ProductCard
+            name="Rôti de porc fermier"
+            description="Porc fermier Tarn-et-Garonne. Parfait pour les repas en famille."
+            category="Porc"
+          />
+        </div>
+      </div>
+
+      <!-- MenuCard -->
+      <div>
+        <p class="text-cream-600 text-xs uppercase tracking-ultra mb-4">MenuCard — Carte menu traiteur</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <MenuCard
+            title="Brazéro Festif"
+            tag="Convivial"
+            description="Une expérience autour du feu, viandes grillées au brazéro, ambiance chaleureuse."
+            pricePerPerson={28}
+            minPeople={20}
+            slug="brazero-festif"
+          />
+          <MenuCard
+            title="Cocktail Dînatoire"
+            tag="Élégant"
+            description="Mignardises et bouchées raffinées pour vos réceptions debout."
+            pricePerPerson={22}
+            minPeople={30}
+            slug="cocktail-dinatoire"
+            featured={true}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── HORAIRES ─── -->
+    <section>
+      <SectionLabel text="06 — Composants spéciaux" />
+      <h2 class="font-serif text-3xl italic text-cream-100 mt-3 mb-10">HoursTable & formulaires</h2>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        <div>
+          <p class="text-cream-600 text-xs uppercase tracking-ultra mb-4">HoursTable — Horaires d'ouverture</p>
+          <HoursTable />
+        </div>
+
+        <div class="dark-card p-8">
+          <p class="text-cream-600 text-xs uppercase tracking-ultra mb-6">Champs de formulaire</p>
+          <div class="space-y-5">
+            <div>
+              <label class="section-label block mb-2">Votre nom</label>
+              <input
+                type="text"
+                placeholder="Guillaume Dupont"
+                class="w-full bg-dark-800 border border-dark-500 text-cream-100 px-4 py-3 text-sm placeholder:text-cream-600 focus:outline-none focus:border-rouge-600 transition-colors"
+              />
+            </div>
+            <div>
+              <label class="section-label block mb-2">Email</label>
+              <input
+                type="email"
+                placeholder="contact@exemple.fr"
+                class="w-full bg-dark-800 border border-dark-500 text-cream-100 px-4 py-3 text-sm placeholder:text-cream-600 focus:outline-none focus:border-rouge-600 transition-colors"
+              />
+            </div>
+            <div>
+              <label class="section-label block mb-2">Message</label>
+              <textarea
+                rows="3"
+                placeholder="Votre message…"
+                class="w-full bg-dark-800 border border-dark-500 text-cream-100 px-4 py-3 text-sm placeholder:text-cream-600 focus:outline-none focus:border-rouge-600 transition-colors resize-none"
+              ></textarea>
+            </div>
+            <button type="button" class="btn-rouge w-full justify-center">Envoyer le message</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── UTILITAIRES ─── -->
+    <section>
+      <SectionLabel text="07 — Utilitaires" />
+      <h2 class="font-serif text-3xl italic text-cream-100 mt-3 mb-10">Classes & tokens</h2>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+
+        <!-- Overlay -->
+        <div>
+          <p class="text-cream-600 text-xs uppercase tracking-ultra mb-4">.bg-overlay — Overlay sur image de fond</p>
+          <div class="relative h-48 bg-dark-700 overflow-hidden bg-overlay">
+            <div class="absolute inset-0 bg-gradient-to-br from-dark-700 to-dark-800"></div>
+            <div class="relative z-10 flex flex-col items-center justify-center h-full">
+              <p class="section-label text-cream-500 mb-2">Overlay actif</p>
+              <p class="font-serif text-2xl italic text-cream-100">Contenu lisible</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tokens -->
+        <div class="dark-card p-8">
+          <p class="section-label text-cream-500 mb-6">Tokens letter-spacing</p>
+          <div class="space-y-4">
+            <div>
+              <p class="text-cream-600 text-xs mb-1">tracking-ultra — 0.35em</p>
+              <p class="font-sans text-xs uppercase tracking-ultra text-cream-300">Nos Spécialités</p>
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-1">tracking-max — 0.5em</p>
+              <p class="font-sans text-xs uppercase tracking-max text-cream-300">Artisan</p>
+            </div>
+            <div>
+              <p class="text-cream-600 text-xs mb-1">tracking-widest (Tailwind)</p>
+              <p class="font-sans text-xs uppercase tracking-widest text-cream-300">Guillaume</p>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-6 border-t border-dark-600">
+            <p class="section-label text-cream-500 mb-4">Scrollbar custom</p>
+            <div class="h-24 overflow-y-scroll pr-2 space-y-2 text-cream-500 text-xs">
+              <p>La scrollbar utilise une couleur de fond dark (#111111), un thumb dark-600 (#2E2E2E) et un hover rouge (#C41818).</p>
+              <p>Elle est définie globalement dans <code class="text-rouge-600 font-mono">global.css</code>.</p>
+              <p>Largeur : 6px. Border-radius : 3px.</p>
+              <p>Scrollez pour la voir en action.</p>
+              <p>↓ ↓ ↓</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gradients -->
+      <div class="mt-8">
+        <p class="text-cream-600 text-xs uppercase tracking-ultra mb-4">Gradients</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <div class="h-24 bg-gradient-dark rounded-sm"></div>
+            <p class="font-mono text-cream-500 text-xs mt-2">bg-gradient-dark</p>
+            <p class="text-cream-600 text-xs">linear-gradient(to bottom, rgba(0,0,0,0.7) → 0.4 → 0.8)</p>
+          </div>
+          <div>
+            <div class="h-24 bg-gradient-card rounded-sm"></div>
+            <p class="font-mono text-cream-500 text-xs mt-2">bg-gradient-card</p>
+            <p class="text-cream-600 text-xs">linear-gradient(135deg, dark-800/92 → dark-900/95)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FOCUS & SÉLECTION ─── -->
+    <section>
+      <SectionLabel text="08 — Accessibilité" />
+      <h2 class="font-serif text-3xl italic text-cream-100 mt-3 mb-10">Focus & sélection</h2>
+
+      <div class="dark-card p-8 space-y-6">
+        <div>
+          <p class="text-cream-600 text-xs mb-3">Focus visible — outline-2 rouge (naviguez au clavier Tab)</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#" class="btn-rouge">Focusable</a>
+            <a href="#" class="btn-outline">Focusable</a>
+            <input
+              type="text"
+              placeholder="Champ focusable"
+              class="bg-dark-800 border border-dark-500 text-cream-100 px-4 py-3 text-sm placeholder:text-cream-600 focus:outline-none focus:border-rouge-600"
+            />
+          </div>
+        </div>
+        <div class="pt-4 border-t border-dark-600">
+          <p class="text-cream-600 text-xs mb-3">Sélection de texte — fond rouge, texte crème</p>
+          <p class="text-cream-300 text-sm">Sélectionnez ce texte avec la souris pour voir la couleur de sélection personnalisée appliquée via <code class="font-mono text-rouge-600 text-xs">::selection</code>.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</Layout>
