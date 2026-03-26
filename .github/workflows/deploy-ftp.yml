@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - claude/auto-push-ftp-obHIs
 
 jobs:
   build-and-deploy:
