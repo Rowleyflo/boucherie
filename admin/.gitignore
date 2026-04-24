@@ -1,0 +1,6 @@
+vendor/
+var/
+.env.local
+.env.test.local
+.env.dev.local
+.env.prod.local

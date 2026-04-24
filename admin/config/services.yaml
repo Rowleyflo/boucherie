@@ -1,0 +1,22 @@
+parameters:
+    email_boucher: '%env(EMAIL_BOUCHER)%'
+    email_from:    '%env(EMAIL_FROM)%'
+    nom_boucher:   '%env(NOM_BOUCHER)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Service\DevisMailer:
+        arguments:
+            $emailBoucher: '%email_boucher%'
+            $emailFrom:    '%email_from%'
+            $nomBoucher:   '%nom_boucher%'

@@ -1,0 +1,109 @@
+{% extends 'emails/layout.html.twig' %}
+
+{% block email_title %}Nouveau devis {{ devis.reference }} — {{ devis.prestationNom }}{% endblock %}
+
+{% block email_header_title %}🔔 Nouvelle demande{% endblock %}
+{% block email_header_subtitle %}
+<p style="margin:6px 0 0;color:#c8932a;font-size:13px;font-family:Arial,sans-serif;">
+    Référence : <strong>{{ devis.reference }}</strong>
+</p>
+{% endblock %}
+
+{% block email_body %}
+
+<!-- Contact client -->
+<h2 style="margin:0 0 16px;font-size:16px;color:#111110;font-family:Arial,sans-serif;
+           font-weight:600;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #e8e0d0;
+           padding-bottom:10px;">
+    Client
+</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+       style="font-size:14px;font-family:Arial,sans-serif;margin:0 0 28px;">
+    <tr>
+        <td style="padding:5px 0;color:#888;width:40%;">Nom&nbsp;:</td>
+        <td style="padding:5px 0;"><strong>{{ devis.clientPrenom }} {{ devis.clientNom }}</strong></td>
+    </tr>
+    <tr>
+        <td style="padding:5px 0;color:#888;">Email&nbsp;:</td>
+        <td style="padding:5px 0;">
+            <a href="mailto:{{ devis.clientEmail }}" style="color:#c8932a;text-decoration:none;">
+                {{ devis.clientEmail }}
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding:5px 0;color:#888;">Téléphone&nbsp;:</td>
+        <td style="padding:5px 0;">
+            <a href="tel:{{ devis.clientTelephone }}" style="color:#c8932a;text-decoration:none;">
+                {{ devis.clientTelephone }}
+            </a>
+        </td>
+    </tr>
+</table>
+
+<!-- Détails prestation -->
+<h2 style="margin:0 0 16px;font-size:16px;color:#111110;font-family:Arial,sans-serif;
+           font-weight:600;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #e8e0d0;
+           padding-bottom:10px;">
+    Prestation demandée
+</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+       style="font-size:14px;font-family:Arial,sans-serif;margin:0 0 28px;">
+    <tr>
+        <td style="padding:5px 0;color:#888;width:40%;">Prestation&nbsp;:</td>
+        <td style="padding:5px 0;"><strong>{{ devis.prestationNom }}</strong></td>
+    </tr>
+    <tr>
+        <td style="padding:5px 0;color:#888;">Personnes&nbsp;:</td>
+        <td style="padding:5px 0;"><strong>{{ devis.nbPersonnes }}</strong></td>
+    </tr>
+    <tr>
+        <td style="padding:5px 0;color:#888;">Date événement&nbsp;:</td>
+        <td style="padding:5px 0;">
+            <strong>{{ devis.dateEvenement ? devis.dateEvenement|date('d/m/Y') : 'À définir' }}</strong>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding:5px 0;color:#888;">Lieu&nbsp;:</td>
+        <td style="padding:5px 0;"><strong>{{ devis.lieuLabel }}</strong>
+            {% if devis.lieuDetail %} — {{ devis.lieuDetail }}{% endif %}
+        </td>
+    </tr>
+    {% if devis.estimationMin and devis.estimationMax %}
+    <tr>
+        <td style="padding:5px 0;color:#888;">Estimation&nbsp;:</td>
+        <td style="padding:5px 0;color:#c8932a;font-weight:bold;">
+            {{ devis.estimationMin|number_format(0, ',', ' ') }} € – {{ devis.estimationMax|number_format(0, ',', ' ') }} €
+        </td>
+    </tr>
+    {% endif %}
+</table>
+
+{% if devis.clientMessage %}
+<h2 style="margin:0 0 12px;font-size:16px;color:#111110;font-family:Arial,sans-serif;
+           font-weight:600;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #e8e0d0;
+           padding-bottom:10px;">
+    Message du client
+</h2>
+<div style="background:#f9f6f1;border:1px solid #e8e0d0;border-radius:4px;padding:16px 20px;
+            margin:0 0 28px;font-size:14px;font-style:italic;color:#555;line-height:1.7;
+            font-family:Georgia,serif;">
+    {{ devis.clientMessage|nl2br }}
+</div>
+{% endif %}
+
+<!-- CTA -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td align="center" style="padding:8px 0;">
+            <a href="{{ lienAdmin }}"
+               style="display:inline-block;background:#c8932a;color:#ffffff;text-decoration:none;
+                      padding:15px 36px;border-radius:3px;font-family:Arial,sans-serif;font-size:13px;
+                      letter-spacing:2px;text-transform:uppercase;font-weight:600;">
+                Accéder à la fiche →
+            </a>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEV-2026-0044 — Boucherie Traiteur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { charbon:{DEFAULT:'#111110',900:'#0d0d0c',800:'#1a1a19',700:'#222221',600:'#2e2e2c',500:'#3d3d3b'}, or:{DEFAULT:'#c8932a',light:'#d9a73d'}, creme:{DEFAULT:'#f5f0e8',muted:'#b0aba3'}, rouge:{DEFAULT:'#c0392b'} }, fontFamily:{ display:['"Cormorant Garamond"','serif'], body:['"DM Sans"','sans-serif'] } } }
+    }
+  </script>
+  <style>
+    body{font-family:'DM Sans',sans-serif;background:#111110;}
+    h1,h2,h3{font-family:'Cormorant Garamond',serif;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:9999;}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#1a1a19}::-webkit-scrollbar-thumb{background:#c8932a;border-radius:4px}
+    textarea:focus,input:focus{outline:none;box-shadow:0 0 0 2px #c8932a;}
+    @keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+    .toast-in{animation:toastIn .3s ease forwards;}
+  </style>
+</head>
+<body class="text-creme" x-data="{open:false}">
+
+<!-- SIDEBAR -->
+<aside class="fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-charbon-800 border-r border-charbon-600 transition-transform duration-300" :class="open?'translate-x-0':'-translate-x-full lg:translate-x-0'">
+  <div class="shrink-0 px-6 py-7 border-b border-charbon-600">
+    <p class="font-display text-3xl text-or leading-none">🥩 Boucherie</p>
+    <p class="font-display text-xl text-creme-muted italic leading-none mt-0.5">Traiteur</p>
+  </div>
+  <nav class="flex-1 px-3 py-4 space-y-0.5">
+    <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">📊</span>Tableau de bord</a>
+    <a href="devis-liste.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium bg-or/15 text-or border border-or/20"><span class="text-lg">📋</span>Devis</a>
+    <a href="prestations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">🍖</span>Prestations & Tarifs</a>
+    <a href="email-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">✉️</span>Templates Email</a>
+  </nav>
+  <div class="shrink-0 border-t border-charbon-600 p-4">
+    <div class="flex items-center gap-3">
+      <div class="size-9 rounded-full bg-or/20 border border-or/30 flex items-center justify-center font-display text-or font-semibold text-sm">AW</div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-medium text-creme">Agence Web</p><p class="text-xs text-creme-muted">Agence</p></div>
+      <a href="login.html" class="text-creme-muted hover:text-rouge transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></a>
+    </div>
+  </div>
+</aside>
+<div x-show="open" @click="open=false" class="fixed inset-0 z-40 bg-black/60 lg:hidden"></div>
+
+<!-- MAIN -->
+<div class="lg:pl-64 flex flex-col min-h-screen">
+  <header class="sticky top-0 z-30 flex items-center gap-4 h-14 px-4 bg-charbon-800/95 backdrop-blur border-b border-charbon-600">
+    <button @click="open=!open" class="lg:hidden text-creme-muted p-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <h2 class="font-display text-xl text-creme flex-1">DEV-2026-0044</h2>
+    <a href="devis-liste.html" class="text-xs text-creme-muted hover:text-creme transition-colors">← Retour à la liste</a>
+  </header>
+
+  <main class="flex-1 p-4 md:p-6">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6" x-data="{
+      statut: 'nouveau',
+      statutLabel: 'Nouveau',
+      notes: '',
+      notesSaved: false,
+      emailMsg: '',
+      emailSujet: '',
+      emailSent: false,
+      setStatut(s, l) { this.statut = s; this.statutLabel = l; showToast('Statut mis à jour : ' + l); },
+      saveNotes() { this.notesSaved = true; setTimeout(()=>this.notesSaved=false, 3000); },
+      sendEmail() { if(!this.emailMsg.trim()) return; this.emailSent = true; this.emailMsg=''; this.emailSujet=''; showToast('Email envoyé avec succès.'); setTimeout(()=>this.emailSent=false,3000); }
+    }">
+
+      <!-- COL PRINCIPALE -->
+      <div class="xl:col-span-2 space-y-5">
+
+        <!-- Récap -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <h2 class="font-display text-2xl text-creme">Mariage & Réceptions</h2>
+              <p class="text-sm text-creme-muted mt-0.5">Demande reçue le 22/04/2026 à 14:37</p>
+            </div>
+            <span class="shrink-0 px-3 py-1 rounded-full text-xs font-semibold border bg-rouge/20 text-red-300 border-rouge/30" x-text="statutLabel">Nouveau</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="bg-charbon-700 rounded-md p-3 text-center">
+              <p class="text-2xl font-display text-or font-semibold">80</p>
+              <p class="text-xs text-creme-muted mt-0.5">Personnes</p>
+            </div>
+            <div class="bg-charbon-700 rounded-md p-3 text-center">
+              <p class="text-sm font-medium text-creme">15/09/2026</p>
+              <p class="text-xs text-creme-muted mt-0.5">Date événement</p>
+            </div>
+            <div class="bg-charbon-700 rounded-md p-3 text-center">
+              <p class="text-sm font-medium text-creme">Livraison</p>
+              <p class="text-xs text-creme-muted mt-0.5 truncate">12 rue des Lilas, Paris</p>
+            </div>
+            <div class="bg-charbon-700 rounded-md p-3 text-center">
+              <p class="text-sm font-semibold text-or font-mono">2 100–2 600 €</p>
+              <p class="text-xs text-creme-muted mt-0.5">Estimation</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+          <h3 class="font-display text-lg text-creme mb-3">Options sélectionnées</h3>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between py-2 border-b border-charbon-700 text-sm">
+              <span class="text-creme">Cocktail dînatoire</span>
+              <span class="text-or font-mono font-semibold">28,50 € <span class="text-xs text-creme-muted font-normal">× 80 pers.</span></span>
+            </div>
+            <div class="flex items-center justify-between py-2 border-b border-charbon-700 text-sm">
+              <span class="text-creme">Supplément livraison & mise en place</span>
+              <span class="text-or font-mono font-semibold">180,00 € <span class="text-xs text-creme-muted font-normal">forfait</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message client -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+          <h3 class="font-display text-lg text-creme mb-3">Message du client</h3>
+          <blockquote class="border-l-2 border-or pl-4 text-sm text-creme-muted italic leading-relaxed">
+            Mariage en plein air dans notre domaine familial. Nous souhaitons un cocktail raffiné pour 80 invités avec une belle présentation. Nous sommes flexibles sur les options, n'hésitez pas à nous proposer votre meilleure formule.
+          </blockquote>
+        </div>
+
+        <!-- Répondre -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+          <h3 class="font-display text-lg text-creme mb-4">Répondre au client</h3>
+          <div class="space-y-3">
+            <input type="text" x-model="emailSujet" placeholder="Objet (laisser vide pour utiliser le template)"
+                   class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2.5 text-sm text-creme placeholder-creme-muted/40 transition-all">
+            <textarea x-model="emailMsg" rows="4" placeholder="Votre message au client…"
+                      class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2.5 text-sm text-creme placeholder-creme-muted/40 transition-all resize-none"></textarea>
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-creme-muted">Sera envoyé à <strong class="text-creme">sophie.martin@email.fr</strong></span>
+              <button @click="sendEmail()" class="flex items-center gap-2 bg-or hover:bg-or-light text-charbon font-semibold px-4 py-2 rounded-md text-sm transition-colors">
+                ✉️ Envoyer
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-display text-lg text-creme">Notes internes</h3>
+            <span x-show="notesSaved" class="text-xs text-green-400">✓ Sauvegardé</span>
+          </div>
+          <textarea x-model="notes" @input.debounce.1000ms="saveNotes()" rows="3"
+                    placeholder="Notes privées (non visibles par le client)…"
+                    class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2.5 text-sm text-creme placeholder-creme-muted/40 transition-all resize-none"></textarea>
+          <p class="text-xs text-creme-muted mt-2">Sauvegarde automatique après 1 seconde.</p>
+        </div>
+      </div>
+
+      <!-- COL DROITE -->
+      <div class="space-y-4">
+
+        <!-- Contact -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+          <h3 class="font-display text-lg text-creme mb-4">Contact client</h3>
+          <div class="space-y-3 text-sm">
+            <div><p class="text-xs text-creme-muted uppercase tracking-wider mb-0.5">Nom</p><p class="text-creme font-medium">Sophie Martin</p></div>
+            <div><p class="text-xs text-creme-muted uppercase tracking-wider mb-0.5">Email</p><a href="#" class="text-or hover:text-or-light break-all">sophie.martin@email.fr</a></div>
+            <div><p class="text-xs text-creme-muted uppercase tracking-wider mb-0.5">Téléphone</p><a href="#" class="text-or hover:text-or-light">06 12 34 56 78</a></div>
+          </div>
+        </div>
+
+        <!-- Statut -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+          <h3 class="font-display text-lg text-creme mb-4">Statut</h3>
+          <div class="space-y-1.5">
+            <button @click="setStatut('nouveau','Nouveau')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium border bg-rouge/20 text-red-300 border-rouge/30 transition-all" :class="statut==='nouveau'?'ring-1 ring-or/60':'opacity-40 hover:opacity-70'">
+              <span class="size-2 rounded-full bg-rouge"></span>Nouveau<span x-show="statut==='nouveau'" class="ml-auto text-or">✓</span>
+            </button>
+            <button @click="setStatut('lu','Lu')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium border bg-charbon-600 text-creme-muted border-charbon-500 transition-all" :class="statut==='lu'?'ring-1 ring-or/60':'opacity-40 hover:opacity-70'">
+              <span class="size-2 rounded-full bg-creme-muted"></span>Lu<span x-show="statut==='lu'" class="ml-auto text-or">✓</span>
+            </button>
+            <button @click="setStatut('en_attente','En attente')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium border bg-yellow-900/40 text-yellow-300 border-yellow-700/40 transition-all" :class="statut==='en_attente'?'ring-1 ring-or/60':'opacity-40 hover:opacity-70'">
+              <span class="size-2 rounded-full bg-yellow-400"></span>En attente<span x-show="statut==='en_attente'" class="ml-auto text-or">✓</span>
+            </button>
+            <button @click="setStatut('accepte','Accepté')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium border bg-green-900/40 text-green-300 border-green-700/40 transition-all" :class="statut==='accepte'?'ring-1 ring-or/60':'opacity-40 hover:opacity-70'">
+              <span class="size-2 rounded-full bg-green-400"></span>Accepté<span x-show="statut==='accepte'" class="ml-auto text-or">✓</span>
+            </button>
+            <button @click="setStatut('refuse','Refusé')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium border bg-charbon-700 text-creme-muted/60 border-charbon-500 transition-all" :class="statut==='refuse'?'ring-1 ring-or/60':'opacity-40 hover:opacity-70'">
+              <span class="size-2 rounded-full bg-creme-muted/40"></span>Refusé<span x-show="statut==='refuse'" class="ml-auto text-or">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Métadonnées -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+          <h3 class="font-display text-lg text-creme mb-4">Métadonnées</h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-creme-muted">Référence</span><span class="font-mono text-or text-xs font-semibold">DEV-2026-0044</span></div>
+            <div class="flex justify-between"><span class="text-creme-muted">Créé le</span><span class="text-creme text-xs">22/04/2026 14:37</span></div>
+            <div class="flex justify-between"><span class="text-creme-muted">Modifié le</span><span class="text-creme text-xs">22/04/2026 14:37</span></div>
+            <div class="flex justify-between"><span class="text-creme-muted">Prestation</span><span class="text-creme text-xs">mariage</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- TOASTS -->
+<div class="fixed bottom-5 right-5 z-[200] flex flex-col-reverse gap-2" id="toasts"></div>
+<script>
+function showToast(msg, type='success') {
+  const el = document.createElement('div');
+  el.className = 'toast-in flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl text-sm font-medium ' + (type==='success'?'bg-green-900 border border-green-700 text-green-100':'bg-red-900 border border-red-700 text-red-100');
+  el.innerHTML = `<span>${type==='success'?'✓':'✗'}</span><span>${msg}</span>`;
+  document.getElementById('toasts').prepend(el);
+  setTimeout(()=>el.remove(), 4000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devis — Boucherie Traiteur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { charbon:{DEFAULT:'#111110',900:'#0d0d0c',800:'#1a1a19',700:'#222221',600:'#2e2e2c',500:'#3d3d3b'}, or:{DEFAULT:'#c8932a',light:'#d9a73d'}, creme:{DEFAULT:'#f5f0e8',muted:'#b0aba3'}, rouge:{DEFAULT:'#c0392b'} }, fontFamily:{ display:['"Cormorant Garamond"','serif'], body:['"DM Sans"','sans-serif'] } } }
+    }
+  </script>
+  <style>
+    body{font-family:'DM Sans',sans-serif;background:#111110;}
+    h1,h2,h3{font-family:'Cormorant Garamond',serif;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:9999;}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#1a1a19}::-webkit-scrollbar-thumb{background:#c8932a;border-radius:4px}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}.badge-pulse{animation:pulse 2s infinite;}
+    tbody tr:hover{background:rgba(200,147,42,0.06);}
+  </style>
+</head>
+<body class="text-creme" x-data="{open:false}">
+
+<!-- SIDEBAR -->
+<aside class="fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-charbon-800 border-r border-charbon-600 transition-transform duration-300" :class="open?'translate-x-0':'-translate-x-full lg:translate-x-0'">
+  <div class="shrink-0 px-6 py-7 border-b border-charbon-600">
+    <p class="font-display text-3xl text-or leading-none">🥩 Boucherie</p>
+    <p class="font-display text-xl text-creme-muted italic leading-none mt-0.5">Traiteur</p>
+  </div>
+  <nav class="flex-1 px-3 py-4 space-y-0.5">
+    <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">📊</span>Tableau de bord</a>
+    <a href="devis-liste.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium bg-or/15 text-or border border-or/20 relative">
+      <span class="text-lg">📋</span>Devis
+      <span class="ml-auto bg-rouge text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center badge-pulse">3</span>
+    </a>
+    <a href="prestations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">🍖</span>Prestations & Tarifs</a>
+    <a href="email-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">✉️</span>Templates Email</a>
+  </nav>
+  <div class="shrink-0 border-t border-charbon-600 p-4">
+    <div class="flex items-center gap-3">
+      <div class="size-9 rounded-full bg-or/20 border border-or/30 flex items-center justify-center font-display text-or font-semibold text-sm">AW</div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-medium text-creme">Agence Web</p><p class="text-xs text-creme-muted">Agence</p></div>
+      <a href="login.html" class="text-creme-muted hover:text-rouge transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></a>
+    </div>
+  </div>
+</aside>
+<div x-show="open" @click="open=false" class="fixed inset-0 z-40 bg-black/60 lg:hidden"></div>
+
+<!-- MAIN -->
+<div class="lg:pl-64 flex flex-col min-h-screen">
+  <header class="sticky top-0 z-30 flex items-center gap-4 h-14 px-4 bg-charbon-800/95 backdrop-blur border-b border-charbon-600">
+    <button @click="open=!open" class="lg:hidden text-creme-muted p-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <h2 class="font-display text-xl text-creme flex-1">Devis</h2>
+    <span class="text-xs text-creme-muted">44 résultats</span>
+  </header>
+
+  <main class="flex-1 p-4 md:p-6">
+    <!-- Filtres -->
+    <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-4 mb-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+        <div class="xl:col-span-2">
+          <input type="search" placeholder="Nom, email, référence…" class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme placeholder-creme-muted/40 focus:border-or focus:outline-none transition-all">
+        </div>
+        <select class="bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme-muted focus:outline-none">
+          <option>Toutes prestations</option>
+          <option>💍 Mariage & Réceptions</option>
+          <option>🔥 Brasero & Grillade</option>
+          <option>🍽️ Traiteur Événementiel</option>
+          <option>🥩 Barbecue Géant</option>
+        </select>
+        <select class="bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme-muted focus:outline-none">
+          <option>Tous statuts</option>
+          <option>Nouveau</option>
+          <option>Lu</option>
+          <option>En attente</option>
+          <option>Accepté</option>
+          <option>Refusé</option>
+        </select>
+        <input type="date" class="bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme-muted focus:outline-none">
+        <div class="flex gap-2">
+          <input type="date" class="flex-1 bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme-muted focus:outline-none">
+          <button class="bg-or hover:bg-or-light text-charbon font-semibold px-4 py-2 rounded-md text-sm transition-colors">↵</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="bg-charbon-800 border border-charbon-600 rounded-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-charbon-600 text-xs text-creme-muted uppercase tracking-widest">
+              <th class="px-4 py-3 text-left font-medium">Référence</th>
+              <th class="px-4 py-3 text-left font-medium">Client</th>
+              <th class="hidden sm:table-cell px-4 py-3 text-left font-medium">Prestation</th>
+              <th class="hidden md:table-cell px-4 py-3 text-right font-medium">Pers.</th>
+              <th class="hidden lg:table-cell px-4 py-3 text-right font-medium text-or">Estimation</th>
+              <th class="hidden md:table-cell px-4 py-3 text-center font-medium">Date évén.</th>
+              <th class="px-4 py-3 text-center font-medium">Statut</th>
+              <th class="px-4 py-3 text-right font-medium">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-charbon-700">
+            <!-- Ligne nouveau -->
+            <tr>
+              <td class="px-4 py-3"><span class="font-mono text-xs text-or font-semibold">DEV-2026-0044</span><p class="text-xs text-creme-muted mt-0.5">22/04/2026</p></td>
+              <td class="px-4 py-3"><p class="font-medium text-creme">Sophie Martin</p><p class="text-xs text-creme-muted">sophie.martin@email.fr</p></td>
+              <td class="hidden sm:table-cell px-4 py-3 text-creme-muted text-xs">Mariage & Réceptions</td>
+              <td class="hidden md:table-cell px-4 py-3 text-right text-creme font-mono">80</td>
+              <td class="hidden lg:table-cell px-4 py-3 text-right font-mono text-or text-xs">2 100–2 600 €</td>
+              <td class="hidden md:table-cell px-4 py-3 text-center text-xs text-creme-muted">15/09/2026</td>
+              <td class="px-4 py-3 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border bg-rouge/20 text-red-300 border-rouge/30">Nouveau</span></td>
+              <td class="px-4 py-3 text-right"><a href="devis-fiche.html" class="text-xs text-or hover:text-or-light font-medium">Voir →</a></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3"><span class="font-mono text-xs text-or font-semibold">DEV-2026-0043</span><p class="text-xs text-creme-muted mt-0.5">21/04/2026</p></td>
+              <td class="px-4 py-3"><p class="font-medium text-creme">Thomas Bernard</p><p class="text-xs text-creme-muted">t.bernard@gmail.com</p></td>
+              <td class="hidden sm:table-cell px-4 py-3 text-creme-muted text-xs">Brasero & Grillade</td>
+              <td class="hidden md:table-cell px-4 py-3 text-right text-creme font-mono">40</td>
+              <td class="hidden lg:table-cell px-4 py-3 text-right font-mono text-or text-xs">666–814 €</td>
+              <td class="hidden md:table-cell px-4 py-3 text-center text-xs text-creme-muted">30/05/2026</td>
+              <td class="px-4 py-3 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border bg-rouge/20 text-red-300 border-rouge/30">Nouveau</span></td>
+              <td class="px-4 py-3 text-right"><a href="devis-fiche.html" class="text-xs text-or hover:text-or-light font-medium">Voir →</a></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3"><span class="font-mono text-xs text-or font-semibold">DEV-2026-0042</span><p class="text-xs text-creme-muted mt-0.5">20/04/2026</p></td>
+              <td class="px-4 py-3"><p class="font-medium text-creme">Marie Lefebvre</p><p class="text-xs text-creme-muted">marie.l@orange.fr</p></td>
+              <td class="hidden sm:table-cell px-4 py-3 text-creme-muted text-xs">Barbecue Géant</td>
+              <td class="hidden md:table-cell px-4 py-3 text-right text-creme font-mono">120</td>
+              <td class="hidden lg:table-cell px-4 py-3 text-right font-mono text-or text-xs">1 566–1 914 €</td>
+              <td class="hidden md:table-cell px-4 py-3 text-center text-xs text-creme-muted">14/07/2026</td>
+              <td class="px-4 py-3 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border bg-yellow-900/40 text-yellow-300 border-yellow-700/40">En attente</span></td>
+              <td class="px-4 py-3 text-right"><a href="devis-fiche.html" class="text-xs text-or hover:text-or-light font-medium">Voir →</a></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3"><span class="font-mono text-xs text-or font-semibold">DEV-2026-0041</span><p class="text-xs text-creme-muted mt-0.5">18/04/2026</p></td>
+              <td class="px-4 py-3"><p class="font-medium text-creme">Pierre Dubois</p><p class="text-xs text-creme-muted">p.dubois@entreprise.com</p></td>
+              <td class="hidden sm:table-cell px-4 py-3 text-creme-muted text-xs">Traiteur Événementiel</td>
+              <td class="hidden md:table-cell px-4 py-3 text-right text-creme font-mono">35</td>
+              <td class="hidden lg:table-cell px-4 py-3 text-right font-mono text-or text-xs">1 197–1 463 €</td>
+              <td class="hidden md:table-cell px-4 py-3 text-center text-xs text-creme-muted">10/06/2026</td>
+              <td class="px-4 py-3 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border bg-green-900/40 text-green-300 border-green-700/40">Accepté</span></td>
+              <td class="px-4 py-3 text-right"><a href="devis-fiche.html" class="text-xs text-or hover:text-or-light font-medium">Voir →</a></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3"><span class="font-mono text-xs text-or font-semibold">DEV-2026-0040</span><p class="text-xs text-creme-muted mt-0.5">15/04/2026</p></td>
+              <td class="px-4 py-3"><p class="font-medium text-creme">Claire Moreau</p><p class="text-xs text-creme-muted">claire.moreau@free.fr</p></td>
+              <td class="hidden sm:table-cell px-4 py-3 text-creme-muted text-xs">Mariage & Réceptions</td>
+              <td class="hidden md:table-cell px-4 py-3 text-right text-creme font-mono">60</td>
+              <td class="hidden lg:table-cell px-4 py-3 text-right font-mono text-or text-xs">1 458–1 782 €</td>
+              <td class="hidden md:table-cell px-4 py-3 text-center text-xs text-creme-muted">22/08/2026</td>
+              <td class="px-4 py-3 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border bg-charbon-600 text-creme-muted border-charbon-500">Lu</span></td>
+              <td class="px-4 py-3 text-right"><a href="devis-fiche.html" class="text-xs text-or hover:text-or-light font-medium">Voir →</a></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3"><span class="font-mono text-xs text-or font-semibold">DEV-2026-0039</span><p class="text-xs text-creme-muted mt-0.5">12/04/2026</p></td>
+              <td class="px-4 py-3"><p class="font-medium text-creme">Jean Petit</p><p class="text-xs text-creme-muted">jean.petit@sfr.fr</p></td>
+              <td class="hidden sm:table-cell px-4 py-3 text-creme-muted text-xs">Brasero & Grillade</td>
+              <td class="hidden md:table-cell px-4 py-3 text-right text-creme font-mono">25</td>
+              <td class="hidden lg:table-cell px-4 py-3 text-right font-mono text-or text-xs">—</td>
+              <td class="hidden md:table-cell px-4 py-3 text-center text-xs text-creme-muted">À définir</td>
+              <td class="px-4 py-3 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border bg-charbon-700 text-creme-muted/60 border-charbon-500">Refusé</span></td>
+              <td class="px-4 py-3 text-right"><a href="devis-fiche.html" class="text-xs text-or hover:text-or-light font-medium">Voir →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Pagination -->
+      <div class="border-t border-charbon-600 px-4 py-3 flex items-center justify-between text-sm text-creme-muted">
+        <span>Page 1 / 3 — 44 résultats</span>
+        <div class="flex gap-1">
+          <span class="px-3 py-1.5 bg-or text-charbon font-semibold rounded text-xs">1</span>
+          <a href="#" class="px-3 py-1.5 bg-charbon-700 hover:bg-charbon-600 rounded text-creme text-xs">2</a>
+          <a href="#" class="px-3 py-1.5 bg-charbon-700 hover:bg-charbon-600 rounded text-creme text-xs">3</a>
+          <a href="#" class="px-3 py-1.5 bg-charbon-700 hover:bg-charbon-600 rounded text-creme text-xs">→</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

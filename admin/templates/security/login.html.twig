@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion — Boucherie Chez Guillaume</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#F5C518', dark: '#d4a800' },
+                        dark:    { DEFAULT: '#0a0a0a', 2: '#0f0f0f', 4: '#1a1a1a' },
+                        rouge:   '#ef4444',
+                    },
+                    fontFamily: {
+                        sans:  ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        input:focus { outline: none; box-shadow: 0 0 0 2px #F5C518; }
+
+        .blob-1 {
+            position: fixed; top: -20%; left: -10%;
+            width: 50vw; height: 50vw;
+            background: #8c3a2b; border-radius: 50%;
+            mix-blend-mode: screen; filter: blur(140px);
+            opacity: 0.12; pointer-events: none;
+        }
+        .blob-2 {
+            position: fixed; bottom: -15%; right: -5%;
+            width: 40vw; height: 40vw;
+            background: #F5C518; border-radius: 50%;
+            mix-blend-mode: screen; filter: blur(160px);
+            opacity: 0.06; pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-dark flex items-center justify-center px-4">
+
+    <div class="blob-1"></div>
+    <div class="blob-2"></div>
+
+    <div class="relative z-10 w-full max-w-sm">
+
+        {# Logo #}
+        <div class="text-center mb-10">
+            <a href="/" class="inline-block">
+                <img src="/logo.svg" alt="Boucherie Chez Guillaume" class="h-14 w-auto mx-auto mb-6 opacity-90" onerror="this.style.display='none'">
+            </a>
+            <span class="text-[10px] font-black uppercase tracking-[0.5em] text-primary/70 block mb-3">Espace Admin</span>
+            <h1 class="font-serif italic text-4xl text-white leading-tight">Chez Guillaume</h1>
+            <p class="text-white/30 text-xs uppercase tracking-[0.3em] font-black mt-2">Back-office</p>
+        </div>
+
+        {# Carte formulaire #}
+        <div class="bg-dark-2 border border-white/8 rounded-2xl p-8 shadow-[0_40px_80px_rgba(0,0,0,0.6)] backdrop-blur-md">
+
+            {% if error %}
+            <div class="mb-6 px-4 py-3 bg-rouge/10 border border-rouge/30 rounded-xl text-sm text-red-300 flex items-center gap-2">
+                <span class="shrink-0 font-black">⚠</span>
+                <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+            </div>
+            {% endif %}
+
+            <form method="post" action="{{ path('app_login') }}" class="space-y-5">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div>
+                    <label for="email" class="block text-[10px] text-white/40 uppercase tracking-[0.4em] mb-2 font-black">
+                        Adresse email
+                    </label>
+                    <input
+                        id="email" type="email" name="email"
+                        value="{{ last_username }}"
+                        required autofocus autocomplete="username"
+                        class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white text-sm
+                               placeholder-white/20 transition-all focus:border-primary"
+                        placeholder="boucher@exemple.fr"
+                    >
+                </div>
+
+                <div>
+                    <label for="password" class="block text-[10px] text-white/40 uppercase tracking-[0.4em] mb-2 font-black">
+                        Mot de passe
+                    </label>
+                    <input
+                        id="password" type="password" name="password"
+                        required autocomplete="current-password"
+                        class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white text-sm
+                               placeholder-white/20 transition-all focus:border-primary"
+                        placeholder="••••••••"
+                    >
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <input id="remember_me" type="checkbox" name="_remember_me"
+                           class="rounded border-white/20 bg-white/5 text-primary focus:ring-primary/50 w-4 h-4">
+                    <label for="remember_me" class="text-sm text-white/40 cursor-pointer select-none">
+                        Rester connecté 7 jours
+                    </label>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary hover:bg-primary-dark text-black font-black py-3.5 px-6 rounded-xl
+                           transition-all text-[11px] uppercase tracking-[0.3em] shadow-[0_0_30px_rgba(245,197,24,0.2)] mt-2">
+                    Se connecter
+                </button>
+            </form>
+        </div>
+
+        <p class="text-center text-[10px] text-white/20 uppercase tracking-widest font-black mt-8">
+            Accès réservé au personnel autorisé
+        </p>
+    </div>
+
+</body>
+</html>

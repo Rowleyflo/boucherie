@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block email_title %}{{ nom_boucher|default('Boucherie Traiteur') }}{% endblock %}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f0e8;font-family:Georgia,'Times New Roman',serif;">
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0e8;padding:40px 20px;">
+    <tr>
+        <td align="center">
+            <table role="presentation" width="600" cellpadding="0" cellspacing="0"
+                   style="max-width:600px;width:100%;background:#ffffff;border-radius:4px;overflow:hidden;
+                          box-shadow:0 4px 24px rgba(0,0,0,0.10);">
+
+                <!-- En-tête -->
+                <tr>
+                    <td style="background:#111110;padding:32px 40px;text-align:center;">
+                        <h1 style="margin:0;color:#c8932a;font-family:Georgia,serif;font-size:28px;
+                                   font-weight:normal;letter-spacing:3px;text-transform:uppercase;">
+                            {% block email_header_title %}{{ nom_boucher|default('Boucherie') }}{% endblock %}
+                        </h1>
+                        {% block email_header_subtitle %}
+                        <p style="margin:8px 0 0;color:#6b6b69;font-size:11px;letter-spacing:4px;
+                                  text-transform:uppercase;font-family:Arial,sans-serif;">
+                            Boucherie &amp; Traiteur Artisanal
+                        </p>
+                        {% endblock %}
+                    </td>
+                </tr>
+
+                <!-- Corps -->
+                <tr>
+                    <td style="padding:40px;color:#333333;font-size:15px;line-height:1.75;">
+                        {% block email_body %}{% endblock %}
+                    </td>
+                </tr>
+
+                <!-- Pied de page -->
+                <tr>
+                    <td style="background:#f5f0e8;padding:20px 40px;text-align:center;
+                               border-top:1px solid #e8e0d0;">
+                        {% block email_footer %}
+                        <p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:11px;color:#aaaaaa;">
+                            Cet email est un message automatique — merci de ne pas y répondre directement.
+                        </p>
+                        <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#bbbbbb;">
+                            &copy; {{ "now"|date("Y") }} {{ nom_boucher|default('Boucherie Traiteur') }} — Tous droits réservés
+                        </p>
+                        {% endblock %}
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

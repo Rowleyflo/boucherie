@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates Email — Boucherie Traiteur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { charbon:{DEFAULT:'#111110',900:'#0d0d0c',800:'#1a1a19',700:'#222221',600:'#2e2e2c',500:'#3d3d3b'}, or:{DEFAULT:'#c8932a',light:'#d9a73d'}, creme:{DEFAULT:'#f5f0e8',muted:'#b0aba3'}, rouge:{DEFAULT:'#c0392b'} }, fontFamily:{ display:['"Cormorant Garamond"','serif'], body:['"DM Sans"','sans-serif'] } } }
+    }
+  </script>
+  <style>
+    body{font-family:'DM Sans',sans-serif;background:#111110;}
+    h1,h2,h3{font-family:'Cormorant Garamond',serif;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:9999;}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#1a1a19}::-webkit-scrollbar-thumb{background:#c8932a;border-radius:4px}
+    input:focus,textarea:focus{outline:none;box-shadow:0 0 0 2px #c8932a;}
+    @keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}.toast-in{animation:toastIn .3s ease forwards;}
+  </style>
+</head>
+<body class="text-creme" x-data="{sidebarOpen:false}">
+
+<!-- SIDEBAR -->
+<aside class="fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-charbon-800 border-r border-charbon-600 transition-transform duration-300" :class="sidebarOpen?'translate-x-0':'-translate-x-full lg:translate-x-0'">
+  <div class="shrink-0 px-6 py-7 border-b border-charbon-600">
+    <p class="font-display text-3xl text-or leading-none">🥩 Boucherie</p>
+    <p class="font-display text-xl text-creme-muted italic leading-none mt-0.5">Traiteur</p>
+  </div>
+  <nav class="flex-1 px-3 py-4 space-y-0.5">
+    <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">📊</span>Tableau de bord</a>
+    <a href="devis-liste.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">📋</span>Devis</a>
+    <a href="prestations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">🍖</span>Prestations & Tarifs</a>
+    <a href="email-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium bg-or/15 text-or border border-or/20"><span class="text-lg">✉️</span>Templates Email</a>
+  </nav>
+  <div class="shrink-0 border-t border-charbon-600 p-4">
+    <div class="flex items-center gap-3">
+      <div class="size-9 rounded-full bg-or/20 border border-or/30 flex items-center justify-center font-display text-or font-semibold text-sm">AW</div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-medium text-creme">Agence Web</p><p class="text-xs text-creme-muted">Agence</p></div>
+      <a href="login.html" class="text-creme-muted hover:text-rouge"><svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></a>
+    </div>
+  </div>
+</aside>
+<div x-show="sidebarOpen" @click="sidebarOpen=false" class="fixed inset-0 z-40 bg-black/60 lg:hidden"></div>
+
+<!-- MAIN -->
+<div class="lg:pl-64 flex flex-col min-h-screen">
+  <header class="sticky top-0 z-30 flex items-center gap-4 h-14 px-4 bg-charbon-800/95 backdrop-blur border-b border-charbon-600">
+    <button @click="sidebarOpen=!sidebarOpen" class="lg:hidden text-creme-muted p-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <h2 class="font-display text-xl text-creme flex-1">Templates Email</h2>
+  </header>
+
+  <main class="flex-1 p-4 md:p-6">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6"
+         x-data="{
+           tab: 0,
+           preview: false,
+           copiedVar: '',
+           sujet: 'Votre demande de devis {{reference}} est bien reçue — {{nom_boucher}}',
+           corps: '',
+           copyVar(v) { navigator.clipboard.writeText(v); this.copiedVar=v; setTimeout(()=>this.copiedVar='',2000); }
+         }">
+
+      <!-- ÉDITEUR -->
+      <div class="xl:col-span-2 space-y-4">
+
+        <!-- Onglets -->
+        <div class="flex gap-1 p-1 bg-charbon-800 border border-charbon-600 rounded-lg">
+          <button @click="tab=0" :class="tab===0?'bg-or/15 text-or border border-or/20':'text-creme-muted hover:text-creme hover:bg-charbon-700'" class="flex-1 px-4 py-2.5 rounded-md text-sm font-medium transition-all">Confirmation client</button>
+          <button @click="tab=1" :class="tab===1?'bg-or/15 text-or border border-or/20':'text-creme-muted hover:text-creme hover:bg-charbon-700'" class="flex-1 px-4 py-2.5 rounded-md text-sm font-medium transition-all">Notification boucher</button>
+          <button @click="tab=2" :class="tab===2?'bg-or/15 text-or border border-or/20':'text-creme-muted hover:text-creme hover:bg-charbon-700'" class="flex-1 px-4 py-2.5 rounded-md text-sm font-medium transition-all">Réponse client</button>
+        </div>
+
+        <!-- Éditeur -->
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5 space-y-4">
+          <div>
+            <label class="text-xs text-creme-muted uppercase tracking-wider mb-1.5 block font-semibold">Objet de l'email</label>
+            <input type="text" x-model="sujet" class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2.5 text-sm text-creme transition-all">
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="text-xs text-creme-muted uppercase tracking-wider font-semibold">Corps (HTML)</label>
+              <button @click="preview=!preview" class="text-xs text-creme-muted hover:text-creme px-2 py-1 bg-charbon-700 rounded border border-charbon-600 transition-colors">
+                <span x-text="preview ? '← Éditeur' : '👁 Aperçu'"></span>
+              </button>
+            </div>
+
+            <template x-if="!preview">
+              <textarea rows="18" class="w-full bg-charbon-900 border border-charbon-500 rounded-md px-3 py-2.5 text-xs text-creme font-mono resize-y transition-all"
+              >Bonjour {{client_prenom}},
+
+Nous avons bien reçu votre demande de devis et nous vous en remercions.
+
+Référence : {{reference}}
+Prestation : {{prestation_nom}}
+Personnes  : {{nb_personnes}}
+Date       : {{date_evenement}}
+Estimation : {{estimation_min}} – {{estimation_max}}
+
+Notre équipe vous recontacte sous 24-48h.
+
+Cordialement,
+{{nom_boucher}}</textarea>
+            </template>
+
+            <template x-if="preview">
+              <div class="border border-charbon-500 rounded-md bg-white overflow-auto" style="height:340px;">
+                <div style="padding:32px;font-family:Georgia,serif;font-size:15px;line-height:1.7;color:#333;background:#f5f0e8;">
+                  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);">
+                    <div style="background:#111110;padding:28px 36px;text-align:center;">
+                      <div style="color:#c8932a;font-size:22px;letter-spacing:2px;font-weight:normal;">🥩 BOUCHERIE TRAITEUR</div>
+                    </div>
+                    <div style="padding:36px;">
+                      <p>Bonjour <strong>Sophie</strong>,</p>
+                      <p>Nous avons bien reçu votre demande de devis et nous vous en remercions.</p>
+                      <div style="background:#f9f6f1;border-left:3px solid #c8932a;padding:16px 20px;margin:20px 0;border-radius:0 4px 4px 0;">
+                        <div style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Référence</div>
+                        <div style="font-size:20px;color:#111110;font-weight:bold;letter-spacing:2px;">DEV-2026-0044</div>
+                      </div>
+                      <table style="font-size:13px;width:100%;">
+                        <tr><td style="color:#888;padding:4px 0;width:45%">Prestation :</td><td><strong>Mariage & Réceptions</strong></td></tr>
+                        <tr><td style="color:#888;padding:4px 0;">Personnes :</td><td><strong>80 personnes</strong></td></tr>
+                        <tr><td style="color:#888;padding:4px 0;">Date :</td><td><strong>15/09/2026</strong></td></tr>
+                        <tr><td style="color:#888;padding:4px 0;">Estimation :</td><td><strong style="color:#c8932a;">2 100 € – 2 600 €</strong></td></tr>
+                      </table>
+                      <p style="margin-top:24px;">Cordialement,<br><strong>Boucherie Dupont</strong></p>
+                    </div>
+                    <div style="background:#f5f0e8;padding:16px 36px;text-align:center;font-size:11px;color:#aaa;">Message automatique — © 2026 Boucherie Dupont</div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div class="flex items-center justify-between pt-2">
+            <span class="text-xs text-green-400 opacity-0" id="savedMsg"></span>
+            <button onclick="document.getElementById('savedMsg').style.opacity='1';document.getElementById('savedMsg').textContent='✓ Sauvegardé le 22/04/2026 15:42';showToast('Template sauvegardé.');setTimeout(()=>document.getElementById('savedMsg').style.opacity='0',5000)"
+                    class="ml-auto bg-or hover:bg-or-light text-charbon font-semibold px-5 py-2 rounded-md text-sm transition-colors">
+              Sauvegarder
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VARIABLES -->
+      <div>
+        <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5 sticky top-20">
+          <h3 class="font-display text-xl text-creme mb-1">Variables</h3>
+          <p class="text-xs text-creme-muted mb-4">Cliquez pour copier dans le presse-papier.</p>
+          <div class="space-y-1.5 max-h-[55vh] overflow-y-auto pr-1">
+            <template x-for="v in [
+              {k:'{{reference}}', d:'Référence du devis'},
+              {k:'{{client_prenom}}', d:'Prénom du client'},
+              {k:'{{client_nom}}', d:'Nom du client'},
+              {k:'{{client_email}}', d:'Email du client'},
+              {k:'{{client_telephone}}', d:'Téléphone'},
+              {k:'{{prestation_nom}}', d:'Nom de la prestation'},
+              {k:'{{nb_personnes}}', d:'Nombre de personnes'},
+              {k:'{{date_evenement}}', d:'Date (d/m/Y)'},
+              {k:'{{lieu}}', d:'Lieu de l\'événement'},
+              {k:'{{estimation_min}}', d:'Estimation minimale'},
+              {k:'{{estimation_max}}', d:'Estimation maximale'},
+              {k:'{{lien_admin}}', d:'Lien vers la fiche admin'},
+              {k:'{{message_personnalise}}', d:'Message du boucher'},
+              {k:'{{nom_boucher}}', d:'Nom de la boucherie'},
+              {k:'{{annee}}', d:'Année en cours'},
+            ]" :key="v.k">
+              <button @click="copyVar(v.k)"
+                      class="w-full text-left group flex flex-col gap-0.5 px-3 py-2.5 rounded-md bg-charbon-700 hover:bg-charbon-600 border border-charbon-600 hover:border-or/40 transition-all">
+                <span class="font-mono text-xs text-or group-hover:text-or-light transition-colors" x-text="v.k"></span>
+                <span class="text-xs text-creme-muted leading-tight" x-text="v.d"></span>
+              </button>
+            </template>
+          </div>
+          <div x-show="copiedVar" x-transition class="mt-3 text-xs text-green-400 text-center py-1.5 bg-green-900/30 border border-green-700/30 rounded">
+            ✓ <span x-text="copiedVar"></span> copié !
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div class="fixed bottom-5 right-5 z-[200] flex flex-col-reverse gap-2" id="toasts"></div>
+<script>
+function showToast(msg, type='success') {
+  const el = document.createElement('div');
+  el.className = 'toast-in flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl text-sm font-medium max-w-xs ' + (type==='success'?'bg-green-900 border border-green-700 text-green-100':'bg-red-900 border border-red-700 text-red-100');
+  el.innerHTML = `<span>${type==='success'?'✓':'✗'}</span><span>${msg}</span>`;
+  document.getElementById('toasts').prepend(el);
+  setTimeout(()=>el.remove(), 4000);
+}
+</script>
+</body>
+</html>

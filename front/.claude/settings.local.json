@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx skills *)",
+      "Bash(python .agents/skills/ui-ux-pro-max/scripts/search.py \"premium butcher catering event luxury dark gold\" --design-system -p \"Chez Guillaume\")",
+      "Bash(dir \"C:\\\\Users\\\\iliyan\\\\Desktop\\\\chezgu\\\\.agents\\\\skills\\\\ui-ux-pro-max\\\\scripts\")",
+      "Bash(dir \"C:\\\\Users\\\\iliyan\\\\Desktop\\\\chezgu\\\\.agents\\\\skills\\\\ui-ux-pro-max\\\\data\")",
+      "Bash(dir /al \"C:\\\\Users\\\\iliyan\\\\Desktop\\\\chezgu\\\\.agents\\\\skills\\\\ui-ux-pro-max\")",
+      "Bash(python \"C:\\\\Users\\\\iliyan\\\\AppData\\\\Local\\\\Temp\\\\skills-gKIWZY\\\\src\\\\ui-ux-pro-max\\\\scripts\\\\search.py\" \"premium butcher catering event luxury dark gold artisan\" --design-system -p \"Chez Guillaume\")",
+      "Bash(npm run *)",
+      "Bash(claude mcp *)",
+      "Bash(xargs grep *)",
+      "mcp__magic__21st_magic_component_builder",
+      "mcp__magic__21st_magic_component_inspiration",
+      "Bash(npm install *)",
+      "Read(//c/Users/iliyan/Desktop/**)",
+      "Bash(composer --version)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

@@ -1,0 +1,380 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ devis.reference }}{% endblock %}
+{% block page_title %}{{ devis.reference }}{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ path('admin_devis_index') }}"
+   class="text-[10px] text-white/40 hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest font-black">
+    ← Retour
+</a>
+{% endblock %}
+
+{% set statut_classes = {
+    'nouveau':    'bg-rouge/15 text-red-300 border-rouge/30',
+    'lu':         'bg-white/5 text-white/40 border-white/10',
+    'en_attente': 'bg-yellow-900/30 text-yellow-300 border-yellow-700/30',
+    'accepte':    'bg-green-900/30 text-green-300 border-green-700/30',
+    'refuse':     'bg-white/5 text-white/25 border-white/8',
+} %}
+
+{% block body %}
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6" x-data="devisDetail({{ devis.id }}, '{{ devis.statut }}')">
+
+    {# ─── COLONNE PRINCIPALE ─────────────────────────── #}
+    <div class="xl:col-span-2 space-y-5">
+
+        {# Récap prestation #}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <h2 class="font-serif italic text-2xl text-white">{{ devis.prestationNom }}</h2>
+                    <p class="text-xs text-white/30 uppercase tracking-widest font-black mt-1">
+                        Reçu le {{ devis.createdAt|date('d/m/Y à H:i') }}
+                    </p>
+                </div>
+                <span class="shrink-0 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wide border {{ statut_classes[devis.statut] ?? '' }}"
+                      x-text="statutLabel">{{ devis.statutLabel }}</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-white/[0.04] border border-white/5 rounded-xl p-4 text-center">
+                    <p class="text-3xl font-serif italic text-primary font-semibold">{{ devis.nbPersonnes }}</p>
+                    <p class="text-[10px] text-white/30 uppercase tracking-widest font-black mt-1">Personnes</p>
+                </div>
+                <div class="bg-white/[0.04] border border-white/5 rounded-xl p-4 text-center">
+                    <p class="text-sm font-semibold text-white">
+                        {% if devis.dateEvenement %}{{ devis.dateEvenement|date('d/m/Y') }}{% else %}<span class="text-white/25">À définir</span>{% endif %}
+                    </p>
+                    <p class="text-[10px] text-white/30 uppercase tracking-widest font-black mt-1">Date évén.</p>
+                </div>
+                <div class="bg-white/[0.04] border border-white/5 rounded-xl p-4 text-center">
+                    <p class="text-sm font-semibold text-white">{{ devis.lieuLabel }}</p>
+                    {% if devis.lieuDetail %}
+                    <p class="text-[10px] text-white/30 mt-1 truncate" title="{{ devis.lieuDetail }}">{{ devis.lieuDetail|slice(0, 20) }}…</p>
+                    {% else %}
+                    <p class="text-[10px] text-white/30 uppercase tracking-widest font-black mt-1">Lieu</p>
+                    {% endif %}
+                </div>
+                <div class="bg-white/[0.04] border border-white/5 rounded-xl p-4 text-center">
+                    {% if devis.estimationMin and devis.estimationMax %}
+                    <p class="text-sm font-black text-primary font-mono">
+                        {{ devis.estimationMin|number_format(0, ',', ' ') }}–{{ devis.estimationMax|number_format(0, ',', ' ') }} €
+                    </p>
+                    {% else %}
+                    <p class="text-sm text-white/25">Non calculée</p>
+                    {% endif %}
+                    <p class="text-[10px] text-white/30 uppercase tracking-widest font-black mt-1">Estimation</p>
+                </div>
+            </div>
+        </div>
+
+        {# Options JSON #}
+        {% if devis.options %}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <h3 class="font-serif italic text-xl text-white mb-4">Options sélectionnées</h3>
+            <div class="space-y-1">
+                {% for option in devis.options %}
+                <div class="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0 text-sm">
+                    <span class="text-white/70">{{ option.label ?? option.id }}</span>
+                    <span class="font-mono font-black text-xs">
+                        {% if option.unite == 'sur_devis' %}
+                            <span class="text-white/30 italic">Sur devis</span>
+                        {% elseif option.prix_base is defined and option.prix_base > 0 %}
+                            <span class="text-primary">{{ option.prix_base|number_format(2, ',', ' ') }} €</span>
+                            <span class="text-white/30 font-normal">
+                                {% if option.unite == 'par_personne' %}× {{ devis.nbPersonnes }} pers.
+                                {% elseif option.unite == 'forfait' %}forfait{% endif %}
+                            </span>
+                        {% else %}
+                            <span class="text-white/25">—</span>
+                        {% endif %}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {# Message client #}
+        {% if devis.clientMessage %}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <h3 class="font-serif italic text-xl text-white mb-4">Message du client</h3>
+            <blockquote class="border-l-2 border-primary/50 pl-5 text-sm text-white/60 italic leading-relaxed">
+                {{ devis.clientMessage|nl2br }}
+            </blockquote>
+        </div>
+        {% endif %}
+
+        {# Modifier le devis #}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-serif italic text-xl text-white">Modifier le devis</h3>
+                <button @click="editOpen = !editOpen"
+                    class="text-[10px] uppercase tracking-widest font-black text-white/30 hover:text-white transition-colors"
+                    x-text="editOpen ? '▲ Replier' : '▼ Déplier'">
+                </button>
+            </div>
+
+            <div x-show="editOpen" x-transition>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-[10px] text-white/30 uppercase tracking-widest font-black mb-2">Prestation</label>
+                        <input type="text" x-model="edit.prestation_nom"
+                            class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-primary transition-all" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-white/30 uppercase tracking-widest font-black mb-2">Nb personnes</label>
+                        <input type="number" x-model.number="edit.nb_personnes" min="1"
+                            class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-primary transition-all" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-white/30 uppercase tracking-widest font-black mb-2">Date événement</label>
+                        <input type="date" x-model="edit.date_evenement"
+                            class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-primary transition-all" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-white/30 uppercase tracking-widest font-black mb-2">Lieu</label>
+                        <select x-model="edit.lieu"
+                            class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-primary transition-all">
+                            <option value="sur_place">Sur place</option>
+                            <option value="livraison">Livraison</option>
+                            <option value="a_definir">À définir</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-[10px] text-white/30 uppercase tracking-widest font-black mb-2">Détail du lieu</label>
+                        <input type="text" x-model="edit.lieu_detail" placeholder="Ville, salle, domaine…"
+                            class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:border-primary transition-all" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-white/30 uppercase tracking-widest font-black mb-2">Estimation min (€)</label>
+                        <input type="number" x-model="edit.estimation_min" step="0.01" min="0"
+                            class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-primary transition-all" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-white/30 uppercase tracking-widest font-black mb-2">Estimation max (€)</label>
+                        <input type="number" x-model="edit.estimation_max" step="0.01" min="0"
+                            class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-primary transition-all" />
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 pt-2 flex-wrap">
+                    <button @click="saveEdit(false)"
+                        :disabled="editLoading"
+                        class="flex items-center gap-2 bg-white/10 hover:bg-white/15 disabled:opacity-30
+                               text-white font-black px-5 py-2.5 rounded-xl text-[11px] uppercase tracking-widest transition-colors">
+                        <span x-show="!editLoading">Sauvegarder</span>
+                        <span x-show="editLoading">…</span>
+                    </button>
+                    <button @click="saveEdit(true)"
+                        :disabled="editLoading"
+                        class="flex items-center gap-2 bg-primary hover:bg-primary-dark disabled:opacity-30
+                               text-black font-black px-5 py-2.5 rounded-xl text-[11px] uppercase tracking-widest transition-colors">
+                        <span x-show="!editLoading">Sauvegarder & renvoyer au client</span>
+                        <span x-show="editLoading">Envoi…</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {# Répondre au client #}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <h3 class="font-serif italic text-xl text-white mb-5">Répondre au client</h3>
+            <div class="space-y-3">
+                <input type="text" x-model="emailSujet"
+                    placeholder="Objet (laisser vide pour utiliser le template)"
+                    class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:border-primary transition-all">
+                <textarea x-model="emailMessage" rows="5"
+                    placeholder="Votre message au client…"
+                    class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:border-primary transition-all resize-none">
+                </textarea>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-white/30">
+                        Envoi à <strong class="text-white/60">{{ devis.clientEmail }}</strong>
+                    </span>
+                    <button @click="sendEmail()"
+                        :disabled="emailLoading || emailMessage.trim() === ''"
+                        class="flex items-center gap-2 bg-primary hover:bg-primary-dark disabled:opacity-30 disabled:cursor-not-allowed
+                               text-black font-black px-5 py-2.5 rounded-xl text-[11px] uppercase tracking-widest transition-colors">
+                        <span x-show="!emailLoading">Envoyer</span>
+                        <span x-show="emailLoading">Envoi…</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {# Notes internes #}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-serif italic text-xl text-white">Notes internes</h3>
+                <span x-show="notesSaved" class="text-[10px] text-green-400 uppercase tracking-widest font-black">✓ Sauvegardé</span>
+            </div>
+            <textarea x-model="notes" @input.debounce.1000ms="saveNotes()" rows="4"
+                placeholder="Notes privées (non visibles par le client)…"
+                class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:border-primary transition-all resize-none">{{ devis.notesAdmin }}</textarea>
+            <p class="text-[10px] text-white/25 uppercase tracking-widest font-black mt-2">
+                Sauvegarde automatique après 1 seconde d'inactivité.
+            </p>
+        </div>
+
+    </div>
+
+    {# ─── COLONNE DROITE ─────────────────────────────── #}
+    <div class="space-y-4">
+
+        {# Contact client #}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <h3 class="font-serif italic text-xl text-white mb-5">Contact client</h3>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <p class="text-[10px] text-white/30 uppercase tracking-widest font-black mb-1">Nom</p>
+                    <p class="text-white font-semibold">{{ devis.clientPrenom }} {{ devis.clientNom }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-white/30 uppercase tracking-widest font-black mb-1">Email</p>
+                    <a href="mailto:{{ devis.clientEmail }}" class="text-primary hover:text-primary-dark transition-colors break-all text-sm">
+                        {{ devis.clientEmail }}
+                    </a>
+                </div>
+                <div>
+                    <p class="text-[10px] text-white/30 uppercase tracking-widest font-black mb-1">Téléphone</p>
+                    <a href="tel:{{ devis.clientTelephone }}" class="text-primary hover:text-primary-dark transition-colors">
+                        {{ devis.clientTelephone }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {# Changement de statut #}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <h3 class="font-serif italic text-xl text-white mb-4">Statut</h3>
+            <div class="space-y-2">
+                {% for slug, label in statuts %}
+                <button @click="setStatut('{{ slug }}')"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all border
+                           {{ statut_classes[slug] ?? 'bg-white/5 text-white/40 border-white/10' }}"
+                    :class="statut === '{{ slug }}' ? 'ring-1 ring-primary/50 opacity-100' : 'opacity-35 hover:opacity-60'">
+                    <span class="w-2 h-2 rounded-full shrink-0
+                        {% if slug == 'nouveau' %}bg-rouge
+                        {% elseif slug == 'accepte' %}bg-green-400
+                        {% elseif slug == 'en_attente' %}bg-yellow-400
+                        {% else %}bg-white/30{% endif %}">
+                    </span>
+                    {{ label }}
+                    <span x-show="statut === '{{ slug }}'" class="ml-auto text-primary">✓</span>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Métadonnées #}
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-6">
+            <h3 class="font-serif italic text-xl text-white mb-4">Métadonnées</h3>
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] text-white/30 uppercase tracking-widest font-black">Référence</span>
+                    <span class="font-mono text-primary text-xs font-black">{{ devis.reference }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] text-white/30 uppercase tracking-widest font-black">Créé le</span>
+                    <span class="text-white/60 text-xs">{{ devis.createdAt|date('d/m/Y H:i') }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] text-white/30 uppercase tracking-widest font-black">Modifié le</span>
+                    <span class="text-white/60 text-xs">{{ devis.updatedAt|date('d/m/Y H:i') }}</span>
+                </div>
+                {% if devis.traitePar %}
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] text-white/30 uppercase tracking-widest font-black">Traité par</span>
+                    <span class="text-white/60 text-xs">{{ devis.traitePar.nomComplet }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function devisDetail(id, initialStatut) {
+    return {
+        id, statut: initialStatut,
+        statutLabel: '{{ devis.statutLabel }}',
+        notes: '', notesSaved: false,
+        emailMessage: '', emailSujet: '', emailLoading: false,
+        editOpen: false, editLoading: false,
+        edit: {
+            prestation_nom:  {{ devis.prestationNom|json_encode|raw }},
+            nb_personnes:    {{ devis.nbPersonnes }},
+            date_evenement:  {{ devis.dateEvenement ? devis.dateEvenement|date('Y-m-d')|json_encode|raw : 'null' }},
+            lieu:            {{ devis.lieu|json_encode|raw }},
+            lieu_detail:     {{ (devis.lieuDetail ?? '')|json_encode|raw }},
+            estimation_min:  {{ devis.estimationMin ?? 'null' }},
+            estimation_max:  {{ devis.estimationMax ?? 'null' }},
+        },
+
+        async setStatut(newStatut) {
+            const res = await apiFetch(`/admin/devis/${this.id}/statut`, {
+                method: 'POST', body: JSON.stringify({ statut: newStatut }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                this.statut = data.statut;
+                this.statutLabel = data.statut_label;
+                showToast('Statut : ' + data.statut_label, 'success');
+            } else {
+                showToast(data.error || 'Erreur mise à jour.', 'error');
+            }
+        },
+
+        async saveNotes() {
+            await apiFetch(`/admin/devis/${this.id}/notes`, {
+                method: 'POST', body: JSON.stringify({ notes: this.notes }),
+            });
+            this.notesSaved = true;
+            setTimeout(() => { this.notesSaved = false; }, 3000);
+        },
+
+        async saveEdit(envoyer) {
+            this.editLoading = true;
+            const res = await apiFetch(`/admin/devis/${this.id}/modifier`, {
+                method: 'POST',
+                body: JSON.stringify({ ...this.edit, envoyer_client: envoyer }),
+            });
+            const data = await res.json();
+            this.editLoading = false;
+            if (data.success) {
+                if (envoyer && data.email_error) {
+                    showToast('Sauvegardé mais erreur email : ' + data.email_error, 'error');
+                } else if (envoyer) {
+                    showToast('Devis sauvegardé et renvoyé au client.', 'success');
+                } else {
+                    showToast('Devis mis à jour.', 'success');
+                }
+            } else {
+                showToast(data.error || 'Erreur.', 'error');
+            }
+        },
+
+        async sendEmail() {
+            if (!this.emailMessage.trim()) return;
+            this.emailLoading = true;
+            const res = await apiFetch(`/admin/devis/${this.id}/email`, {
+                method: 'POST', body: JSON.stringify({ message: this.emailMessage, sujet: this.emailSujet }),
+            });
+            const data = await res.json();
+            this.emailLoading = false;
+            if (data.success) {
+                showToast('Email envoyé.', 'success');
+                this.emailMessage = ''; this.emailSujet = '';
+            } else {
+                showToast(data.error || 'Erreur envoi email.', 'error');
+            }
+        },
+    };
+}
+</script>
+{% endblock %}

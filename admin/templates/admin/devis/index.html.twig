@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Devis{% endblock %}
+{% block page_title %}Devis{% endblock %}
+
+{% block topbar_actions %}
+<span class="text-[10px] text-white/30 uppercase tracking-widest font-black">{{ pagination.total }} résultat{{ pagination.total != 1 ? 's' : '' }}</span>
+{% endblock %}
+
+{% block body %}
+{% set statut_classes = {
+    'nouveau':    'bg-rouge/15 text-red-300 border-rouge/30',
+    'lu':         'bg-white/5 text-white/40 border-white/10',
+    'en_attente': 'bg-yellow-900/30 text-yellow-300 border-yellow-700/30',
+    'accepte':    'bg-green-900/30 text-green-300 border-green-700/30',
+    'refuse':     'bg-white/5 text-white/25 border-white/8',
+} %}
+
+{# ─── FILTRES ─────────────────────────────────────────── #}
+<form method="get" class="bg-dark-2 border border-white/5 rounded-2xl p-4 mb-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+        <div class="xl:col-span-2">
+            <input type="search" name="search" value="{{ filters.search ?? '' }}"
+                placeholder="Nom, email, référence…"
+                class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/20 focus:border-primary transition-all">
+        </div>
+
+        <select name="prestation"
+                class="bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary transition-all">
+            <option value="">Toutes prestations</option>
+            {% for prestation in prestations %}
+            <option value="{{ prestation.slug }}" {{ (filters.prestation ?? '') == prestation.slug ? 'selected' : '' }}>
+                {{ prestation.icone }} {{ prestation.nom }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <select name="statut"
+                class="bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary transition-all">
+            <option value="">Tous statuts</option>
+            {% for slug, label in statuts %}
+            <option value="{{ slug }}" {{ (filters.statut ?? '') == slug ? 'selected' : '' }}>{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="date" name="date_from" value="{{ filters.date_from ?? '' }}"
+               class="bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary transition-all">
+
+        <div class="flex gap-2">
+            <input type="date" name="date_to" value="{{ filters.date_to ?? '' }}"
+                   class="flex-1 bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary transition-all">
+            <button type="submit"
+                    class="bg-primary hover:bg-primary-dark text-black font-black px-4 py-2.5 rounded-xl text-sm transition-colors">
+                ↵
+            </button>
+            {% if filters is not empty %}
+            <a href="{{ path('admin_devis_index') }}"
+               class="flex items-center justify-center bg-white/5 hover:bg-white/10 text-white/50 px-3 py-2 rounded-xl text-sm transition-colors">
+                ✕
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</form>
+
+{# ─── TABLEAU ─────────────────────────────────────────── #}
+<div class="bg-dark-2 border border-white/5 rounded-2xl overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-white/5 text-[10px] text-white/30 uppercase tracking-widest font-black">
+                    <th class="px-5 py-4 text-left">Référence</th>
+                    <th class="px-5 py-4 text-left">Client</th>
+                    <th class="hidden sm:table-cell px-5 py-4 text-left">Prestation</th>
+                    <th class="hidden md:table-cell px-5 py-4 text-right">Pers.</th>
+                    <th class="hidden lg:table-cell px-5 py-4 text-right text-primary">Estimation</th>
+                    <th class="hidden md:table-cell px-5 py-4 text-center">Date évén.</th>
+                    <th class="px-5 py-4 text-center">Statut</th>
+                    <th class="px-5 py-4 text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white/[0.04]">
+                {% for devis in pagination.items %}
+                <tr class="transition-colors">
+                    <td class="px-5 py-3.5">
+                        <span class="font-mono text-xs text-primary font-black">{{ devis.reference }}</span>
+                        <p class="text-[10px] text-white/25 mt-0.5">{{ devis.createdAt|date('d/m/Y') }}</p>
+                    </td>
+                    <td class="px-5 py-3.5">
+                        <p class="font-semibold text-white">{{ devis.clientPrenom }} {{ devis.clientNom }}</p>
+                        <p class="text-xs text-white/35 truncate max-w-[160px]">{{ devis.clientEmail }}</p>
+                    </td>
+                    <td class="hidden sm:table-cell px-5 py-3.5 text-white/45 text-xs">
+                        {{ devis.prestationNom }}
+                    </td>
+                    <td class="hidden md:table-cell px-5 py-3.5 text-right text-white font-mono">
+                        {{ devis.nbPersonnes }}
+                    </td>
+                    <td class="hidden lg:table-cell px-5 py-3.5 text-right font-mono text-primary text-xs font-black">
+                        {% if devis.estimationMin and devis.estimationMax %}
+                        {{ devis.estimationMin|number_format(0, ',', ' ') }}–{{ devis.estimationMax|number_format(0, ',', ' ') }} €
+                        {% else %}
+                        <span class="text-white/20">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="hidden md:table-cell px-5 py-3.5 text-center text-xs text-white/40">
+                        {% if devis.dateEvenement %}{{ devis.dateEvenement|date('d/m/Y') }}
+                        {% else %}<span class="text-white/20">À définir</span>{% endif %}
+                    </td>
+                    <td class="px-5 py-3.5 text-center">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wide border
+                                     {{ statut_classes[devis.statut] ?? 'bg-white/5 text-white/40 border-white/10' }}">
+                            {{ devis.statutLabel }}
+                        </span>
+                    </td>
+                    <td class="px-5 py-3.5 text-right">
+                        <a href="{{ path('admin_devis_show', { id: devis.id }) }}"
+                           class="inline-flex items-center gap-1 text-[10px] text-primary hover:text-primary-dark transition-colors font-black uppercase tracking-wide">
+                            Voir →
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" class="px-5 py-16 text-center">
+                        <p class="font-serif italic text-2xl text-white/20 mb-2">Aucun devis trouvé</p>
+                        <p class="text-sm text-white/30">Essayez de modifier vos filtres.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# Pagination #}
+    {% if pagination.totalPages > 1 %}
+    <div class="border-t border-white/5 px-5 py-4 flex items-center justify-between">
+        <span class="text-[10px] text-white/30 uppercase tracking-widest font-black">
+            Page {{ pagination.page }} / {{ pagination.totalPages }} — {{ pagination.total }} résultats
+        </span>
+        <div class="flex gap-1">
+            {% if pagination.page > 1 %}
+            <a href="{{ path('admin_devis_index', filters|merge({ page: pagination.page - 1 })) }}"
+               class="px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-white text-sm transition-colors">←</a>
+            {% endif %}
+            {% for p in max(1, pagination.page - 2)..min(pagination.totalPages, pagination.page + 2) %}
+            <a href="{{ path('admin_devis_index', filters|merge({ page: p })) }}"
+               class="px-3 py-1.5 rounded-lg text-sm transition-colors {{ p == pagination.page ? 'bg-primary text-black font-black' : 'bg-white/5 hover:bg-white/10 text-white' }}">
+                {{ p }}
+            </a>
+            {% endfor %}
+            {% if pagination.page < pagination.totalPages %}
+            <a href="{{ path('admin_devis_index', filters|merge({ page: pagination.page + 1 })) }}"
+               class="px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-white text-sm transition-colors">→</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

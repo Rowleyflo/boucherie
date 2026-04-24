@@ -1,0 +1,723 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const brazeroMenus = [
+  {
+      title: 'Menu Classique', price: '25,00€', unit: '/ pers',
+      desc: 'Notre menu complet avec une sélection d\'apéritifs gourmands et viandes grillées au feu de bois.',
+      modalDesc: 'Notre menu complet avec une sélection d\'apéritifs gourmands et viandes grillées au feu de bois. Une expérience gastronomique parfaite pour toutes vos réceptions. Préparé avec passion par notre équipe.',
+      img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=500',
+      details: [
+          { t: 'Apéritif', c: 'Planche de charcuterie, Cœur de canard persillé, Calamar à l\'Espagnole' },
+          { t: 'Viande et accompagnement', c: 'Émincé d\'onglet de bœuf mariné à l\'échalote et au vin rouge, Suprême de poulet mariné au curry, Embeurrée de pomme de terre' },
+          { t: 'Format', c: 'Minimum 20 personnes.' }
+      ]
+  },
+  {
+      title: 'Menu Gourmet', price: '30,00€', unit: '/ pers',
+      desc: 'Une sélection exceptionnelle de viandes premium et d\'accompagnements raffinés pour vos événements spéciaux.',
+      modalDesc: 'Une sélection exceptionnelle de viandes premium et d\'accompagnements raffinés pour vos événements spéciaux. Pour les amateurs de gastronomie qui ne font aucun compromis.',
+      img: 'https://images.unsplash.com/photo-1544025162-831e5066c0de?q=80&w=500',
+      details: [
+          { t: 'Apéritif', c: 'Planche de charcuteries fines et fromages, Poivron de Padron à la fleur de sel, Cœur de canard persillé, Mini brochette aux crevettes et au chorizo' },
+          { t: 'Viande et accompagnement', c: 'Onglet de boeuf émincé et mariné à l\'échalote, Araignée de porc marinée aux trois poivres, Écrasé de pommes de terre aux champignons et aux cèpes' },
+          { t: 'Format', c: 'Minimum 20 personnes' }
+      ]
+  },
+  {
+      title: 'Menu Prestige', price: '35,00€', unit: '/ pers', desc: 'Produits nobles et cuissons signatures.',
+      img: 'https://images.unsplash.com/photo-1594046306503-4f056241a46b?q=80&w=500',
+      details: [
+          { t: 'Apéritif', c: 'Croque-monsieur truffé, St-Jacques, Mini brochettes' },
+          { t: 'Viande', c: 'Magret de canard, Émincé de bœuf mariné' },
+          { t: 'Accompagnement', c: 'Pommes grenailles sautées' }
+      ]
+  },
+  {
+      title: 'Menu du Boucher', price: '60,00€', unit: '/ pers', desc: 'L\'expérience ultime des pièces d\'exception.',
+      img: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=500',
+      details: [
+          { t: 'Apéritif', c: 'Sélection d\'exceptions du Chef boucher' },
+          { t: 'Viande', c: 'Côte de bœuf maturée, Pièces nobles de concours (Tomahawk...)' },
+          { t: 'Accompagnement', c: 'Légumes grillés de saison & Pommes grenailles' }
+      ]
+  },
+];
+
+const traiteurItems = [
+  {
+    title: 'Planche Charcuterie', desc: 'Sélection artisanale traditionnelle', price: '4,50€', unit: '/ pers',
+    img: 'https://images.unsplash.com/photo-1628268909376-e8c4dfebcd0d?q=80&w=500'
+  },
+  {
+    title: 'Planche Mixte', desc: 'Charcuteries fines et fromages affinés', price: '5,50€', unit: '/ pers',
+    img: 'https://images.unsplash.com/photo-1596568322646-0b1a0eac5bfa?q=80&w=500'
+  },
+  {
+    title: 'Plaque Pizza/Quiche', desc: 'Idéale pour environ 50 pièces cocktails', price: '32,00€', unit: 'dès',
+    img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=500'
+  },
+  {
+    title: 'Tapas & Anchois', desc: 'Pan con Tomate, jambon ou crevettes', price: '1,40€', unit: '/ pièce',
+    img: 'https://images.unsplash.com/photo-1541529086526-db283c563270?q=80&w=500'
+  },
+  {
+    title: 'Pièces Nobles', desc: 'Tapas Foie Gras, Saumon fumé maison', price: '1,70€', unit: '/ pièce',
+    img: 'https://images.unsplash.com/photo-1644704381734-7a3c3182b810?q=80&w=500'
+  },
+  {
+    title: 'Verrines Fraîcheur', desc: 'Rillettes de thon, passion, pétoncles...', price: '1,80€', unit: '/ pièce',
+    img: 'https://images.unsplash.com/photo-1588673836336-d70c40608ed1?q=80&w=500'
+  }
+];
+
+const carteAperitifs = [
+  { name: 'Planche charcuterie',                  price: '4,50€' },
+  { name: 'Planche charcuterie fromage',          price: '5,50€' },
+  { name: 'Mini brochettes chorizo crevettes',    price: '5,90€' },
+  { name: 'Cœur de canard persillés',             price: '5,90€' },
+  { name: 'Poivron de Padron à la fleur de sel',  price: '2,90€' },
+  { name: 'Calamar à l\'Espagnole',               price: '5,90€' },
+  { name: 'Mini brochettes crevettes flambées',   price: '6,90€' },
+  { name: 'Mini brochettes Noix de Saint-Jacques',price: '7,50€' },
+  { name: 'Couteaux en persillade',               price: '5,90€' },
+  { name: 'Moules de Bouchot en persillade',      price: '5,90€' },
+];
+
+const carteViandes = [
+  { name: 'Émincé de bœuf vin rouge & échalote',  price: '9,90€' },
+  { name: 'Émincé d\'onglet vin rouge & échalote', price: '10,90€' },
+  { name: 'Suprême de poulet mariné',              price: '7,90€' },
+  { name: 'Grilladin de dinde mariné',             price: '6,90€' },
+  { name: 'Entrecôte ~400g',                       price: '18,90€' },
+  { name: 'Araignée de porc marinée',              price: '8,90€' },
+  { name: 'Pluma de porc marinée',                 price: '9,90€' },
+  { name: 'Demi magret ~200g',                     price: '9,90€' },
+  { name: 'Magret entier ~400g',                   price: '17,90€' },
+  { name: 'Tomahawk de porc',                      price: 'Sur devis' },
+  { name: 'Côte à l\'os',                          price: 'Sur devis' },
+  { name: 'T-bone de bœuf',                        price: 'Sur devis' },
+];
+---
+
+<Layout
+  title="Boucherie Chez Guillaume — Boucher Traiteur à Montbeton, Tarn-et-Garonne (82)"
+  description="Boucherie artisanale & traiteur événementiel à Montbeton (82). Formules Brazéro, plateaux traiteur pour mariages, anniversaires et réceptions. Devis gratuit."
+  image="/images/team-boucherie.jpg"
+>
+  <!-- 1. HERO -->
+  <section id="hero" class="min-h-[600px] md:min-h-[900px] flex items-center bg-[#151210] relative overflow-hidden pt-20 border-b border-white/5">
+    <div class="absolute inset-0 z-0 opacity-40">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-wood.png')]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center relative z-10 py-12 lg:py-0">
+
+      <!-- Image avec parallaxe -->
+      <div class="relative group flex justify-center order-2 lg:order-1" id="hero-image-col">
+        <div class="relative w-[55%] md:w-[70%]" id="hero-parallax">
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[110%] border-[8px] border-primary z-0 transform rotate-[-2deg] reveal-fade"></div>
+          <div class="relative z-10 transform hover:scale-105 transition-transform duration-700 reveal-scale">
+            <img src="/images/steak-hero.png" alt="Côte de bœuf fraîche — Boucherie Chez Guillaume, Montbeton" class="w-full h-auto drop-shadow-[0_50px_50px_rgba(0,0,0,0.8)]" fetchpriority="high" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Texte avec animations séquentielles -->
+      <div class="text-white lg:pl-10 order-1 lg:order-2">
+        <span class="section-label reveal-up" style="--delay:0ms">L'Art de la Viande</span>
+        <h1 class="text-4xl md:text-6xl font-serif italic leading-[1.1] mb-8 reveal-up" style="--delay:120ms">
+          Boucher Traiteur <br/>
+          <span class="text-primary not-italic font-sans font-black uppercase text-3xl md:text-5xl tracking-tighter">pour vos événements <br/> dans le Tarn-et-Garonne</span>
+        </h1>
+        <p class="text-secondary text-lg md:text-xl leading-relaxed mb-12 max-w-xl font-light reveal-up" style="--delay:240ms">
+          Boucherie d'exception & Traiteur événementiel. Nous sélectionnons, maturons et sublimons les meilleures pièces pour vos moments uniques.
+        </p>
+        <div class="flex flex-wrap gap-6 items-center reveal-up" style="--delay:360ms">
+          <a href="#prestations" class="btn-primary">Découvrir nos cartes</a>
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
+  </section>
+
+  <!-- NOTRE HISTOIRE -->
+  <section id="about" class="relative py-32 bg-[#0a0a0a] overflow-hidden">
+
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-[10%] left-[-10%] w-[50vw] h-[50vw] bg-[#8c3a2b] rounded-full mix-blend-screen filter blur-[150px] opacity-20"></div>
+      <div class="absolute bottom-[10%] right-[-10%] w-[40vw] h-[40vw] bg-[#d48c2c] rounded-full mix-blend-screen filter blur-[150px] opacity-10"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+
+      <div class="mb-20">
+        <span class="section-label reveal-up" style="--delay:0ms">Notre Histoire</span>
+        <div class="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-20">
+          <h2 class="text-4xl md:text-5xl font-serif italic text-white leading-[1.1] tracking-tight reveal-up" style="--delay:100ms">
+            Un savoir-faire<br/><span class="text-primary">artisanal</span>
+          </h2>
+          <div class="h-px bg-white/10 flex-grow mb-4 hidden lg:block reveal-fade" style="--delay:200ms"></div>
+          <p class="text-secondary text-sm uppercase tracking-[0.3em] font-black lg:mb-4 reveal-up" style="--delay:200ms">Montbeton — Tarn-et-Garonne</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-28 items-start">
+
+        <div class="space-y-8">
+          <p class="text-white/80 text-lg leading-relaxed font-light reveal-up" style="--delay:150ms">
+            Chez Guillaume perpétue un savoir-faire artisanal dans le respect des traditions. Installés à <strong class="text-white font-semibold">Montbeton dans le Tarn-et-Garonne</strong>, nous sélectionnons avec soin les meilleures viandes et matières premières auprès de producteurs locaux.
+          </p>
+          <p class="text-white/80 text-lg leading-relaxed font-light reveal-up" style="--delay:250ms">
+            Notre équipe de bouchers, charcutiers et traiteurs passionnés travaille chaque jour pour vous offrir des produits de qualité et des <strong class="text-white font-semibold">prestations traiteurs sur mesure</strong> pour tous vos réceptions.
+          </p>
+          <p class="text-white/80 text-lg leading-relaxed font-light reveal-up" style="--delay:350ms">
+            De la simple réception entre amis jusqu'au <strong class="text-white font-semibold">mariage de plusieurs centaines de convives</strong>, nous mettons notre expertise à votre service pour créer des moments de convivialité inoubliables autour de belles pièces de viandes.
+          </p>
+          <div class="pt-4 reveal-up" style="--delay:450ms">
+            <a href="#prestations" class="btn-primary">Voir nos formules</a>
+          </div>
+        </div>
+
+        <div class="reveal-scale overflow-hidden rounded-2xl" style="--delay:200ms">
+          <img src="/images/team-boucherie.jpg" alt="L'équipe de la Boucherie Chez Guillaume à Montbeton, Tarn-et-Garonne" class="w-full h-full object-cover max-h-[520px]" loading="lazy" />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- UNIFIED PRESTATIONS SECTION WITH TABS -->
+  <section id="prestations" class="relative py-24 overflow-hidden bg-[#0a0a0a]" x-data="{ activeTab: 'brazero', activeModal: null, brazeroSlide: 0, traiteurSlide: 0, carteSlide: 0, bTouchStartX: 0, tTouchStartX: 0, cTouchStartX: 0 }">
+
+    <div class="absolute inset-0 opacity-20 pointer-events-none">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-wood.png')]"></div>
+    </div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-primary/5 rounded-full blur-[140px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <span class="text-primary tracking-[0.3em] text-xs font-black uppercase inline-block border border-primary/30 px-6 py-2 rounded-full mb-6 bg-black/50 backdrop-blur-md reveal-up" style="--delay:0ms">Nos Prestations</span>
+        <h2 class="text-3xl md:text-4xl font-serif italic text-white drop-shadow-xl mb-12 reveal-up" style="--delay:100ms">L'Excellence à <span class="text-primary">votre table</span></h2>
+
+        <!-- TABS SWITCHER -->
+        <div class="inline-flex p-1.5 bg-white/[0.03] border border-white/10 rounded-full backdrop-blur-2xl shadow-2xl">
+           <button @click="activeTab = 'brazero'" :class="activeTab === 'brazero' ? 'bg-primary text-black shadow-lg scale-105' : 'text-white/60 hover:text-white'" class="px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300">
+              Formules Brazéro
+           </button>
+           <button @click="activeTab = 'traiteur'" :class="activeTab === 'traiteur' ? 'bg-primary text-black shadow-lg scale-105' : 'text-white/60 hover:text-white'" class="px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300">
+              Service Traiteur
+           </button>
+           <button @click="activeTab = 'carte'" :class="activeTab === 'carte' ? 'bg-primary text-black shadow-lg scale-105' : 'text-white/60 hover:text-white'" class="px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300">
+              À la Carte
+           </button>
+        </div>
+      </div>
+
+      <!-- TAB CONTENT: BRAZERO -->
+      <div x-show="activeTab === 'brazero'" x-transition:enter="transition ease-out duration-500 delay-200" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+
+        <!-- MOBILE CAROUSEL -->
+        <div class="md:hidden">
+          <div class="overflow-hidden -mx-6"
+               @touchstart.passive="bTouchStartX = $event.touches[0].clientX"
+               @touchend="if($event.changedTouches[0].clientX - bTouchStartX < -50 && brazeroSlide < 3) brazeroSlide++; else if($event.changedTouches[0].clientX - bTouchStartX > 50 && brazeroSlide > 0) brazeroSlide--">
+            <div class="flex" :style="'transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); transform: translateX(calc(7.5vw - ' + brazeroSlide + ' * (85vw + 16px)))'">
+              {brazeroMenus.map((menu, index) => (
+                <div class="w-[85vw] shrink-0 mr-4">
+                  <div @click={`activeModal = ${index}`} class="relative bg-white/[0.04] backdrop-blur-[30px] border border-white/10 rounded-[40px] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.3)] cursor-pointer hover:border-primary/50 transition-all duration-500 flex flex-col group h-full">
+                    <div class="w-full flex justify-center mb-6 mt-4">
+                      <div class="w-28 h-28 rounded-full overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)] border-[4px] border-black/20">
+                        <img src={menu.img} alt={menu.title} class="w-full h-full object-cover" loading="lazy" />
+                      </div>
+                    </div>
+                    <div class="text-center px-1 flex-grow">
+                      <h3 class="text-lg font-bold text-white tracking-wide mb-1 leading-tight">{menu.title}</h3>
+                      <p class="text-white/50 text-[10px] font-light leading-relaxed h-12 overflow-hidden">{menu.desc}</p>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center pt-5 border-t border-white/10">
+                      <span class="text-lg font-serif italic text-primary">{menu.price}</span>
+                      <button class="bg-white/10 group-hover:bg-primary font-bold text-white text-[9px] px-3 py-2 flex items-center rounded-full transition-colors shadow-lg pointer-events-none uppercase tracking-tighter">
+                        Détails <svg class="w-3 h-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <!-- Dots -->
+          <div class="flex justify-center items-center gap-2 mt-6">
+            {brazeroMenus.map((_, i) => (
+              <button
+                @click={`brazeroSlide = ${i}`}
+                :class={`brazeroSlide === ${i} ? 'w-5 bg-primary' : 'w-1.5 bg-white/20'`}
+                class="h-1.5 rounded-full transition-all duration-300"
+              ></button>
+            ))}
+          </div>
+        </div>
+
+        <!-- DESKTOP GRID -->
+        <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {brazeroMenus.map((menu, index) => (
+            <div class="h-full">
+              <div @click={`activeModal = ${index}`} class="relative bg-white/[0.04] backdrop-blur-[30px] border border-white/10 rounded-[40px] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.3)] cursor-pointer hover:-translate-y-3 hover:shadow-[0_40px_60px_rgba(0,0,0,0.5)] hover:border-primary/50 transition-all duration-500 flex flex-col group h-full">
+                <div class="w-full flex justify-center mb-6 mt-4 relative">
+                  <div class="w-28 h-28 rounded-full overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)] border-[4px] border-black/20 group-hover:scale-105 group-hover:rotate-6 transition-transform duration-700">
+                    <img src={menu.img} alt={menu.title} class="w-full h-full object-cover" loading="lazy" />
+                  </div>
+                </div>
+                <div class="text-center px-1 flex-grow">
+                  <h3 class="text-lg font-bold text-white tracking-wide mb-1 leading-tight">{menu.title}</h3>
+                  <p class="text-white/50 text-[10px] font-light leading-relaxed h-12 overflow-hidden">{menu.desc}</p>
+                </div>
+                <div class="mt-6 flex justify-between items-center pt-5 border-t border-white/10">
+                  <span class="text-lg font-serif italic text-primary">{menu.price}</span>
+                  <button class="bg-white/10 group-hover:bg-primary font-bold text-white text-[9px] px-3 py-2 flex items-center rounded-full transition-colors shadow-lg pointer-events-none uppercase tracking-tighter">
+                    Détails <svg class="w-3 h-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+      <!-- TAB CONTENT: TRAITEUR -->
+      <div x-show="activeTab === 'traiteur'" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+
+        <!-- MOBILE CAROUSEL -->
+        <div class="md:hidden">
+          <div class="overflow-hidden -mx-6"
+               @touchstart.passive="tTouchStartX = $event.touches[0].clientX"
+               @touchend="if($event.changedTouches[0].clientX - tTouchStartX < -50 && traiteurSlide < 5) traiteurSlide++; else if($event.changedTouches[0].clientX - tTouchStartX > 50 && traiteurSlide > 0) traiteurSlide--">
+            <div class="flex" :style="'transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); transform: translateX(calc(7.5vw - ' + traiteurSlide + ' * (85vw + 16px)))'">
+              {traiteurItems.map((item) => (
+                <div class="w-[85vw] shrink-0 mr-4">
+                  <div class="relative bg-white/[0.04] backdrop-blur-[30px] border border-white/10 rounded-[40px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:border-white/20 transition-all duration-500 flex flex-col group h-full">
+                    <div class="w-full flex justify-center mb-6 mt-2">
+                      <div class="w-32 h-32 rounded-full overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)] border-[6px] border-black/20">
+                        <img src={item.img} alt={`${item.title} — Traiteur Boucherie Chez Guillaume`} class="w-full h-full object-cover" loading="lazy" />
+                      </div>
+                    </div>
+                    <div class="text-center px-2 flex-grow">
+                      <h3 class="text-xl font-bold text-white tracking-wide mb-2">{item.title}</h3>
+                      <p class="text-white/50 text-sm font-light leading-relaxed">{item.desc}</p>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center pt-5 border-t border-white/10">
+                      <div class="flex items-baseline gap-1">
+                        <span class="text-xl font-serif italic text-primary">{item.price}</span>
+                        <span class="text-[10px] text-white/60 lowercase">{item.unit}</span>
+                      </div>
+                      <a href="/devis" class="bg-black/80 hover:bg-primary font-bold text-white text-[10px] px-5 py-3 rounded-full border border-white/5 transition-colors uppercase tracking-widest shadow-lg">Demander</a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <!-- Dots -->
+          <div class="flex justify-center items-center gap-2 mt-6">
+            {traiteurItems.map((_, i) => (
+              <button
+                @click={`traiteurSlide = ${i}`}
+                :class={`traiteurSlide === ${i} ? 'w-5 bg-primary' : 'w-1.5 bg-white/20'`}
+                class="h-1.5 rounded-full transition-all duration-300"
+              ></button>
+            ))}
+          </div>
+        </div>
+
+        <!-- DESKTOP GRID -->
+        <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {traiteurItems.map((item) => (
+            <div class="relative bg-white/[0.04] backdrop-blur-[30px] border border-white/10 rounded-[40px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:-translate-y-3 hover:shadow-[0_40px_60px_rgba(0,0,0,0.5)] hover:border-white/20 transition-all duration-500 flex flex-col group">
+              <div class="w-full flex justify-center mb-8 mt-2 relative">
+                <div class="w-40 h-40 rounded-full overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.5)] border-[6px] border-black/20 group-hover:scale-105 group-hover:rotate-3 transition-transform duration-700">
+                  <img src={item.img} alt={`${item.title} — Traiteur Boucherie Chez Guillaume`} class="w-full h-full object-cover" loading="lazy" />
+                </div>
+              </div>
+              <div class="text-center px-2 flex-grow">
+                <h3 class="text-2xl font-bold text-white tracking-wide mb-2">{item.title}</h3>
+                <p class="text-white/50 text-sm font-light leading-relaxed">{item.desc}</p>
+              </div>
+              <div class="mt-8 flex justify-between items-center pt-6 border-t border-white/10">
+                <div class="flex items-baseline gap-1">
+                  <span class="text-2xl font-serif italic text-primary">{item.price}</span>
+                  <span class="text-[10px] text-white/60 lowercase">{item.unit}</span>
+                </div>
+                <a href="/devis" class="bg-black/80 hover:bg-primary font-bold text-white text-[10px] px-5 py-3 rounded-full border border-white/5 transition-colors uppercase tracking-widest shadow-lg">Demander</a>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+      <!-- TAB CONTENT: À LA CARTE -->
+      <div x-show="activeTab === 'carte'" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+
+        <div class="text-center mb-10">
+          <p class="text-white/50 text-sm max-w-xl mx-auto leading-relaxed">Composez librement votre braséro en choisissant parmi notre sélection d'apéritifs et de viandes. Tout est calculé au nombre de convives.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          <!-- Apéritifs -->
+          <div class="bg-white/[0.03] border border-white/10 rounded-[32px] p-8">
+            <div class="flex items-center gap-3 mb-6 pb-5 border-b border-white/10">
+              <div class="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 1-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
+              </div>
+              <div>
+                <h3 class="text-white font-black text-lg">Apéritifs</h3>
+                <p class="text-white/40 text-[11px]">Prix par personne</p>
+              </div>
+            </div>
+            <div class="space-y-3">
+              {carteAperitifs.map(item => (
+                <div class="flex items-center justify-between gap-4 py-2.5 border-b border-white/5 last:border-0">
+                  <span class="text-white/80 text-sm leading-snug">{item.name}</span>
+                  <span class="text-primary font-black text-sm shrink-0">{item.price}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Viandes -->
+          <div class="bg-white/[0.03] border border-white/10 rounded-[32px] p-8">
+            <div class="flex items-center gap-3 mb-6 pb-5 border-b border-white/10">
+              <div class="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/></svg>
+              </div>
+              <div>
+                <h3 class="text-white font-black text-lg">Viandes</h3>
+                <p class="text-white/40 text-[11px]">Prix par personne</p>
+              </div>
+            </div>
+            <div class="space-y-3">
+              {carteViandes.map(item => (
+                <div class="flex items-center justify-between gap-4 py-2.5 border-b border-white/5 last:border-0">
+                  <span class="text-white/80 text-sm leading-snug">{item.name}</span>
+                  <span class={`font-black text-sm shrink-0 ${item.price === 'Sur devis' ? 'text-white/40 italic' : 'text-primary'}`}>{item.price}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="text-center mt-10">
+          <a href="/devis" class="inline-block bg-primary hover:bg-white text-dark hover:text-black text-xs font-black uppercase tracking-[0.2em] px-10 py-4 rounded-full transition-all shadow-[0_0_30px_rgba(212,140,44,0.3)]">
+            Composer mon devis →
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+      <!-- MODALS (Specifically for Brazéro/Tab 1) -->
+      {brazeroMenus.map((menu, index) => (
+          <div x-show={`activeModal === ${index} && activeTab === 'brazero'`} x-cloak class="fixed inset-0 z-[9999] flex items-center justify-center pt-24 pb-12 px-4" style="position: fixed; inset: 0px;">
+             <div x-show={`activeModal === ${index}`} x-transition.opacity @click="activeModal = null" class="absolute inset-0 bg-black/80 backdrop-blur-xl"></div>
+             <div x-show={`activeModal === ${index}`} x-transition:enter="transition ease-out duration-400" x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-4" class="relative w-full max-w-4xl bg-[#0f0f0f] border border-white/10 rounded-[32px] shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
+                 <button @click="activeModal = null" class="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-10 h-10 rounded-full bg-black/50 hover:bg-black/90 backdrop-blur-md flex items-center justify-center text-white transition-colors border border-white/10">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                 </button>
+                 <div class="md:w-5/12 relative h-48 md:h-auto shrink-0 hidden sm:block">
+                     <img src={menu.img} alt={`Formule Brazéro ${menu.title} — Boucherie Chez Guillaume`} class="w-full h-full object-cover" loading="lazy" />
+                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0f0f0f]"></div>
+                 </div>
+                 <div class="md:w-7/12 p-6 md:p-10 relative z-10 flex flex-col overflow-y-auto custom-scrollbar">
+                     <span class="text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-2 block">Formule Brazéro</span>
+                     <h3 class="text-3xl lg:text-4xl font-serif italic text-white mb-3">{menu.title}</h3>
+                     <p class="text-white/60 text-[13px] font-light leading-relaxed mb-6 pr-4">{menu.modalDesc || menu.desc}</p>
+                     <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-6 mb-8 flex-grow">
+                         <div class="flex items-end gap-2 mb-6 border-b border-white/10 pb-4">
+                             <span class="text-4xl font-serif italic text-primary">{menu.price}</span>
+                             <span class="text-xs text-white/50 mb-1">{menu.unit}</span>
+                         </div>
+                         <div class="space-y-6">
+                             {menu.details.map(detail => (
+                                 <div class="flex items-start gap-4">
+                                     <div class="mt-0.5 text-primary/80 shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                                     <div>
+                                         <span class="block text-white text-[10px] uppercase font-bold tracking-widest mb-2 opacity-80">{detail.t}</span>
+                                         <ul class="text-white/70 text-sm font-light space-y-1.5 list-none m-0 p-0">
+                                             {detail.c.split(',').map((item: string) => (
+                                                 <li class="flex items-start gap-2 text-[13px] leading-snug"><span class="text-primary/50 text-[10px] mt-1 shrink-0">●</span><span>{item.trim()}</span></li>
+                                             ))}
+                                         </ul>
+                                     </div>
+                                 </div>
+                             ))}
+                         </div>
+                     </div>
+                     <a href="/devis" @click="activeModal = null" class="inline-block text-center w-full bg-primary hover:bg-white text-dark hover:text-black text-xs font-black uppercase tracking-[0.2em] py-4 rounded-full transition-all shadow-[0_0_30px_rgba(212,140,44,0.3)] mt-auto">Demander un devis</a>
+                 </div>
+             </div>
+          </div>
+      ))}
+    </div>
+
+  </section>
+
+  <!-- L'ÉQUIPE -->
+  <section id="equipe" class="relative py-32 bg-[#0f0f0f] overflow-hidden">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-primary/5 rounded-full blur-[160px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="mb-16">
+        <span class="section-label reveal-up" style="--delay:0ms">L'Équipe</span>
+        <h2 class="text-4xl md:text-5xl font-serif italic text-white leading-[1.1] tracking-tight reveal-up" style="--delay:100ms">
+          Des passionnés <span class="text-primary">à votre service</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[
+          {
+            name: 'Guillaume',
+            role: 'Boucher',
+            img: '/images/Guillaume.png',
+            imgStyle: 'object-fit: contain; object-position: bottom; transform: scale(0.97); transform-origin: bottom center;',
+          },
+          {
+            name: 'Corenthin',
+            role: 'Responsable',
+            img: '/images/corentin.png',
+          },
+          {
+            name: 'Enzo',
+            role: 'Apprenti 3ème année',
+            img: '/images/autre.png',
+          },
+          {
+            name: 'Dorian',
+            role: 'Apprenti 2ème année',
+            img: '/images/dorian.png',
+          },
+        ].map((person, i) => (
+          <div class="reveal-up group" style={`--delay:${i * 100}ms`}>
+            <div class="relative overflow-hidden rounded-2xl mb-5 aspect-[3/4]">
+              <img src={person.img} alt={`${person.name} — ${person.role}, Boucherie Chez Guillaume`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style={person.imgStyle || ''} loading="lazy" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+            </div>
+            <h3 class="text-white font-serif italic text-2xl leading-tight">{person.name}</h3>
+            <p class="text-primary text-[10px] font-black uppercase tracking-[0.3em] mt-1">{person.role}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- TÉMOIGNAGES -->
+  <section id="temoignages" class="relative py-32 bg-[#0a0a0a] overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[40vw] bg-primary/5 rounded-full blur-[180px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="mb-16 text-center">
+        <span class="section-label reveal-up" style="--delay:0ms">Témoignages</span>
+        <h2 class="text-4xl md:text-5xl font-serif italic text-white leading-[1.1] tracking-tight reveal-up" style="--delay:100ms">
+          Ils nous font <span class="text-primary">confiance</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          {
+            initials: 'SG',
+            name: 'Sandra Glf',
+            event: 'Réception · 15 personnes',
+            text: 'Quelle chance d\'avoir Guillaume et son équipe à Montbeton ! Essai transformé pour cette reprise, accueil, conseil, qualité sont au rendez-vous ! La famille de carnivores est ravie, merci ! Et les copains ont apprécié la fondue bœuf / canard de ce week-end !'
+          },
+          {
+            initials: 'MG',
+            name: 'MG',
+            event: 'Anniversaire · 20 personnes',
+            text: 'Toute la viande est bonne et tendre. Jamais déçue ! Je valide aussi la partie traiteur : paella succulente et les verrines avec choix des variétés et explosion de saveurs en bouche !!! Merci merci… on s\'est régalés.'
+          },
+          {
+            initials: 'MC',
+            name: 'Magdalena Cavel',
+            event: 'Repas d\'entreprise',
+            text: 'La boucherie Chez Guillaume est un lieu incontournable à Montbeton. Un large choix de viandes, charcuterie, fromage et plats préparés avec des produits locaux de très bonne qualité. Ils préparent des plateaux pour vos événements. Je recommande à 100 % !'
+          },
+        ].map((t, i) => (
+          <div class="reveal-up flex flex-col bg-white/[0.03] border border-white/8 rounded-3xl p-8 hover:border-primary/30 transition-colors duration-500" style={`--delay:${i * 120}ms`}>
+            <svg class="w-8 h-8 text-primary/40 mb-6 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+            <p class="text-white/70 text-sm font-light leading-relaxed flex-grow">{t.text}</p>
+            <div class="mt-8 pt-6 border-t border-white/8 flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center shrink-0">
+                <span class="text-primary font-black text-[10px] tracking-wider">{t.initials}</span>
+              </div>
+              <div>
+                <p class="text-white font-semibold text-sm">{t.name}</p>
+                <p class="text-primary/70 text-[10px] uppercase tracking-widest font-black mt-0.5">{t.event}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="relative py-32 bg-[#0f0f0f] overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-wood.png')]"></div>
+    </div>
+    <div class="absolute top-1/2 left-[-10%] w-[50vw] h-[50vw] bg-primary/5 rounded-full blur-[160px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+
+      <!-- Infos -->
+      <div class="reveal-up" style="--delay:0ms">
+        <span class="section-label">Contact</span>
+        <h2 class="text-4xl md:text-5xl font-serif italic text-white leading-[1.1] tracking-tight mb-10">
+          Organisons votre <span class="text-primary">événement</span>
+        </h2>
+
+        <div class="space-y-8">
+          <!-- Adresse -->
+          <div class="flex gap-5 items-start">
+            <div class="w-12 h-12 border border-primary/30 bg-primary/5 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+            </div>
+            <div>
+              <p class="text-white/40 text-[10px] uppercase tracking-widest font-black mb-1">Adresse</p>
+              <p class="text-white font-semibold">496 route de Montauban</p>
+              <p class="text-white/70 text-sm">82290 Montbeton</p>
+            </div>
+          </div>
+
+          <!-- Téléphone -->
+          <div class="flex gap-5 items-center">
+            <div class="w-12 h-12 border border-primary/30 bg-primary/5 rounded-xl flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            </div>
+            <div>
+              <p class="text-white/40 text-[10px] uppercase tracking-widest font-black mb-1">Téléphone</p>
+              <a href="tel:0563272998" class="text-white font-semibold hover:text-primary transition-colors">05 63 27 29 98</a>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex gap-5 items-center">
+            <div class="w-12 h-12 border border-primary/30 bg-primary/5 rounded-xl flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            </div>
+            <div>
+              <p class="text-white/40 text-[10px] uppercase tracking-widest font-black mb-1">Email</p>
+              <a href="mailto:contact@boucheriechezguillaume.fr" class="text-white font-semibold hover:text-primary transition-colors">contact@boucheriechezguillaume.fr</a>
+            </div>
+          </div>
+
+          <!-- Horaires -->
+          <div class="flex gap-5 items-start">
+            <div class="w-12 h-12 border border-primary/30 bg-primary/5 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="w-full">
+              <p class="text-white/40 text-[10px] uppercase tracking-widest font-black mb-3">Horaires d'ouverture</p>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between items-center py-2 border-b border-white/5">
+                  <span class="text-white/60">Lundi</span>
+                  <span class="text-white/30 italic text-xs">Fermé</span>
+                </div>
+                <div class="flex justify-between items-start py-2 border-b border-white/5">
+                  <span class="text-white/60">Mardi – Samedi</span>
+                  <div class="text-right">
+                    <span class="text-white block">8h – 12h30</span>
+                    <span class="text-white block">15h30 – 19h</span>
+                  </div>
+                </div>
+                <div class="flex justify-between items-start py-2">
+                  <span class="text-white/60">Dimanche</span>
+                  <div class="text-right">
+                    <span class="text-white block">9h – 12h30</span>
+                    <span class="text-white/30 italic text-xs block">Après-midi fermé</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google Map -->
+      <div class="reveal-scale overflow-hidden rounded-2xl border border-white/10 h-full min-h-[500px]" style="--delay:200ms">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2857.4!2d1.3541!3d44.0217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aebb!2s496%20Route%20de%20Montauban%2C%2082290%20Montbeton!5e0!3m2!1sfr!2sfr!4v1"
+          width="100%"
+          height="100%"
+          style="border:0; min-height:500px; filter: grayscale(100%) invert(92%) contrast(83%);"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Boucherie Chez Guillaume — 496 route de Montauban, 82290 Montbeton"
+        ></iframe>
+      </div>
+
+    </div>
+  </section>
+
+  <script is:inline src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style is:inline>
+    [x-cloak] { display: none !important; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 140, 44, 0.3); border-radius: 10px; }
+
+    /* ── Reveal animations ── */
+    .reveal-up,
+    .reveal-fade,
+    .reveal-scale {
+      opacity: 0;
+      transition-property: opacity, transform;
+      transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+      transition-duration: 800ms;
+      transition-delay: var(--delay, 0ms);
+    }
+    .reveal-up    { transform: translateY(36px); }
+    .reveal-fade  { transform: translateY(16px); }
+    .reveal-scale { transform: scale(0.94) translateY(24px); }
+
+    .reveal-up.is-visible,
+    .reveal-fade.is-visible,
+    .reveal-scale.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+
+  <script is:inline>
+    /* ── Intersection Observer : reveal on scroll ── */
+    const revealEls = document.querySelectorAll('.reveal-up, .reveal-fade, .reveal-scale');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    /* ── Parallaxe hero image ── */
+    const parallaxEl = document.getElementById('hero-parallax');
+    if (parallaxEl) {
+      window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        parallaxEl.style.transform = `translateY(${scrollY * 0.18}px)`;
+      }, { passive: true });
+    }
+  </script>
+</Layout>

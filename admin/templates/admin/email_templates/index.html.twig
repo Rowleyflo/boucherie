@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Templates Email{% endblock %}
+{% block page_title %}Templates Email{% endblock %}
+
+{% block body %}
+<div x-data="emailTemplatesManager()" class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+    {# ─── ÉDITEUR ─────────────────────────────────────── #}
+    <div class="xl:col-span-2 space-y-4">
+
+        {# Onglets #}
+        <div class="flex gap-1 p-1 bg-dark-2 border border-white/5 rounded-2xl">
+            {% for template in templates %}
+            <button
+                @click="activeTab = {{ loop.index0 }}"
+                :class="activeTab === {{ loop.index0 }}
+                    ? 'bg-primary/15 text-primary border border-primary/20'
+                    : 'text-white/40 hover:text-white hover:bg-white/[0.04]'"
+                class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-center">
+                {{ template.nom }}
+            </button>
+            {% endfor %}
+        </div>
+
+        {# Contenu onglets #}
+        {% for template in templates %}
+        <div x-show="activeTab === {{ loop.index0 }}"
+             x-data="templateEditor({{ template.id }}, {{ template.sujet|json_encode }}, {{ template.corps|json_encode }})">
+
+            <div class="bg-dark-2 border border-white/5 rounded-2xl p-5 space-y-4">
+                <div>
+                    <label class="text-xs text-white/40 uppercase tracking-wider mb-1.5 block font-semibold">
+                        Objet de l'email
+                    </label>
+                    <input
+                        x-model="sujet"
+                        type="text"
+                        class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:border-primary transition-all"
+                    >
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="text-xs text-white/40 uppercase tracking-wider font-semibold">
+                            Corps (HTML)
+                        </label>
+                        <div class="flex gap-2">
+                            <button @click="preview = !preview"
+                                    class="text-xs text-white/40 hover:text-white transition-colors px-2 py-1 bg-white/[0.04] rounded border border-white/5">
+                                <span x-text="preview ? '← Éditeur' : '👁 Aperçu'"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <template x-if="!preview">
+                        <textarea
+                            x-model="corps"
+                            rows="20"
+                            class="w-full bg-dark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:border-primary transition-all resize-y"
+                            spellcheck="false"
+                        ></textarea>
+                    </template>
+
+                    <template x-if="preview">
+                        <div class="border border-white/10 rounded-xl bg-white overflow-auto" style="height:420px;">
+                            <iframe
+                                x-ref="previewFrame"
+                                class="w-full h-full border-0"
+                                sandbox="allow-same-origin"
+                                title="Aperçu email"
+                                :srcdoc="corps">
+                            </iframe>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <span x-show="savedAt" class="text-xs text-green-400" x-text="'✓ Sauvegardé le ' + savedAt"></span>
+                    <div class="ml-auto flex gap-3">
+                        <button @click="save()"
+                                :disabled="saving"
+                                class="flex items-center gap-2 bg-primary hover:bg-primary-dark disabled:opacity-40 text-black font-semibold px-5 py-2 rounded-xl text-sm transition-colors">
+                            <span x-text="saving ? 'Sauvegarde…' : 'Sauvegarder'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {# ─── VARIABLES DISPONIBLES ───────────────────────── #}
+    <div class="space-y-4">
+        <div class="bg-dark-2 border border-white/5 rounded-2xl p-5 sticky top-20">
+            <h3 class="font-serif italic text-xl text-white mb-1">Variables</h3>
+            <p class="text-xs text-white/40 mb-4">Cliquez pour copier dans le presse-papier.</p>
+
+            <div class="space-y-1.5 max-h-[60vh] overflow-y-auto pr-1">
+                {% for variable, description in variables %}
+                <button
+                    @click="copyVar('{{ variable }}')"
+                    class="w-full text-left group flex flex-col gap-0.5 px-3 py-2.5 rounded-xl
+                           bg-white/[0.04] hover:bg-white/5 border border-white/5 hover:border-primary/40
+                           transition-all">
+                    <span class="font-mono text-xs text-primary group-hover:text-primary-dark transition-colors">{{ variable }}</span>
+                    <span class="text-xs text-white/40 leading-tight">{{ description }}</span>
+                </button>
+                {% endfor %}
+            </div>
+
+            <div x-show="copiedVar"
+                 x-transition
+                 class="mt-3 text-xs text-green-400 text-center py-1.5 bg-green-900/30 border border-green-700/30 rounded">
+                ✓ <span x-text="copiedVar"></span> copié !
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function emailTemplatesManager() {
+    return {
+        activeTab: 0,
+        copiedVar: '',
+        copyVar(variable) {
+            navigator.clipboard.writeText(variable).then(() => {
+                this.copiedVar = variable;
+                setTimeout(() => { this.copiedVar = ''; }, 2000);
+            });
+        },
+    };
+}
+
+function templateEditor(id, initialSujet, initialCorps) {
+    return {
+        id,
+        sujet:   initialSujet,
+        corps:   initialCorps,
+        preview: false,
+        saving:  false,
+        savedAt: '',
+
+        async save() {
+            this.saving = true;
+            const res = await apiFetch(`/admin/email-templates/${this.id}`, {
+                method: 'POST',
+                body: JSON.stringify({ sujet: this.sujet, corps: this.corps }),
+            });
+            const data = await res.json();
+            this.saving = false;
+            if (data.success) {
+                this.savedAt = data.updated_at;
+                showToast('Template sauvegardé.', 'success');
+                setTimeout(() => { this.savedAt = ''; }, 6000);
+            } else {
+                showToast(data.error || 'Erreur lors de la sauvegarde.', 'error');
+            }
+        },
+    };
+}
+</script>
+{% endblock %}

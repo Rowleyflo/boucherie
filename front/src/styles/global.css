@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand colors */
+  --color-primary: #F5C518;
+  --color-primary-dark: #D4A800;
+  --color-dark: #1A1A1A;
+  --color-surface: #242424;
+  --color-surface-2: #2E2E2E;
+  --color-white: #FFFFFF;
+  --color-secondary: #A0A0A0;
+  --color-border: rgba(255,255,255,0.08);
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+@layer base {
+  html {
+    @apply bg-dark text-white antialiased font-sans;
+  }
+  h1, h2, h3, h4 { @apply font-serif; }
+  ::selection { background: #F5C518; color: #1A1A1A; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-dark px-8 py-4 uppercase font-black text-[10px] tracking-[0.3em] hover:bg-primary-dark transition-all duration-300 rounded-sm inline-block shadow-[0_4px_20px_rgba(245,197,24,0.3)];
+  }
+  .btn-ghost {
+    @apply border border-white/20 text-white px-8 py-4 uppercase font-black text-[10px] tracking-[0.3em] hover:border-primary hover:text-primary transition-all duration-300 rounded-sm inline-block;
+  }
+  .section-label {
+    @apply text-primary font-black uppercase text-[10px] tracking-[0.5em] mb-6 block;
+  }
+  .section-title {
+    @apply text-4xl md:text-5xl font-serif italic tracking-tight leading-[1.1];
+  }
+}

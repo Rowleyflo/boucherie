@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Boucherie Traiteur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            charbon: { DEFAULT: '#111110', 900: '#0d0d0c', 800: '#1a1a19', 700: '#222221', 600: '#2e2e2c', 500: '#3d3d3b' },
+            or:      { DEFAULT: '#c8932a', light: '#d9a73d', dark: '#a67620' },
+            creme:   { DEFAULT: '#f5f0e8', muted: '#b0aba3', dark: '#8a857e' },
+            rouge:   { DEFAULT: '#c0392b', dark: '#96281b' },
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            body:    ['"DM Sans"', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    [x-cloak] { display: none !important; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: #111110; }
+    h1,h2,h3,.font-display { font-family: 'Cormorant Garamond', Georgia, serif; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity:0.025; pointer-events:none; z-index:9999; }
+    ::-webkit-scrollbar { width:5px; } ::-webkit-scrollbar-track { background:#1a1a19; } ::-webkit-scrollbar-thumb { background:#c8932a; border-radius:4px; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+    .badge-pulse { animation: pulse 2s infinite; }
+    tbody tr:hover { background: rgba(200,147,42,0.06); }
+  </style>
+</head>
+<body class="h-full text-creme" x-data="{open:false}">
+
+<!-- SIDEBAR -->
+<aside class="fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-charbon-800 border-r border-charbon-600 transition-transform duration-300"
+       :class="open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+  <div class="shrink-0 px-6 py-7 border-b border-charbon-600">
+    <p class="font-display text-3xl text-or leading-none">🥩 Boucherie</p>
+    <p class="font-display text-xl text-creme-muted italic leading-none mt-0.5">Traiteur</p>
+  </div>
+  <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+    <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium bg-or/15 text-or border border-or/20">
+      <span class="text-lg">📊</span> Tableau de bord
+    </a>
+    <a href="devis-liste.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme relative">
+      <span class="text-lg">📋</span> Devis
+      <span class="ml-auto bg-rouge text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center badge-pulse">3</span>
+    </a>
+    <a href="prestations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme">
+      <span class="text-lg">🍖</span> Prestations & Tarifs
+    </a>
+    <a href="email-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme">
+      <span class="text-lg">✉️</span> Templates Email
+    </a>
+  </nav>
+  <div class="shrink-0 border-t border-charbon-600 p-4">
+    <div class="flex items-center gap-3">
+      <div class="size-9 rounded-full bg-or/20 border border-or/30 flex items-center justify-center font-display text-or font-semibold text-sm">AW</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-creme truncate">Agence Web</p>
+        <p class="text-xs text-creme-muted">Agence</p>
+      </div>
+      <a href="login.html" class="text-creme-muted hover:text-rouge transition-colors p-1" title="Déconnexion">
+        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- OVERLAY MOBILE -->
+<div x-show="open" @click="open=false" class="fixed inset-0 z-40 bg-black/60 lg:hidden"></div>
+
+<!-- MAIN -->
+<div class="lg:pl-64 flex flex-col min-h-screen">
+  <!-- Topbar -->
+  <header class="sticky top-0 z-30 flex items-center gap-4 h-14 px-4 bg-charbon-800/95 backdrop-blur-sm border-b border-charbon-600">
+    <button @click="open=!open" class="lg:hidden text-creme-muted hover:text-creme p-1">
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <h2 class="font-display text-xl text-creme flex-1">Tableau de bord</h2>
+    <span class="text-xs text-creme-muted bg-charbon-700 px-2 py-1 rounded">22 avril 2026</span>
+  </header>
+
+  <main class="flex-1 p-4 md:p-6">
+
+    <!-- Cartes statuts -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 mb-6">
+      <a href="devis-liste.html" class="flex flex-col items-start p-4 rounded-lg border border-rouge/60 bg-rouge/10 hover:scale-[1.02] transition-all">
+        <span class="text-2xl mb-2">🆕</span>
+        <span class="text-3xl font-display font-semibold text-rouge">3</span>
+        <span class="text-xs text-creme-muted uppercase tracking-wider mt-1 font-medium">Nouveau</span>
+      </a>
+      <a href="devis-liste.html" class="flex flex-col items-start p-4 rounded-lg border border-charbon-500 bg-charbon-700 hover:scale-[1.02] transition-all">
+        <span class="text-2xl mb-2">👁️</span>
+        <span class="text-3xl font-display font-semibold text-creme-muted">8</span>
+        <span class="text-xs text-creme-muted uppercase tracking-wider mt-1 font-medium">Lu</span>
+      </a>
+      <a href="devis-liste.html" class="flex flex-col items-start p-4 rounded-lg border border-yellow-700/60 bg-yellow-900/20 hover:scale-[1.02] transition-all">
+        <span class="text-2xl mb-2">⏳</span>
+        <span class="text-3xl font-display font-semibold text-yellow-400">5</span>
+        <span class="text-xs text-creme-muted uppercase tracking-wider mt-1 font-medium">En attente</span>
+      </a>
+      <a href="devis-liste.html" class="flex flex-col items-start p-4 rounded-lg border border-green-700/60 bg-green-900/20 hover:scale-[1.02] transition-all">
+        <span class="text-2xl mb-2">✅</span>
+        <span class="text-3xl font-display font-semibold text-green-400">24</span>
+        <span class="text-xs text-creme-muted uppercase tracking-wider mt-1 font-medium">Accepté</span>
+      </a>
+      <a href="devis-liste.html" class="flex flex-col items-start p-4 rounded-lg border border-charbon-500 bg-charbon-700 hover:scale-[1.02] transition-all">
+        <span class="text-2xl mb-2">❌</span>
+        <span class="text-3xl font-display font-semibold text-creme-muted">4</span>
+        <span class="text-xs text-creme-muted uppercase tracking-wider mt-1 font-medium">Refusé</span>
+      </a>
+    </div>
+
+    <!-- Graphique + Derniers devis -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <!-- Graphique -->
+      <div class="xl:col-span-2 bg-charbon-800 border border-charbon-600 rounded-lg p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-display text-xl text-creme">Activité — 30 derniers jours</h2>
+          <span class="text-xs text-creme-muted bg-charbon-700 px-2 py-1 rounded">44 devis total</span>
+        </div>
+        <div class="relative h-52">
+          <canvas id="activityChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Derniers devis -->
+      <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-5 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-display text-xl text-creme">Derniers devis</h2>
+          <a href="devis-liste.html" class="text-xs text-or hover:text-or-light">Voir tout →</a>
+        </div>
+        <div class="flex-1 space-y-1">
+          <a href="devis-fiche.html" class="flex items-center gap-3 p-3 rounded-md hover:bg-charbon-700 transition-colors group">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-creme group-hover:text-or transition-colors">Sophie Martin</p>
+              <p class="text-xs text-creme-muted">DEV-2026-0044 · Mariage & Réceptions</p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded font-medium bg-rouge/20 text-red-300 border border-rouge/30">Nouveau</span>
+          </a>
+          <a href="devis-fiche.html" class="flex items-center gap-3 p-3 rounded-md hover:bg-charbon-700 transition-colors group">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-creme group-hover:text-or transition-colors">Thomas Bernard</p>
+              <p class="text-xs text-creme-muted">DEV-2026-0043 · Brasero & Grillade</p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded font-medium bg-rouge/20 text-red-300 border border-rouge/30">Nouveau</span>
+          </a>
+          <a href="devis-fiche.html" class="flex items-center gap-3 p-3 rounded-md hover:bg-charbon-700 transition-colors group">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-creme group-hover:text-or transition-colors">Marie Lefebvre</p>
+              <p class="text-xs text-creme-muted">DEV-2026-0042 · Barbecue Géant</p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded font-medium bg-yellow-900/40 text-yellow-300 border border-yellow-700/40">En attente</span>
+          </a>
+          <a href="devis-fiche.html" class="flex items-center gap-3 p-3 rounded-md hover:bg-charbon-700 transition-colors group">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-creme group-hover:text-or transition-colors">Pierre Dubois</p>
+              <p class="text-xs text-creme-muted">DEV-2026-0041 · Traiteur Événementiel</p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded font-medium bg-green-900/40 text-green-300 border border-green-700/40">Accepté</span>
+          </a>
+          <a href="devis-fiche.html" class="flex items-center gap-3 p-3 rounded-md hover:bg-charbon-700 transition-colors group">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-creme group-hover:text-or transition-colors">Claire Moreau</p>
+              <p class="text-xs text-creme-muted">DEV-2026-0040 · Mariage & Réceptions</p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded font-medium bg-charbon-600 text-creme-muted border border-charbon-500">Lu</span>
+          </a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-charbon-600">
+          <a href="devis-liste.html" class="flex items-center justify-center gap-2 w-full py-2 rounded-md bg-or/10 border border-or/20 text-or text-sm font-medium hover:bg-or/20 transition-colors">
+            <span class="badge-pulse">●</span> Voir les nouveaux (3)
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const labels = [];
+const data = [];
+const now = new Date();
+for (let i = 30; i >= 0; i--) {
+  const d = new Date(now); d.setDate(d.getDate() - i);
+  labels.push(d.toISOString().split('T')[0]);
+  data.push(Math.floor(Math.random() * 4));
+}
+data[28] = 3; data[27] = 2; data[25] = 1; data[24] = 4; data[20] = 3; data[15] = 2; data[10] = 1; data[5] = 3;
+
+new Chart(document.getElementById('activityChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [{
+      label: 'Devis reçus',
+      data,
+      borderColor: '#c8932a',
+      backgroundColor: 'rgba(200,147,42,0.08)',
+      borderWidth: 2,
+      pointBackgroundColor: '#c8932a',
+      pointBorderColor: '#111110',
+      pointBorderWidth: 2,
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      tension: 0.35,
+      fill: true,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a1a19', borderColor: '#c8932a', borderWidth: 1,
+        titleColor: '#f5f0e8', bodyColor: '#b0aba3',
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#6b6b69', font: { size: 10 }, maxTicksLimit: 8, callback(val,idx){ const d=new Date(this.getLabelForValue(val)); return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'}); } }, grid: { color: 'rgba(255,255,255,0.04)' }, border: { color: 'rgba(255,255,255,0.06)' } },
+      y: { beginAtZero: true, ticks: { color: '#6b6b69', font: { size: 11 }, precision: 0 }, grid: { color: 'rgba(255,255,255,0.04)' }, border: { color: 'rgba(255,255,255,0.06)' } }
+    }
+  }
+});
+</script>
+</body>
+</html>

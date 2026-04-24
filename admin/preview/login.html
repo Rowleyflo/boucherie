@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion — Boucherie Traiteur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            charbon: { DEFAULT: '#111110', 800: '#1a1a19', 700: '#222221', 600: '#2e2e2c', 500: '#3d3d3b' },
+            or:      { DEFAULT: '#c8932a', light: '#d9a73d', dark: '#a67620' },
+            creme:   { DEFAULT: '#f5f0e8', muted: '#b0aba3' },
+            rouge:   '#c0392b',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            body:    ['"DM Sans"', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'DM Sans', system-ui, sans-serif; }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1;
+    }
+    input:focus { outline: none; box-shadow: 0 0 0 2px #c8932a; }
+    .nav-preview { position: fixed; bottom: 20px; right: 20px; z-index: 100; display: flex; gap: 8px; }
+    .nav-btn { background: #c8932a; color: #111110; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; font-family: 'DM Sans', sans-serif; }
+  </style>
+</head>
+<body class="min-h-screen bg-charbon flex items-center justify-center px-4">
+
+  <div class="relative z-10 w-full max-w-md">
+    <div class="text-center mb-10">
+      <p class="font-display text-5xl text-or mb-1">🥩</p>
+      <h1 class="font-display text-4xl text-creme font-light tracking-wide">Boucherie</h1>
+      <p class="font-display text-xl text-creme-muted italic tracking-widest">Traiteur</p>
+      <p class="mt-3 text-xs text-creme-muted uppercase tracking-[4px]">Back-office</p>
+    </div>
+
+    <div class="bg-charbon-800 border border-charbon-600 rounded-lg p-8 shadow-2xl">
+      <div class="space-y-5">
+        <div>
+          <label class="block text-xs text-creme-muted uppercase tracking-widest mb-2 font-semibold">Adresse email</label>
+          <input type="email" value="boucher@exemple.fr" class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-4 py-3 text-creme text-sm transition-all focus:border-or" placeholder="boucher@exemple.fr">
+        </div>
+        <div>
+          <label class="block text-xs text-creme-muted uppercase tracking-widest mb-2 font-semibold">Mot de passe</label>
+          <input type="password" value="password" class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-4 py-3 text-creme text-sm transition-all focus:border-or" placeholder="••••••••">
+        </div>
+        <div class="flex items-center gap-2">
+          <input id="remember" type="checkbox" checked class="rounded border-charbon-500 bg-charbon-700 size-4 accent-amber-600">
+          <label for="remember" class="text-sm text-creme-muted">Rester connecté pendant 7 jours</label>
+        </div>
+        <a href="dashboard.html" class="block w-full bg-or hover:bg-or-light text-charbon font-semibold py-3 px-6 rounded-md transition-colors text-sm uppercase tracking-widest mt-2 text-center">
+          Connexion
+        </a>
+      </div>
+    </div>
+    <p class="text-center text-xs text-creme-muted/50 mt-6">Accès réservé au personnel autorisé</p>
+  </div>
+
+  <div class="nav-preview">
+    <a href="dashboard.html" class="nav-btn">→ Dashboard</a>
+  </div>
+</body>
+</html>

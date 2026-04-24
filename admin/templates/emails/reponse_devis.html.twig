@@ -1,0 +1,26 @@
+{% extends 'emails/layout.html.twig' %}
+
+{% block email_title %}Votre devis {{ devis.reference }} — {{ nomBoucher }}{% endblock %}
+
+{% block email_body %}
+<p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:15px;">
+    Bonjour <strong>{{ devis.clientPrenom }}</strong>,
+</p>
+<p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:12px;color:#aaa;">
+    Concernant votre demande <strong style="color:#c8932a;">{{ devis.reference }}</strong>
+    — <em>{{ devis.prestationNom }}</em>
+</p>
+
+<hr style="border:none;border-top:1px solid #e8e0d0;margin:24px 0;">
+
+<div style="font-size:15px;line-height:1.8;color:#333;font-family:Georgia,serif;">
+    {{ messagePersonnalise|nl2br }}
+</div>
+
+<hr style="border:none;border-top:1px solid #e8e0d0;margin:28px 0;">
+
+<p style="margin:0;font-family:Arial,sans-serif;font-size:14px;color:#555;">
+    Cordialement,<br>
+    <strong style="color:#111110;">{{ nomBoucher }}</strong>
+</p>
+{% endblock %}

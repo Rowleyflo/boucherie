@@ -1,0 +1,316 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = "Boucherie Chez Guillaume — Boucher Traiteur à Montbeton (82)",
+  description = "Boucherie artisanale & traiteur événementiel à Montbeton, Tarn-et-Garonne. Formules Brazéro, plateaux traiteur sur mesure pour mariages, anniversaires et réceptions. Devis gratuit.",
+  image = "/images/team-boucherie.jpg",
+  noindex = false,
+} = Astro.props;
+
+const siteUrl = "https://boucheriechezguillaume.fr";
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const imageUrl = `${siteUrl}${image}`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${siteUrl}/#business`,
+  "name": "Boucherie Chez Guillaume",
+  "alternateName": "Chez Guillaume",
+  "description": "Boucher Traiteur artisanal à Montbeton dans le Tarn-et-Garonne. Formules Brazéro, plateaux traiteur sur mesure pour mariages, anniversaires et événements d'entreprise.",
+  "url": siteUrl,
+  "telephone": "+33563272998",
+  "email": "contact@boucheriechezguillaume.fr",
+  "image": imageUrl,
+  "priceRange": "€€",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "496 route de Montauban",
+    "addressLocality": "Montbeton",
+    "postalCode": "82290",
+    "addressRegion": "Tarn-et-Garonne",
+    "addressCountry": "FR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 44.0217,
+    "longitude": 1.3541
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday"],
+      "opens": "08:00",
+      "closes": "12:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday"],
+      "opens": "15:30",
+      "closes": "19:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Sunday"],
+      "opens": "09:00",
+      "closes": "12:30"
+    }
+  ],
+  "servesCuisine": ["Française","Charcuterie","Viande"],
+  "areaServed": {
+    "@type": "GeoCircle",
+    "geoMidpoint": { "@type": "GeoCoordinates", "latitude": 44.0217, "longitude": 1.3541 },
+    "geoRadius": "50000"
+  }
+};
+---
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F5C518" />
+    {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
+    <link rel="canonical" href={canonicalUrl} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Boucherie Chez Guillaume" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Boucherie Chez Guillaume — Boucher Traiteur à Montbeton (82)" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <!-- JSON-LD LocalBusiness -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+		<title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+	</head>
+	<body class="bg-dark text-white selection:bg-primary selection:text-white overflow-x-hidden">
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-700 bg-transparent py-6 lg:py-10">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between">
+
+        <!-- Logo -->
+        <a href="/" class="group">
+          <img src="/logo.svg" alt="Logo Boucherie Chez Guillaume" class="h-10 lg:h-14 w-auto transition-all duration-500 group-hover:scale-105" />
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center gap-14 text-[11px] font-black uppercase tracking-[0.4em] text-white/70">
+          <a href="#about" class="hover:text-primary transition-colors">Histoire</a>
+          <a href="#prestations" class="hover:text-primary transition-colors">Prestations</a>
+          <a href="#equipe" class="hover:text-primary transition-colors">Équipe</a>
+          <a href="#temoignages" class="hover:text-primary transition-colors">Avis</a>
+          <a href="#contact" class="hover:text-primary transition-colors">Contact</a>
+          <a href="/devis" class="bg-primary text-dark px-5 py-2.5 hover:bg-primary-dark transition-all duration-300 rounded-sm shadow-[0_4px_16px_rgba(245,197,24,0.25)]">Devis</a>
+        </nav>
+
+        <!-- Desktop : réseaux sociaux -->
+        <div class="hidden lg:flex items-center gap-5 text-white/60">
+          <a href="#" aria-label="Facebook" class="hover:text-primary transition-colors">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="hover:text-primary transition-colors">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        </div>
+
+        <!-- Mobile : burger -->
+        <button id="burger" class="lg:hidden flex flex-col gap-1.5 p-2 text-white" aria-label="Menu">
+          <span class="burger-line block w-6 h-0.5 bg-current transition-all duration-300"></span>
+          <span class="burger-line block w-6 h-0.5 bg-current transition-all duration-300"></span>
+          <span class="burger-line block w-4 h-0.5 bg-current transition-all duration-300"></span>
+        </button>
+      </div>
+
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="lg:hidden hidden bg-black/98 backdrop-blur-xl border-t border-white/5">
+        <nav class="flex flex-col px-6 py-8 gap-1 text-[11px] font-black uppercase tracking-[0.4em]">
+          <a href="#about"       class="mobile-link py-4 border-b border-white/5 text-white/70 hover:text-primary transition-colors">Histoire</a>
+          <a href="#prestations" class="mobile-link py-4 border-b border-white/5 text-white/70 hover:text-primary transition-colors">Prestations</a>
+          <a href="#equipe"      class="mobile-link py-4 border-b border-white/5 text-white/70 hover:text-primary transition-colors">Équipe</a>
+          <a href="#temoignages" class="mobile-link py-4 border-b border-white/5 text-white/70 hover:text-primary transition-colors">Avis</a>
+          <a href="#contact"     class="mobile-link py-4 border-b border-white/5 text-white/70 hover:text-primary transition-colors">Contact</a>
+          <a href="/devis"       class="mt-6 bg-primary text-dark px-6 py-4 text-center hover:bg-primary-dark transition-all duration-300 rounded-sm">Demander un devis</a>
+          <div class="flex gap-5 justify-center mt-6 text-white/40">
+            <a href="#" aria-label="Facebook" class="hover:text-primary transition-colors">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" class="hover:text-primary transition-colors">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <script is:inline>
+      const header     = document.getElementById('main-header');
+      const burger     = document.getElementById('burger');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const lines      = burger.querySelectorAll('.burger-line');
+
+      // Scroll : fond header
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 80) {
+          header.classList.add('bg-black/95', 'shadow-2xl');
+          header.classList.remove('bg-transparent');
+        } else {
+          header.classList.add('bg-transparent');
+          header.classList.remove('bg-black/95', 'shadow-2xl');
+        }
+      });
+
+      // Burger toggle
+      let open = false;
+      burger.addEventListener('click', () => {
+        open = !open;
+        mobileMenu.classList.toggle('hidden', !open);
+        // Animation croix
+        lines[0].style.transform = open ? 'translateY(8px) rotate(45deg)' : '';
+        lines[1].style.opacity   = open ? '0' : '1';
+        lines[2].style.transform = open ? 'translateY(-8px) rotate(-45deg)' : '';
+        lines[2].style.width     = open ? '24px' : '';
+      });
+
+      // Fermer le menu au clic sur un lien
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+          open = false;
+          mobileMenu.classList.add('hidden');
+          lines[0].style.transform = '';
+          lines[1].style.opacity   = '1';
+          lines[2].style.transform = '';
+          lines[2].style.width     = '';
+        });
+      });
+    </script>
+
+		<slot />
+
+    <!-- FOOTER -->
+    <footer class="bg-[#080808] border-t border-white/5">
+
+      <!-- Main footer content -->
+      <div class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+
+        <!-- Colonne 1 : Logo + tagline -->
+        <div class="lg:col-span-1">
+          <a href="/">
+            <img src="/logo.svg" alt="Boucherie Chez Guillaume" class="h-12 w-auto mb-6 opacity-90" />
+          </a>
+          <p class="text-white/40 text-sm font-light leading-relaxed mb-6">
+            Boucher Traiteur artisanal à Montbeton dans le Tarn-et-Garonne. Sélection rigoureuse, produits locaux, événements sur mesure.
+          </p>
+          <div class="flex gap-3">
+            <a href="#" aria-label="Facebook" class="w-9 h-9 border border-white/10 rounded-lg flex items-center justify-center hover:bg-primary hover:border-primary transition-all group">
+              <svg class="w-4 h-4 group-hover:text-dark transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" class="w-9 h-9 border border-white/10 rounded-lg flex items-center justify-center hover:bg-primary hover:border-primary transition-all group">
+              <svg class="w-4 h-4 group-hover:text-dark transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="Google" class="w-9 h-9 border border-white/10 rounded-lg flex items-center justify-center hover:bg-primary hover:border-primary transition-all group">
+              <svg class="w-4 h-4 group-hover:text-dark transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 11h8.533c.044.385.067.78.067 1.184C20.6 17.48 17.048 21 12 21c-4.971 0-9-4.029-9-9s4.029-9 9-9c2.395 0 4.565.939 6.178 2.473l-2.51 2.51C14.733 7.13 13.43 6.6 12 6.6A5.4 5.4 0 006.6 12 5.4 5.4 0 0012 17.4c2.831 0 4.87-1.702 5.298-4.4H12v-2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Colonne 2 : Navigation -->
+        <div>
+          <h4 class="text-white font-black text-[10px] uppercase tracking-[0.4em] mb-6">Navigation</h4>
+          <ul class="space-y-3">
+            {[
+              { label: 'Accueil', href: '/' },
+              { label: 'Notre Histoire', href: '#about' },
+              { label: 'Nos Prestations', href: '#prestations' },
+              { label: "L'Équipe", href: '#equipe' },
+              { label: 'Témoignages', href: '#temoignages' },
+              { label: 'Contact', href: '#contact' },
+            ].map(l => (
+              <li><a href={l.href} class="text-white/40 hover:text-primary text-sm font-light transition-colors">{l.label}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Colonne 3 : Prestations -->
+        <div>
+          <h4 class="text-white font-black text-[10px] uppercase tracking-[0.4em] mb-6">Formules</h4>
+          <ul class="space-y-3">
+            {[
+              'Menu Classique',
+              'Menu Gourmet',
+              'Menu Prestige',
+              'Menu du Boucher',
+              'Formule à la Carte',
+              'Service Traiteur',
+            ].map(f => (
+              <li><a href="#prestations" class="text-white/40 hover:text-primary text-sm font-light transition-colors">{f}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Colonne 4 : Contact -->
+        <div>
+          <h4 class="text-white font-black text-[10px] uppercase tracking-[0.4em] mb-6">Nous trouver</h4>
+          <ul class="space-y-5 text-sm font-light text-white/40">
+            <li class="flex gap-3 items-start">
+              <svg class="w-4 h-4 text-primary shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+              <span>496 route de Montauban<br/>82290 Montbeton</span>
+            </li>
+            <li class="flex gap-3 items-center">
+              <svg class="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+              <a href="tel:0563272998" class="hover:text-primary transition-colors">05 63 27 29 98</a>
+            </li>
+            <li class="flex gap-3 items-center">
+              <svg class="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+              <a href="mailto:contact@boucheriechezguillaume.fr" class="hover:text-primary transition-colors">contact@boucheriechezguillaume.fr</a>
+            </li>
+            <li>
+              <a href="/devis" class="inline-block mt-2 btn-primary text-[9px] px-6 py-3">Demander un devis</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p class="text-white/20 text-[10px] uppercase tracking-widest font-black">
+            © {new Date().getFullYear()} Boucherie Chez Guillaume — Montbeton (82)
+          </p>
+          <div class="flex gap-6 text-[10px] uppercase tracking-widest font-black text-white/20">
+            <a href="/mentions-legales" class="hover:text-primary transition-colors">Mentions légales</a>
+            <a href="#" class="hover:text-primary transition-colors">Politique de confidentialité</a>
+          </div>
+        </div>
+      </div>
+
+    </footer>
+	</body>
+</html>

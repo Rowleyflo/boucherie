@@ -1,0 +1,8 @@
+framework:
+    mailer:
+        dsn: '%env(MAILER_DSN)%'
+        envelope:
+            sender: '%env(EMAIL_FROM)%'
+        headers:
+            From: '%env(NOM_BOUCHER)% <%env(EMAIL_FROM)%>'
+            X-Mailer: 'BoucherieAdmin/1.0'

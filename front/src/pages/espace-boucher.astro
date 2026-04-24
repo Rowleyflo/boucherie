@@ -1,0 +1,322 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Espace Boucher — Boucherie Chez Guillaume"
+  description="Interface d'administration privée."
+  noindex={true}
+>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer is:inline></script>
+
+  <div x-data="adminApp()" class="min-h-screen bg-dark pt-28 pb-24">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <!-- ── LOGIN ──────────────────────────────────────────── -->
+      <div x-show="!adminAuth" class="max-w-sm mx-auto py-20">
+        <div class="mb-10">
+          <span class="section-label">Espace privé</span>
+          <h1 class="text-5xl font-serif italic leading-tight">Accès<br/><span class="text-primary">boucher</span></h1>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="f-label">Mot de passe</label>
+            <input type="password" x-model="adminPwd" @keyup.enter="checkAdmin()"
+              placeholder="••••••••••••" class="f-input placeholder-white/15" autofocus />
+          </div>
+          <div x-show="adminErr"
+            class="text-[10px] uppercase font-black tracking-[0.3em] text-primary/80 border-l-2 border-primary/60 pl-4 py-1">
+            Mot de passe incorrect
+          </div>
+          <button @click="checkAdmin()" class="btn-primary w-full text-center block mt-2">
+            Accéder →
+          </button>
+        </div>
+      </div>
+
+      <!-- ── DASHBOARD ──────────────────────────────────────── -->
+      <div x-show="adminAuth">
+
+        <!-- Header -->
+        <div class="flex items-end justify-between mb-14 border-b border-white/10 pb-8 flex-wrap gap-4">
+          <div>
+            <span class="section-label">Espace boucher</span>
+            <h1 class="text-5xl md:text-6xl font-serif italic leading-none">Gestion des <span class="text-primary">devis</span></h1>
+          </div>
+          <button @click="adminAuth=false; adminPwd='';"
+            class="flex items-center gap-3 text-[10px] uppercase font-black tracking-[0.3em] text-secondary hover:text-white transition-colors group">
+            <svg class="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Déconnexion
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 mb-14">
+          <div class="bg-dark p-8 flex flex-col gap-3">
+            <div class="text-5xl font-black text-white tracking-tight" x-text="list.length"></div>
+            <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">Demandes reçues</div>
+          </div>
+          <div class="bg-dark p-8 flex flex-col gap-3 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-0.5 bg-primary"></div>
+            <div class="text-5xl font-black text-primary tracking-tight" x-text="list.filter(d=>d.status==='pending').length"></div>
+            <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">En attente</div>
+          </div>
+          <div class="bg-dark p-8 flex flex-col gap-3">
+            <div class="text-5xl font-black text-white/70 tracking-tight" x-text="list.filter(d=>d.status==='responded').length"></div>
+            <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">Répondus</div>
+          </div>
+          <div class="bg-dark p-8 flex flex-col gap-3">
+            <div class="text-5xl font-black text-white/70 tracking-tight" x-text="list.filter(d=>d.status==='accepted').length"></div>
+            <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">Acceptés</div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap items-center gap-0 mb-6 border border-white/10 w-fit">
+          <template x-for="f in ['all','pending','read','responded','accepted']" :key="f">
+            <button @click="aFilter=f"
+              :class="aFilter===f ? 'bg-primary text-dark' : 'text-secondary hover:text-white'"
+              class="px-6 py-2.5 text-[9px] uppercase font-black tracking-[0.35em] transition-all duration-150"
+              x-text="{'all':'Tous','pending':'En attente','read':'Lus','responded':'Répondus','accepted':'Acceptés'}[f]">
+            </button>
+          </template>
+        </div>
+
+        <!-- Count -->
+        <div class="text-[10px] uppercase font-black tracking-[0.3em] text-secondary/50 mb-4">
+          <span x-text="filteredList().length"></span> demande<span x-show="filteredList().length > 1">s</span>
+        </div>
+
+        <!-- Empty state -->
+        <div x-show="filteredList().length===0" class="py-24 border border-white/5 flex flex-col items-center justify-center gap-6">
+          <div class="w-12 h-px bg-primary/40"></div>
+          <div class="text-[10px] uppercase font-black tracking-[0.5em] text-secondary/40">Aucune demande pour ce filtre</div>
+          <div class="w-12 h-px bg-primary/40"></div>
+        </div>
+
+        <!-- Devis list -->
+        <div class="space-y-px">
+          <template x-for="d in filteredList()" :key="d.id">
+            <div class="bg-surface-2 transition-colors duration-200 border-l-2"
+              :class="openD===d.id ? 'border-l-primary' : (d.status==='pending' ? 'border-l-primary/40' : 'border-l-transparent hover:border-l-white/20')">
+
+              <!-- Row header -->
+              <button @click="openDevis(d)" class="w-full px-6 py-5 text-left flex items-center gap-5 flex-wrap">
+                <div class="shrink-0 w-1.5 h-8 transition-colors duration-200"
+                  :class="{
+                    'bg-primary':    d.status==='pending',
+                    'bg-white/20':   d.status==='read',
+                    'bg-white/50':   d.status==='responded',
+                    'bg-primary/60': d.status==='accepted'
+                  }"></div>
+                <div class="flex-grow min-w-0">
+                  <div class="flex items-baseline gap-3 flex-wrap">
+                    <span class="font-black text-white text-[15px]" x-text="d.ct.prenom+' '+d.ct.nom"></span>
+                    <span class="text-[10px] uppercase font-black tracking-[0.2em] text-secondary/60" x-text="d.ev.type"></span>
+                  </div>
+                  <div class="text-[11px] text-secondary/60 mt-1 font-light tracking-wide"
+                    x-text="fDate(d.ev.date)+' · '+d.ev.guests+' convives · '+d.ev.lieu"></div>
+                </div>
+                <div class="hidden md:block text-right shrink-0">
+                  <div class="font-black text-primary tracking-tight" x-text="d.estimatif"></div>
+                  <div class="text-[10px] text-secondary/40 mt-0.5" x-text="fDate(d.createdAt)"></div>
+                </div>
+                <div class="shrink-0 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.3em] border transition-colors duration-200"
+                  :class="{
+                    'border-primary/40 text-primary bg-primary/5': d.status==='pending',
+                    'border-white/10 text-secondary/60':           d.status==='read',
+                    'border-white/20 text-white/60':               d.status==='responded',
+                    'border-primary/20 text-primary/60':           d.status==='accepted'
+                  }"
+                  x-text="sLabel(d.status)"></div>
+                <svg class="w-4 h-4 text-secondary/30 shrink-0 transition-transform duration-300"
+                  :class="openD===d.id ? 'rotate-180' : ''"
+                  fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+
+              <!-- Expanded detail -->
+              <div x-show="openD===d.id" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                class="border-t border-white/5 bg-black/20">
+                <div class="px-6 py-8 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
+
+                  <!-- Fiche client -->
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                    <div>
+                      <div class="a-label">Contact</div>
+                      <div class="space-y-2.5">
+                        <div>
+                          <div class="text-[10px] text-secondary/50 uppercase tracking-widest mb-0.5">Email</div>
+                          <a :href="'mailto:'+d.ct.email" class="text-sm text-white hover:text-primary transition-colors font-medium break-all" x-text="d.ct.email"></a>
+                        </div>
+                        <div>
+                          <div class="text-[10px] text-secondary/50 uppercase tracking-widest mb-0.5">Téléphone</div>
+                          <a :href="'tel:'+d.ct.tel" class="text-sm text-white hover:text-primary transition-colors font-medium" x-text="d.ct.tel"></a>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="a-label">Événement</div>
+                      <div class="space-y-1.5 text-sm">
+                        <div class="flex gap-2"><span class="text-secondary/50 shrink-0 w-16 text-[11px]">Type</span><span class="text-white" x-text="d.ev.type||'—'"></span></div>
+                        <div class="flex gap-2"><span class="text-secondary/50 shrink-0 w-16 text-[11px]">Date</span><span class="text-white" x-text="fDate(d.ev.date)"></span></div>
+                        <div class="flex gap-2"><span class="text-secondary/50 shrink-0 w-16 text-[11px]">Convives</span><span class="text-white" x-text="d.ev.guests+' pers.'"></span></div>
+                        <div class="flex gap-2"><span class="text-secondary/50 shrink-0 w-16 text-[11px]">Lieu</span><span class="text-white" x-text="d.ev.lieu||'—'"></span></div>
+                        <div x-show="d.ev.note" class="flex gap-2 pt-1">
+                          <span class="text-secondary/50 shrink-0 w-16 text-[11px]">Note</span>
+                          <span class="text-white/70 italic text-xs leading-relaxed" x-text="d.ev.note"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="a-label">Prestations</div>
+                      <div class="space-y-1.5 text-sm">
+                        <div x-show="d.brazero" class="font-bold text-white" x-text="d.brazero"></div>
+                        <template x-for="it in (d.carteAp||[])" :key="it">
+                          <div class="text-secondary/60 text-xs flex gap-2"><span class="text-primary/50 shrink-0">—</span><span x-text="it"></span></div>
+                        </template>
+                        <template x-for="it in (d.carteVi||[])" :key="it">
+                          <div class="text-secondary/60 text-xs flex gap-2"><span class="text-primary/50 shrink-0">—</span><span x-text="it"></span></div>
+                        </template>
+                        <template x-for="t in (d.traiteur||[])" :key="t.name">
+                          <div class="text-secondary/70 text-xs flex gap-2"><span class="text-primary/50 shrink-0">—</span><span x-text="t.name+' ×'+t.qty"></span></div>
+                        </template>
+                        <div x-show="!d.brazero && (!d.traiteur||d.traiteur.length===0)" class="text-secondary/30 italic text-xs">Aucune prestation</div>
+                      </div>
+                      <div class="mt-4 pt-4 border-t border-white/5">
+                        <div class="text-[10px] text-secondary/40 uppercase tracking-widest mb-1">Estimation</div>
+                        <div class="font-black text-primary text-lg" x-text="d.estimatif"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="border-l border-white/5 pl-10 space-y-7">
+                    <div>
+                      <div class="a-label">Modifier le statut</div>
+                      <div class="space-y-1.5">
+                        <template x-for="s in ['pending','read','responded','accepted']" :key="s">
+                          <button @click="setStatus(d,s)"
+                            class="w-full flex items-center justify-between px-4 py-2.5 border transition-all duration-150 text-left group"
+                            :class="d.status===s ? 'border-primary bg-primary/8 text-primary' : 'border-white/8 text-secondary/50 hover:border-white/15 hover:text-white/70'">
+                            <span class="text-[9px] uppercase font-black tracking-[0.3em]" x-text="sLabel(s)"></span>
+                            <svg x-show="d.status===s" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                          </button>
+                        </template>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                      <a :href="d.ct.email ? 'mailto:'+d.ct.email+'?subject=Votre devis - Boucherie Chez Guillaume&body=Bonjour '+d.ct.prenom+',' : '#'"
+                        :class="!d.ct.email && 'opacity-30 pointer-events-none'"
+                        class="btn-primary !py-3 !px-4 text-center flex items-center justify-center gap-2 !text-[9px]">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        Répondre
+                      </a>
+                      <a :href="d.ct.tel ? 'tel:'+d.ct.tel : '#'"
+                        :class="!d.ct.tel && 'opacity-30 pointer-events-none'"
+                        class="btn-ghost !py-3 !px-4 text-center flex items-center justify-center gap-2 !text-[9px]">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        Appeler
+                      </a>
+                    </div>
+
+                    <div>
+                      <div class="a-label">Notes internes</div>
+                      <textarea x-model="d.note" rows="4"
+                        placeholder="Tarif négocié, remarques logistiques…"
+                        class="f-input resize-none placeholder-white/15 text-sm"></textarea>
+                      <button @click="saveList()"
+                        class="mt-3 inline-flex items-center gap-2 text-[10px] uppercase font-black tracking-[0.3em] text-primary hover:text-primary-dark transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        Sauvegarder
+                      </button>
+                    </div>
+
+                    <div class="pt-4 border-t border-white/5">
+                      <button @click="delDevis(d.id)"
+                        class="inline-flex items-center gap-2 text-[9px] uppercase font-black tracking-[0.3em] text-secondary/30 hover:text-secondary transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                        Supprimer ce devis
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </template>
+        </div>
+
+      </div><!-- /dashboard -->
+    </div>
+  </div>
+
+  <style is:inline>
+    .f-label { display:block; font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.4em; color:#A0A0A0; margin-bottom:10px; }
+    .f-input  { width:100%; background:#242424; border:1px solid rgba(255,255,255,0.10); color:#fff; padding:12px 16px; font-size:14px; outline:none; transition:border-color 0.2s; display:block; }
+    .f-input:focus { border-color:#F5C518; }
+    .a-label  { font-size:9px; font-weight:900; text-transform:uppercase; letter-spacing:0.4em; color:rgba(160,160,160,0.55); margin-bottom:10px; }
+  </style>
+
+  <script is:inline>
+    function adminApp() {
+      return {
+        adminPwd: '', adminAuth: false, adminErr: false,
+        list: [], openD: null, aFilter: 'all',
+
+        init() { this.loadDevis(); },
+
+        checkAdmin() {
+          if (this.adminPwd === 'Guillaume82') {
+            this.adminAuth = true; this.adminErr = false; this.loadDevis();
+          } else {
+            this.adminErr = true;
+          }
+        },
+
+        loadDevis() {
+          this.list = JSON.parse(localStorage.getItem('chezgu_devis') || '[]');
+        },
+
+        saveList() {
+          localStorage.setItem('chezgu_devis', JSON.stringify(this.list));
+        },
+
+        openDevis(d) {
+          if (this.openD === d.id) { this.openD = null; return; }
+          this.openD = d.id;
+          if (d.status === 'pending') { d.status = 'read'; this.saveList(); }
+        },
+
+        setStatus(d, s) { d.status = s; this.saveList(); },
+
+        delDevis(id) {
+          if (!confirm('Supprimer ce devis ?')) return;
+          this.list = this.list.filter(d => d.id !== id);
+          this.saveList();
+          if (this.openD === id) this.openD = null;
+        },
+
+        filteredList() {
+          const l = this.aFilter === 'all' ? this.list : this.list.filter(d => d.status === this.aFilter);
+          return l.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        },
+
+        fDate(d) {
+          if (!d) return '—';
+          try { return new Date(d + 'T00:00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }); }
+          catch(e) { return d; }
+        },
+
+        sLabel(s) {
+          return { pending: 'En attente', read: 'Lu', responded: 'Répondu', accepted: 'Accepté' }[s] || s;
+        },
+      };
+    }
+  </script>
+</Layout>

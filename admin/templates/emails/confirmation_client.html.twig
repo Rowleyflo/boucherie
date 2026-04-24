@@ -1,0 +1,61 @@
+{% extends 'emails/layout.html.twig' %}
+
+{% block email_title %}Confirmation de votre demande — {{ devis.reference }}{% endblock %}
+
+{% block email_body %}
+<p style="margin:0 0 20px;">Bonjour <strong>{{ devis.clientPrenom }}</strong>,</p>
+
+<p style="margin:0 0 20px;">
+    Nous avons bien reçu votre demande de devis et nous vous en remercions chaleureusement.
+</p>
+
+<!-- Bloc référence -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+       style="background:#f9f6f1;border-left:3px solid #c8932a;border-radius:0 4px 4px 0;margin:0 0 28px;">
+    <tr>
+        <td style="padding:20px 24px;">
+            <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:11px;color:#aaa;
+                      text-transform:uppercase;letter-spacing:2px;">Référence de votre demande</p>
+            <p style="margin:0;font-size:24px;color:#111110;font-weight:bold;letter-spacing:3px;
+                      font-family:Arial,sans-serif;">{{ devis.reference }}</p>
+        </td>
+    </tr>
+</table>
+
+<!-- Récapitulatif -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+       style="margin:0 0 28px;font-size:14px;font-family:Arial,sans-serif;">
+    <tr>
+        <td style="padding:6px 0;color:#888;width:45%;vertical-align:top;">Prestation&nbsp;:</td>
+        <td style="padding:6px 0;color:#333;"><strong>{{ devis.prestationNom }}</strong></td>
+    </tr>
+    <tr>
+        <td style="padding:6px 0;color:#888;vertical-align:top;">Nombre de personnes&nbsp;:</td>
+        <td style="padding:6px 0;color:#333;"><strong>{{ devis.nbPersonnes }} personnes</strong></td>
+    </tr>
+    {% if devis.dateEvenement %}
+    <tr>
+        <td style="padding:6px 0;color:#888;vertical-align:top;">Date souhaitée&nbsp;:</td>
+        <td style="padding:6px 0;color:#333;"><strong>{{ devis.dateEvenement|date('d/m/Y') }}</strong></td>
+    </tr>
+    {% endif %}
+    {% if devis.estimationMin and devis.estimationMax %}
+    <tr>
+        <td style="padding:6px 0;color:#888;vertical-align:top;">Estimation&nbsp;:</td>
+        <td style="padding:6px 0;color:#c8932a;font-weight:bold;">
+            <strong>{{ devis.estimationMin|number_format(0, ',', ' ') }} € – {{ devis.estimationMax|number_format(0, ',', ' ') }} €</strong>
+        </td>
+    </tr>
+    {% endif %}
+</table>
+
+<p style="margin:0 0 20px;font-family:Arial,sans-serif;font-size:14px;line-height:1.7;color:#555;">
+    Notre équipe étudiera votre demande avec attention et vous contactera
+    <strong>sous 24 à 48 heures ouvrées</strong> par email ou par téléphone.
+</p>
+
+<p style="margin:28px 0 0;font-family:Arial,sans-serif;font-size:14px;">
+    Cordialement,<br>
+    <strong>L'équipe {{ nomBoucher }}</strong>
+</p>
+{% endblock %}

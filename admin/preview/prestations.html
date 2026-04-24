@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prestations & Tarifs — Boucherie Traiteur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { charbon:{DEFAULT:'#111110',900:'#0d0d0c',800:'#1a1a19',700:'#222221',600:'#2e2e2c',500:'#3d3d3b'}, or:{DEFAULT:'#c8932a',light:'#d9a73d'}, creme:{DEFAULT:'#f5f0e8',muted:'#b0aba3'}, rouge:{DEFAULT:'#c0392b'} }, fontFamily:{ display:['"Cormorant Garamond"','serif'], body:['"DM Sans"','sans-serif'] } } }
+    }
+  </script>
+  <style>
+    body{font-family:'DM Sans',sans-serif;background:#111110;}
+    h1,h2,h3{font-family:'Cormorant Garamond',serif;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:9999;}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#1a1a19}::-webkit-scrollbar-thumb{background:#c8932a;border-radius:4px}
+    input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 2px #c8932a;}
+    @keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}.toast-in{animation:toastIn .3s ease forwards;}
+  </style>
+</head>
+<body class="text-creme" x-data="{open:false}">
+
+<!-- SIDEBAR -->
+<aside class="fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-charbon-800 border-r border-charbon-600 transition-transform duration-300" :class="open?'translate-x-0':'-translate-x-full lg:translate-x-0'">
+  <div class="shrink-0 px-6 py-7 border-b border-charbon-600">
+    <p class="font-display text-3xl text-or leading-none">🥩 Boucherie</p>
+    <p class="font-display text-xl text-creme-muted italic leading-none mt-0.5">Traiteur</p>
+  </div>
+  <nav class="flex-1 px-3 py-4 space-y-0.5">
+    <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">📊</span>Tableau de bord</a>
+    <a href="devis-liste.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">📋</span>Devis</a>
+    <a href="prestations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium bg-or/15 text-or border border-or/20"><span class="text-lg">🍖</span>Prestations & Tarifs</a>
+    <a href="email-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-creme-muted hover:bg-charbon-600 hover:text-creme"><span class="text-lg">✉️</span>Templates Email</a>
+  </nav>
+  <div class="shrink-0 border-t border-charbon-600 p-4">
+    <div class="flex items-center gap-3">
+      <div class="size-9 rounded-full bg-or/20 border border-or/30 flex items-center justify-center font-display text-or font-semibold text-sm">AW</div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-medium text-creme">Agence Web</p><p class="text-xs text-creme-muted">Agence</p></div>
+      <a href="login.html" class="text-creme-muted hover:text-rouge"><svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></a>
+    </div>
+  </div>
+</aside>
+<div x-show="open" @click="open=false" class="fixed inset-0 z-40 bg-black/60 lg:hidden"></div>
+
+<!-- MAIN -->
+<div class="lg:pl-64 flex flex-col min-h-screen">
+  <header class="sticky top-0 z-30 flex items-center gap-4 h-14 px-4 bg-charbon-800/95 backdrop-blur border-b border-charbon-600">
+    <button @click="open=!open" class="lg:hidden text-creme-muted p-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <h2 class="font-display text-xl text-creme flex-1">Prestations & Tarifs</h2>
+    <button onclick="showToast('Fonctionnalité disponible en version live')" class="flex items-center gap-2 bg-or hover:bg-or-light text-charbon font-semibold px-4 py-2 rounded-md text-sm transition-colors">+ Nouvelle prestation</button>
+  </header>
+
+  <main class="flex-1 p-4 md:p-6 space-y-3">
+
+    <!-- Prestation 1 — ouverte -->
+    <div class="bg-charbon-800 border border-charbon-600 rounded-lg overflow-hidden" x-data="{open:true, actif:true}">
+      <div class="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-charbon-700 transition-colors" @click="open=!open">
+        <span class="text-2xl leading-none">💍</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-display text-lg text-creme">Mariage & Réceptions</h3>
+          <p class="text-xs text-creme-muted">4 tarifs</p>
+        </div>
+        <span class="text-xs px-2 py-0.5 rounded font-medium" :class="actif?'bg-green-900/40 text-green-400 border border-green-700/40':'bg-charbon-700 text-creme-muted border border-charbon-600'">
+          <span x-text="actif?'Actif':'Inactif'">Actif</span>
+        </span>
+        <svg class="size-4 text-creme-muted transition-transform" :class="open?'rotate-180':''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div x-show="open" x-transition class="border-t border-charbon-700 px-5 pb-5 pt-4">
+        <!-- Formulaire édition -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div><label class="text-xs text-creme-muted uppercase tracking-wider mb-1 block">Nom</label>
+            <input type="text" value="Mariage & Réceptions" class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme transition-all"></div>
+          <div><label class="text-xs text-creme-muted uppercase tracking-wider mb-1 block">Icône</label>
+            <input type="text" value="💍" class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme transition-all"></div>
+          <div><label class="text-xs text-creme-muted uppercase tracking-wider mb-1 block">Statut</label>
+            <select x-model="actif" class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme transition-all">
+              <option :value="true">Actif</option><option :value="false">Inactif</option>
+            </select></div>
+          <div class="sm:col-span-3"><label class="text-xs text-creme-muted uppercase tracking-wider mb-1 block">Description</label>
+            <textarea rows="2" class="w-full bg-charbon-700 border border-charbon-500 rounded-md px-3 py-2 text-sm text-creme resize-none">Sublimez votre grand jour avec nos viandes d'exception et nos plateaux de charcuterie artisanale.</textarea></div>
+        </div>
+        <div class="flex items-center gap-3 mb-6">
+          <button onclick="showToast('Prestation sauvegardée !')" class="bg-or hover:bg-or-light text-charbon font-semibold px-4 py-2 rounded-md text-sm transition-colors">Sauvegarder</button>
+          <button onclick="if(confirm('Supprimer cette prestation ?')) showToast('Suppression simulée','error')" class="ml-auto text-xs text-rouge hover:text-red-300 transition-colors">Supprimer cette prestation</button>
+        </div>
+        <!-- Tarifs -->
+        <h4 class="font-display text-base text-creme mb-3">Tarifs</h4>
+        <div class="overflow-x-auto rounded-md border border-charbon-700">
+          <table class="w-full text-xs">
+            <thead><tr class="bg-charbon-900 border-b border-charbon-700 text-creme-muted uppercase tracking-wider">
+              <th class="px-3 py-2 text-left font-medium">Libellé</th>
+              <th class="hidden sm:table-cell px-3 py-2 text-left font-medium">Description</th>
+              <th class="px-3 py-2 text-right font-medium">Prix</th>
+              <th class="px-3 py-2 text-center font-medium">Unité</th>
+              <th class="hidden md:table-cell px-3 py-2 text-center font-medium">Min pers.</th>
+              <th class="px-3 py-2 text-center font-medium">Actif</th>
+              <th class="px-3 py-2 text-right font-medium">Actions</th>
+            </tr></thead>
+            <tbody class="divide-y divide-charbon-700">
+              <tr x-data="{editing:false}">
+                <td class="px-3 py-2"><span x-show="!editing" class="text-creme">Cocktail dînatoire</span><input x-show="editing" type="text" value="Cocktail dînatoire" class="w-full bg-charbon-600 border border-charbon-500 rounded px-2 py-1 text-creme text-xs"></td>
+                <td class="hidden sm:table-cell px-3 py-2 text-creme-muted">Verrines, planches charcuterie & fromage…</td>
+                <td class="px-3 py-2 text-right"><span x-show="!editing" class="text-or font-semibold font-mono">28,50 €</span><input x-show="editing" type="number" value="28.50" step="0.01" class="w-20 bg-charbon-600 border border-charbon-500 rounded px-2 py-1 text-creme text-xs text-right"></td>
+                <td class="px-3 py-2 text-center text-creme-muted"><span x-show="!editing">Par personne</span><select x-show="editing" class="bg-charbon-600 border border-charbon-500 rounded px-1 py-1 text-creme text-xs"><option>Par personne</option><option>Forfait</option><option>Au kg</option></select></td>
+                <td class="hidden md:table-cell px-3 py-2 text-center text-creme-muted">20</td>
+                <td class="px-3 py-2 text-center"><button class="text-green-400">●</button></td>
+                <td class="px-3 py-2 text-right">
+                  <button x-show="!editing" @click="editing=true" class="text-or hover:text-or-light mr-2">Éditer</button>
+                  <button x-show="editing" @click="editing=false;showToast('Tarif sauvegardé !')" class="text-green-400 mr-2">✓</button>
+                  <button @click="if(confirm('Supprimer ce tarif ?')) showToast('Suppression simulée','error')" class="text-rouge/70 hover:text-rouge">✕</button>
+                </td>
+              </tr>
+              <tr><td class="px-3 py-2 text-creme">Buffet charcuterie & fromagerie</td><td class="hidden sm:table-cell px-3 py-2 text-creme-muted">Sélection de 8 charcuteries, 6 fromages…</td><td class="px-3 py-2 text-right text-or font-semibold font-mono">22,00 €</td><td class="px-3 py-2 text-center text-creme-muted">Par personne</td><td class="hidden md:table-cell px-3 py-2 text-center text-creme-muted">30</td><td class="px-3 py-2 text-center"><button class="text-green-400">●</button></td><td class="px-3 py-2 text-right"><button class="text-or hover:text-or-light mr-2">Éditer</button><button class="text-rouge/70 hover:text-rouge">✕</button></td></tr>
+              <tr><td class="px-3 py-2 text-creme">Formule complète</td><td class="hidden sm:table-cell px-3 py-2 text-creme-muted">Cocktail + buffet + service à table</td><td class="px-3 py-2 text-right text-or font-semibold font-mono">48,00 €</td><td class="px-3 py-2 text-center text-creme-muted">Par personne</td><td class="hidden md:table-cell px-3 py-2 text-center text-creme-muted">50</td><td class="px-3 py-2 text-center"><button class="text-green-400">●</button></td><td class="px-3 py-2 text-right"><button class="text-or hover:text-or-light mr-2">Éditer</button><button class="text-rouge/70 hover:text-rouge">✕</button></td></tr>
+              <tr><td class="px-3 py-2 text-creme">Supplément livraison & mise en place</td><td class="hidden sm:table-cell px-3 py-2 text-creme-muted">Livraison, installation, desserte</td><td class="px-3 py-2 text-right text-or font-semibold font-mono">180,00 €</td><td class="px-3 py-2 text-center text-creme-muted">Forfait</td><td class="hidden md:table-cell px-3 py-2 text-center text-creme-muted">—</td><td class="px-3 py-2 text-center"><button class="text-green-400">●</button></td><td class="px-3 py-2 text-right"><button class="text-or hover:text-or-light mr-2">Éditer</button><button class="text-rouge/70 hover:text-rouge">✕</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <button onclick="showToast('Formulaire d\'ajout disponible en version live')" class="mt-3 flex items-center gap-1.5 text-xs text-or hover:text-or-light transition-colors font-medium">+ Ajouter un tarif</button>
+      </div>
+    </div>
+
+    <!-- Prestation 2 — fermée -->
+    <div class="bg-charbon-800 border border-charbon-600 rounded-lg overflow-hidden" x-data="{open:false}">
+      <div class="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-charbon-700 transition-colors" @click="open=!open">
+        <span class="text-2xl leading-none">🔥</span>
+        <div class="flex-1 min-w-0"><h3 class="font-display text-lg text-creme">Brasero & Grillade</h3><p class="text-xs text-creme-muted">4 tarifs</p></div>
+        <span class="text-xs px-2 py-0.5 rounded font-medium bg-green-900/40 text-green-400 border border-green-700/40">Actif</span>
+        <svg class="size-4 text-creme-muted transition-transform" :class="open?'rotate-180':''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div x-show="open" x-transition class="border-t border-charbon-700 px-5 py-4 text-sm text-creme-muted">Accordéon fermé — cliquez pour éditer les tarifs.</div>
+    </div>
+
+    <!-- Prestation 3 -->
+    <div class="bg-charbon-800 border border-charbon-600 rounded-lg overflow-hidden" x-data="{open:false}">
+      <div class="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-charbon-700 transition-colors" @click="open=!open">
+        <span class="text-2xl leading-none">🍽️</span>
+        <div class="flex-1 min-w-0"><h3 class="font-display text-lg text-creme">Traiteur Événementiel</h3><p class="text-xs text-creme-muted">4 tarifs</p></div>
+        <span class="text-xs px-2 py-0.5 rounded font-medium bg-green-900/40 text-green-400 border border-green-700/40">Actif</span>
+        <svg class="size-4 text-creme-muted transition-transform" :class="open?'rotate-180':''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- Prestation 4 -->
+    <div class="bg-charbon-800 border border-charbon-600 rounded-lg overflow-hidden" x-data="{open:false}">
+      <div class="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-charbon-700 transition-colors" @click="open=!open">
+        <span class="text-2xl leading-none">🥩</span>
+        <div class="flex-1 min-w-0"><h3 class="font-display text-lg text-creme">Barbecue Géant</h3><p class="text-xs text-creme-muted">3 tarifs</p></div>
+        <span class="text-xs px-2 py-0.5 rounded font-medium bg-green-900/40 text-green-400 border border-green-700/40">Actif</span>
+        <svg class="size-4 text-creme-muted transition-transform" :class="open?'rotate-180':''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- Prestation 5 -->
+    <div class="bg-charbon-800 border border-charbon-600 rounded-lg overflow-hidden" x-data="{open:false}">
+      <div class="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-charbon-700 transition-colors" @click="open=!open">
+        <span class="text-2xl leading-none">✨</span>
+        <div class="flex-1 min-w-0"><h3 class="font-display text-lg text-creme">Autre Prestation</h3><p class="text-xs text-creme-muted">1 tarif</p></div>
+        <span class="text-xs px-2 py-0.5 rounded font-medium bg-green-900/40 text-green-400 border border-green-700/40">Actif</span>
+        <svg class="size-4 text-creme-muted transition-transform" :class="open?'rotate-180':''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="fixed bottom-5 right-5 z-[200] flex flex-col-reverse gap-2" id="toasts"></div>
+<script>
+function showToast(msg, type='success') {
+  const el = document.createElement('div');
+  el.className = 'toast-in flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl text-sm font-medium max-w-xs ' + (type==='success'?'bg-green-900 border border-green-700 text-green-100':'bg-red-900 border border-red-700 text-red-100');
+  el.innerHTML = `<span>${type==='success'?'✓':'✗'}</span><span>${msg}</span>`;
+  document.getElementById('toasts').prepend(el);
+  setTimeout(()=>el.remove(), 4000);
+}
+</script>
+</body>
+</html>

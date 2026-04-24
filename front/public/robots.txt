@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /espace-boucher
+Disallow: /send-devis.php
+
+Sitemap: https://boucheriechezguillaume.fr/sitemap-index.xml

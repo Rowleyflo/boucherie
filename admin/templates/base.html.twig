@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Back-office{% endblock %} — Boucherie Chez Guillaume</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary:  { DEFAULT: '#F5C518', dark: '#d4a800' },
+                        dark:     { DEFAULT: '#0a0a0a', 2: '#0f0f0f', 3: '#151210', 4: '#1a1a1a', 5: '#222222' },
+                        rouge:    { DEFAULT: '#ef4444', dark: '#dc2626' },
+                    },
+                    fontFamily: {
+                        sans:    ['Inter', 'system-ui', 'sans-serif'],
+                        serif:   ['"Playfair Display"', 'Georgia', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+
+    {% block head_extra %}{% endblock %}
+
+    <style>
+        [x-cloak] { display: none !important; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0a0a0a;
+            color: rgba(255,255,255,0.85);
+        }
+
+        ::-webkit-scrollbar       { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #F5C518; border-radius: 4px; }
+
+        @keyframes toastIn  { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateX(120%); } }
+        .toast-in  { animation: toastIn  0.3s ease forwards; }
+        .toast-out { animation: toastOut 0.3s ease forwards; }
+
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .badge-pulse { animation: pulse-dot 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+
+        tbody tr:nth-child(odd)  { background: rgba(255,255,255,0.012); }
+        tbody tr:hover           { background: rgba(245,197,24,0.05); }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #F5C518;
+        }
+
+        .nav-link-active {
+            background: rgba(245,197,24,0.1);
+            color: #F5C518;
+            border: 1px solid rgba(245,197,24,0.2);
+        }
+        .nav-link-idle {
+            color: rgba(255,255,255,0.45);
+            border: 1px solid transparent;
+        }
+        .nav-link-idle:hover {
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.85);
+        }
+    </style>
+</head>
+
+<body class="h-full" x-data="appLayout()" x-cloak>
+
+{# ─── SIDEBAR ─────────────────────────────────────────────── #}
+<aside
+    class="fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-dark-2 border-r border-white/5 transition-transform duration-300"
+    :class="open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+>
+    {# Logo #}
+    <div class="shrink-0 px-6 py-7 border-b border-white/5">
+        <a href="{{ path('admin_dashboard') }}" class="block group">
+            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary/70 block mb-1">Espace Admin</span>
+            <p class="font-serif italic text-2xl text-white leading-none group-hover:text-primary transition-colors duration-300">
+                Chez Guillaume
+            </p>
+        </a>
+    </div>
+
+    {# Navigation #}
+    <nav class="flex-1 overflow-y-auto px-3 py-5 space-y-1">
+        {% set route = app.request.attributes.get('_route') %}
+
+        <a href="{{ path('admin_dashboard') }}"
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all
+                  {{ route starts with 'admin_dashboard' ? 'nav-link-active' : 'nav-link-idle' }}">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+            <span>Tableau de bord</span>
+        </a>
+
+        <a href="{{ path('admin_devis_index') }}"
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all relative
+                  {{ route starts with 'admin_devis' ? 'nav-link-active' : 'nav-link-idle' }}">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+            <span>Devis</span>
+            {% if nouveaux_devis > 0 %}
+            <span class="ml-auto bg-rouge text-white text-[9px] font-black rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center badge-pulse">
+                {{ nouveaux_devis }}
+            </span>
+            {% endif %}
+        </a>
+
+        <a href="{{ path('admin_prestations_index') }}"
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all
+                  {{ route starts with 'admin_prestations' ? 'nav-link-active' : 'nav-link-idle' }}">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 6h.008v.008H6V6z"/></svg>
+            <span>Prestations & Tarifs</span>
+        </a>
+
+        {% if is_granted('ROLE_AGENCE') %}
+        <a href="{{ path('admin_email_templates') }}"
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all
+                  {{ route starts with 'admin_email' ? 'nav-link-active' : 'nav-link-idle' }}">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            <span>Templates Email</span>
+        </a>
+        {% endif %}
+
+        <div class="pt-5 pb-1 px-3">
+            <p class="text-[9px] text-white/20 uppercase tracking-[0.4em] font-black">Accès rapide</p>
+        </div>
+        <a href="{{ path('api_config') }}" target="_blank"
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all nav-link-idle">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+            <span>API Config <span class="opacity-40 normal-case">↗</span></span>
+        </a>
+    </nav>
+
+    {# Utilisateur connecté #}
+    <div class="shrink-0 border-t border-white/5 p-4">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center shrink-0">
+                <span class="text-primary font-black text-[11px] tracking-wider">
+                    {{ app.user.prenom|first|upper }}{{ app.user.nom|first|upper }}
+                </span>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-white truncate">{{ app.user.nomComplet }}</p>
+                <p class="text-[10px] text-white/40 uppercase tracking-widest font-black">
+                    {% if is_granted('ROLE_AGENCE') %}Agence{% else %}Boucher{% endif %}
+                </p>
+            </div>
+            <a href="{{ path('app_logout') }}"
+               class="text-white/30 hover:text-rouge transition-colors p-1 rounded"
+               title="Déconnexion">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</aside>
+
+{# Overlay mobile #}
+<div x-show="open" @click="open = false"
+     class="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+     x-transition:enter="transition-opacity duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+     x-transition:leave="transition-opacity duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+</div>
+
+{# ─── CONTENU PRINCIPAL ───────────────────────────────────── #}
+<div class="lg:pl-64 flex flex-col min-h-screen">
+
+    {# Topbar #}
+    <header class="sticky top-0 z-30 flex items-center gap-4 h-14 px-6 bg-dark/95 backdrop-blur-md border-b border-white/5">
+        <button @click="open = !open" class="lg:hidden text-white/40 hover:text-white transition-colors p-1">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+
+        <h2 class="font-serif italic text-lg text-white flex-1 truncate">
+            {% block page_title %}{% endblock %}
+        </h2>
+
+        <div class="flex items-center gap-2">
+            {% block topbar_actions %}{% endblock %}
+        </div>
+    </header>
+
+    {# Flash messages #}
+    {% for type, messages in app.flashes %}
+    {% for message in messages %}
+    <div class="mx-6 mt-4 px-4 py-3 rounded-lg text-sm font-medium border
+                {% if type == 'success' %}bg-green-900/30 border-green-700/50 text-green-300
+                {% elseif type == 'danger' or type == 'error' %}bg-rouge/15 border-rouge/30 text-red-300
+                {% else %}bg-white/5 border-white/10 text-white/70{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endfor %}
+
+    {# Contenu page #}
+    <main class="flex-1 p-4 md:p-6">
+        {% block body %}{% endblock %}
+    </main>
+
+</div>
+
+{# ─── TOASTS ──────────────────────────────────────────────── #}
+<div id="toast-zone"
+     class="fixed bottom-5 right-5 z-[200] flex flex-col-reverse gap-2 pointer-events-none"
+     x-data="toastManager()"
+     @show-toast.window="add($event.detail)">
+    <template x-for="t in toasts" :key="t.id">
+        <div class="toast-in pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl text-sm font-medium max-w-sm border"
+             :class="t.type === 'success'
+                 ? 'bg-dark-2 border-green-700/50 text-green-300'
+                 : 'bg-dark-2 border-rouge/40 text-red-300'">
+            <span x-text="t.type === 'success' ? '✓' : '✗'" class="text-base shrink-0 font-black"></span>
+            <span x-text="t.message" class="flex-1"></span>
+        </div>
+    </template>
+</div>
+
+<script>
+function appLayout() { return { open: false }; }
+
+function toastManager() {
+    return {
+        toasts: [],
+        add({ message, type = 'success' }) {
+            const id = Date.now() + Math.random();
+            this.toasts.push({ id, message, type });
+            setTimeout(() => { this.toasts = this.toasts.filter(t => t.id !== id); }, 4000);
+        }
+    };
+}
+
+window.showToast = function(message, type = 'success') {
+    window.dispatchEvent(new CustomEvent('show-toast', { detail: { message, type } }));
+};
+
+window.apiFetch = async function(url, options = {}) {
+    const defaults = { headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } };
+    return fetch(url, { ...defaults, ...options, headers: { ...defaults.headers, ...(options.headers || {}) } });
+};
+</script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

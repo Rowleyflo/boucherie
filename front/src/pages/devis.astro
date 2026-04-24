@@ -1,0 +1,1074 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const brazeroMenus = [
+  {
+    id: 'classique', title: 'Menu Classique', priceNum: 25, price: '25,00 €', unit: '/ pers',
+    img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=500',
+    desc: 'Apéritifs gourmands et viandes grillées au feu de bois.',
+    details: [
+      { t: 'Apéritif', c: 'Planche de charcuterie · Cœur de canard persillé · Calamar à l\'Espagnole' },
+      { t: 'Viande & accompagnement', c: 'Émincé d\'onglet de bœuf mariné à l\'échalote et au vin rouge · Suprême de poulet mariné au curry · Embeurrée de pomme de terre' },
+      { t: 'Format', c: 'Minimum 20 personnes' },
+    ]
+  },
+  {
+    id: 'gourmet', title: 'Menu Gourmet', priceNum: 30, price: '30,00 €', unit: '/ pers',
+    img: 'https://images.unsplash.com/photo-1544025162-831e5066c0de?q=80&w=500',
+    desc: 'Viandes premium et accompagnements raffinés pour vos événements spéciaux.',
+    details: [
+      { t: 'Apéritif', c: 'Planche charcuteries fines et fromages · Poivron de Padron à la fleur de sel · Cœur de canard persillé · Mini brochette aux crevettes et au chorizo' },
+      { t: 'Viande & accompagnement', c: 'Onglet de bœuf émincé et mariné à l\'échalote · Araignée de porc marinée aux trois poivres · Écrasé de pommes de terre aux champignons et cèpes' },
+      { t: 'Format', c: 'Minimum 20 personnes' },
+    ]
+  },
+  {
+    id: 'prestige', title: 'Menu Prestige', priceNum: 35, price: '35,00 €', unit: '/ pers',
+    img: 'https://images.unsplash.com/photo-1594046306503-4f056241a46b?q=80&w=500',
+    desc: 'Produits nobles et cuissons signatures.',
+    details: [
+      { t: 'Apéritif', c: 'Croque-monsieur truffé · Saint-Jacques · Mini brochettes' },
+      { t: 'Viande', c: 'Magret de canard · Émincé de bœuf mariné' },
+      { t: 'Accompagnement', c: 'Pommes grenailles sautées' },
+    ]
+  },
+  {
+    id: 'boucher', title: 'Menu du Boucher', priceNum: 60, price: '60,00 €', unit: '/ pers',
+    img: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=500',
+    desc: 'L\'expérience ultime des pièces d\'exception.',
+    details: [
+      { t: 'Apéritif', c: 'Sélection d\'exceptions du Chef boucher' },
+      { t: 'Viande', c: 'Côte de bœuf maturée · Pièces nobles (Tomahawk…)' },
+      { t: 'Accompagnement', c: 'Légumes grillés de saison & Pommes grenailles' },
+    ]
+  },
+];
+
+const carteAperitifs = [
+  { id: 'char',     name: 'Planche charcuterie',                      price: 4.50 },
+  { id: 'charfro',  name: 'Planche charcuterie fromage',              price: 5.50 },
+  { id: 'brochcrev',name: 'Mini brochettes chorizo crevettes',        price: 5.90 },
+  { id: 'canard',   name: 'Cœur de canard persillés',                 price: 5.90 },
+  { id: 'padron',   name: 'Poivron de Padron à la fleur de sel',      price: 2.90 },
+  { id: 'calamar',  name: 'Calamar à l\'Espagnole',                   price: 5.90 },
+  { id: 'crevflam', name: 'Mini brochettes crevettes flambées',       price: 6.90 },
+  { id: 'stjacq',   name: 'Mini brochettes Noix de Saint-Jacques',    price: 7.50 },
+  { id: 'couteaux', name: 'Couteaux en persillade',                   price: 5.90 },
+  { id: 'moules',   name: 'Moules de Bouchot en persillade',          price: 5.90 },
+];
+
+const carteViandes = [
+  { id: 'boeuf',    name: 'Émincé de bœuf vin rouge & échalote',      price: 9.90,  unit: 'pers' },
+  { id: 'onglet',   name: 'Émincé d\'onglet vin rouge & échalote',    price: 10.90, unit: 'pers' },
+  { id: 'poulet',   name: 'Suprême de poulet mariné',                  price: 7.90,  unit: 'pers' },
+  { id: 'dinde',    name: 'Grilladin de dinde mariné',                 price: 6.90,  unit: 'pers' },
+  { id: 'entrecote',name: 'Entrecôte ~400g',                          price: 18.90, unit: 'pers' },
+  { id: 'araignee', name: 'Araignée de porc marinée',                  price: 8.90,  unit: 'pers' },
+  { id: 'pluma',    name: 'Pluma de porc marinée',                     price: 9.90,  unit: 'pers' },
+  { id: 'demimag',  name: 'Demi magret ~200g',                         price: 9.90,  unit: 'pers' },
+  { id: 'magret',   name: 'Magret entier ~400g',                       price: 17.90, unit: 'pers' },
+  { id: 'tomahawk', name: 'Tomahawk de porc',                          price: 0,     unit: 'devis' },
+  { id: 'coteOS',   name: 'Côte à l\'os',                             price: 0,     unit: 'devis' },
+  { id: 'tbone',    name: 'T-bone de bœuf',                            price: 0,     unit: 'devis' },
+];
+
+const traiteurItems = [
+  { id: 'planchar', name: 'Planche Charcuterie',  desc: 'Sélection artisanale traditionnelle',    price: 4.50, unit: 'pers',  surDevis: false, img: 'https://images.unsplash.com/photo-1628268909376-e8c4dfebcd0d?q=80&w=400' },
+  { id: 'planmix',  name: 'Planche Mixte',         desc: 'Charcuteries fines et fromages affinés', price: 5.50, unit: 'pers',  surDevis: false, img: 'https://images.unsplash.com/photo-1596568322646-0b1a0eac5bfa?q=80&w=400' },
+  { id: 'pizza',    name: 'Plaque Pizza / Quiche', desc: '~50 pièces cocktail par plaque',          price: 32,   unit: 'plaque', surDevis: false, img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=400' },
+  { id: 'tapas',    name: 'Tapas & Anchois',        desc: 'Pan con Tomate, jambon ou crevettes',    price: 0,    unit: 'pièce',  surDevis: true,  img: 'https://images.unsplash.com/photo-1541529086526-db283c563270?q=80&w=400' },
+  { id: 'nobles',   name: 'Pièces Nobles',          desc: 'Foie Gras, Saumon fumé maison',          price: 0,    unit: 'pièce',  surDevis: true,  img: 'https://images.unsplash.com/photo-1644704381734-7a3c3182b810?q=80&w=400' },
+  { id: 'verrines', name: 'Verrines Fraîcheur',     desc: 'Rillettes de thon, passion, pétoncles…', price: 0,   unit: 'pièce',  surDevis: true,  img: 'https://images.unsplash.com/photo-1588673836336-d70c40608ed1?q=80&w=400' },
+];
+
+const eventTypes = ['Mariage','Anniversaire','Séminaire','Repas de famille','Barbecue','Cocktail','Repas d\'entreprise','Autre'];
+---
+
+<Layout
+  title="Demander un devis traiteur — Boucherie Chez Guillaume"
+  description="Simulez et envoyez votre demande de devis pour un Brazéro ou une prestation traiteur sur mesure. Mariages, anniversaires, repas d'entreprise en Tarn-et-Garonne."
+>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer is:inline></script>
+  <script is:inline define:vars={{ brazeroMenus, carteAperitifs, carteViandes, traiteurItems, eventTypes }}>
+    window.__D__ = { brazeroMenus, carteAperitifs, carteViandes, traiteurItems, eventTypes };
+  </script>
+
+  <div x-data="devisApp()" class="min-h-screen bg-dark pt-28 pb-24">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <!-- ── TAB BAR ── -->
+      <div class="flex items-center gap-0 mb-14 border border-white/10 w-fit">
+        <button @click="tab='form'"
+          :class="tab==='form' ? 'bg-primary text-dark' : 'text-white/50 hover:text-white'"
+          class="px-8 py-3 text-[10px] uppercase font-black tracking-[0.3em] transition-all duration-200">
+          Composer mon devis
+        </button>
+      </div>
+
+
+      <!-- ══════════════════════════════════════════════════
+           TAB FORMULAIRE
+      ═════════════════════════════════════════════════════ -->
+      <div x-show="tab==='form'" x-transition>
+
+        <!-- SUCCESS -->
+        <div x-show="submitted" class="text-center py-24">
+          <div class="w-24 h-24 bg-primary/10 border border-primary/30 flex items-center justify-center mx-auto mb-8">
+            <svg class="w-12 h-12 text-primary" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span class="section-label block text-center">Demande envoyée</span>
+          <h2 class="text-4xl md:text-6xl font-serif italic mb-6">Merci pour votre confiance</h2>
+          <p class="text-secondary max-w-xl mx-auto mb-12 leading-relaxed">Guillaume vous contactera dans les 24h pour finaliser votre devis et répondre à toutes vos questions.</p>
+          <button @click="resetForm()" class="btn-primary">Nouvelle demande</button>
+        </div>
+
+        <!-- STEPPER FORM -->
+        <div x-show="!submitted">
+
+          <div class="mb-12">
+            <span class="section-label">Votre projet</span>
+            <h1 class="section-title">Composez votre <span class="text-primary not-italic font-sans font-black uppercase text-3xl md:text-5xl tracking-tighter">devis sur mesure</span></h1>
+          </div>
+
+          <div class="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-14 items-start">
+
+            <!-- ─── FORM COLUMN ───────────────────────────── -->
+            <div>
+
+              <!-- Progress stepper -->
+              <div id="form-top" class="flex items-center mb-12">
+                <template x-for="s in [1,2,3]" :key="s">
+                  <div class="flex items-center">
+                    <button @click="goStep(s)"
+                      class="w-9 h-9 flex items-center justify-center text-[11px] font-black transition-all duration-300 shrink-0"
+                      :class="step > s ? 'bg-primary text-dark cursor-pointer' : step === s ? 'bg-primary text-dark' : 'bg-surface-2 text-white/30 cursor-default'">
+                      <span x-show="step > s">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
+                      <span x-show="step <= s" x-text="s"></span>
+                    </button>
+                    <div x-show="s < 3" class="h-px w-16 md:w-24 transition-all duration-500"
+                      :class="step > s ? 'bg-primary' : 'bg-white/10'"></div>
+                  </div>
+                </template>
+                <div class="ml-5">
+                  <div class="text-[11px] font-black uppercase tracking-[0.3em] text-white"
+                    x-text="['','Votre événement','Vos prestations','Vos coordonnées'][step]"></div>
+                  <div class="text-[10px] text-white/30 mt-0.5"
+                    x-text="'Étape '+step+' sur 3'"></div>
+                </div>
+              </div>
+
+              <!-- ──────────────────────────────────────────
+                   STEP 1 — Événement
+              ─────────────────────────────────────────── -->
+              <div x-show="step===1"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-x-6"
+                x-transition:enter-end="opacity-100 translate-x-0">
+                <div class="space-y-8">
+
+                  <div>
+                    <label class="f-label">Type d'événement</label>
+                    <div class="flex flex-wrap gap-2">
+                      <template x-for="t in D.eventTypes" :key="t">
+                        <button @click="ev.type = t"
+                          :class="ev.type===t ? 'border-primary bg-primary/10 text-primary' : 'border-white/10 text-white/50 hover:border-white/25 hover:text-white'"
+                          class="border px-4 py-2 text-[10px] uppercase font-black tracking-[0.2em] transition-all duration-150"
+                          x-text="t"></button>
+                      </template>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label class="f-label">Date souhaitée</label>
+                      <input type="date" x-model="ev.date" class="f-input" />
+                    </div>
+                    <div>
+                      <label class="f-label">Nombre de convives</label>
+                      <input type="number" x-model.number="ev.guests" min="1" placeholder="ex : 80" class="f-input placeholder-white/20" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="f-label">Lieu de l'événement</label>
+                    <input type="text" x-model="ev.lieu" placeholder="Ville, salle, domaine…" class="f-input placeholder-white/20" />
+                  </div>
+
+                  <div>
+                    <label class="f-label">Informations complémentaires <span class="text-white/25 normal-case font-normal">(optionnel)</span></label>
+                    <textarea x-model="ev.note" rows="3" placeholder="Allergies, thème, ambiance souhaitée…" class="f-input resize-none placeholder-white/20"></textarea>
+                  </div>
+
+                  <div class="flex justify-end pt-2">
+                    <button @click="if(ok1()){step=2;scrollToForm()}" :disabled="!ok1()"
+                      :class="ok1() ? 'btn-primary' : 'btn-primary opacity-30 cursor-not-allowed'">
+                      Continuer →
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ──────────────────────────────────────────
+                   STEP 2 — Prestations
+              ─────────────────────────────────────────── -->
+              <div x-show="step===2"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-x-6"
+                x-transition:enter-end="opacity-100 translate-x-0">
+                <div class="space-y-8">
+
+                  <!-- Sub-tab navigation -->
+                  <div class="flex items-center gap-0 border border-white/10 w-fit flex-wrap">
+                    <button @click="step2tab='brasero'"
+                      :class="step2tab==='brasero' ? 'bg-primary text-dark' : 'text-white/50 hover:text-white'"
+                      class="px-5 py-2.5 text-[9px] uppercase font-black tracking-[0.3em] transition-all duration-200">
+                      Braséro &amp; Grill
+                    </button>
+                    <button @click="step2tab='traiteur'"
+                      :class="step2tab==='traiteur' ? 'bg-primary text-dark' : 'text-white/50 hover:text-white'"
+                      class="px-5 py-2.5 text-[9px] uppercase font-black tracking-[0.3em] transition-all duration-200">
+                      Extras Traiteur
+                    </button>
+                    <button @click="step2tab='carte'"
+                      :class="step2tab==='carte' ? 'bg-primary text-dark' : 'text-white/50 hover:text-white'"
+                      class="px-5 py-2.5 text-[9px] uppercase font-black tracking-[0.3em] transition-all duration-200">
+                      À la Carte
+                    </button>
+                  </div>
+
+                  <!-- TAB: Braséro & Grill -->
+                  <div x-show="step2tab==='brasero'">
+                    <p class="text-white/35 text-xs mb-6">Prix par personne · service &amp; matériel inclus · choisissez une formule</p>
+                    <div class="space-y-3">
+                      <template x-for="menu in D.brazeroMenus" :key="menu.id">
+                        <div class="border transition-all duration-200 overflow-hidden"
+                          :class="brazero===menu.id ? 'border-primary/50' : 'border-white/10 hover:border-white/20'">
+                          <button @click="pickBrazero(menu.id)" class="w-full flex items-center gap-4 p-4 text-left">
+                            <div class="w-12 h-12 rounded-full overflow-hidden shrink-0 border-2 transition-colors duration-200"
+                              :class="brazero===menu.id ? 'border-primary' : 'border-white/10'">
+                              <img :src="menu.img" :alt="menu.title" class="w-full h-full object-cover" />
+                            </div>
+                            <div class="flex-grow min-w-0">
+                              <div class="flex items-center gap-2.5 mb-0.5">
+                                <div class="w-4 h-4 border-2 rounded-full flex items-center justify-center shrink-0 transition-colors duration-200"
+                                  :class="brazero===menu.id ? 'border-primary' : 'border-white/20'">
+                                  <div class="w-2 h-2 rounded-full bg-primary transition-all duration-200"
+                                    :class="brazero===menu.id ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"></div>
+                                </div>
+                                <span class="font-black text-white text-sm" x-text="menu.title"></span>
+                              </div>
+                              <p class="text-white/35 text-[11px] pl-[26px] leading-snug" x-text="menu.desc"></p>
+                            </div>
+                            <div class="text-right shrink-0 ml-2">
+                              <div class="font-black text-base transition-colors duration-200"
+                                :class="brazero===menu.id ? 'text-primary' : 'text-white/50'"
+                                x-text="menu.priceNum > 0 ? menu.price : 'Sur devis'"></div>
+                              <div class="text-[10px] text-white/25" x-text="menu.unit"></div>
+                            </div>
+                            <div @click.stop="openDetail===menu.id ? openDetail=null : openDetail=menu.id"
+                              class="shrink-0 ml-1 p-1 hover:text-primary transition-colors">
+                              <svg class="w-4 h-4 text-white/20 transition-transform duration-200"
+                                :class="openDetail===menu.id ? 'rotate-180 text-primary' : ''"
+                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"/>
+                              </svg>
+                            </div>
+                          </button>
+                          <div x-show="openDetail===menu.id" x-transition class="border-t border-white/5 bg-black/30">
+                            <div class="p-5 pl-16 grid grid-cols-1 sm:grid-cols-3 gap-5">
+                              <template x-for="det in menu.details" :key="det.t">
+                                <div>
+                                  <div class="text-[9px] uppercase font-black tracking-widest text-primary/60 mb-1.5" x-text="det.t"></div>
+                                  <p class="text-white/55 text-xs leading-relaxed" x-text="det.c"></p>
+                                </div>
+                              </template>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+
+                  <!-- TAB: Extras Traiteur -->
+                  <div x-show="step2tab==='traiteur'">
+                    <p class="text-white/35 text-xs mb-6">Planches, tapas et verrines pour compléter votre prestation — cliquez pour sélectionner</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <template x-for="item in D.traiteurItems" :key="item.id">
+                        <button @click="toggleT(item.id)"
+                          class="border transition-all duration-200 overflow-hidden text-left w-full"
+                          :class="tsel[item.id] ? 'border-primary/50' : 'border-white/10 hover:border-white/20'">
+                          <div class="h-24 overflow-hidden">
+                            <img :src="item.img" :alt="item.name"
+                              class="w-full h-full object-cover transition-opacity duration-300"
+                              :class="tsel[item.id] ? 'opacity-80' : 'opacity-40'" />
+                          </div>
+                          <div class="p-4">
+                            <!-- Checkbox visuel -->
+                            <div class="flex items-center gap-2.5 mb-1">
+                              <div class="w-4 h-4 border-2 rounded-full flex items-center justify-center shrink-0 transition-colors duration-200"
+                                :class="tsel[item.id] ? 'border-primary' : 'border-white/20'">
+                                <div class="w-2 h-2 rounded-full bg-primary transition-all duration-200"
+                                  :class="tsel[item.id] ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"></div>
+                              </div>
+                              <span class="font-black text-sm text-white" x-text="item.name"></span>
+                            </div>
+                            <div class="text-white/35 text-[11px] mb-3 pl-[26px]" x-text="item.desc"></div>
+                            <div class="pl-[26px]">
+                              <template x-if="!item.surDevis">
+                                <span>
+                                  <span class="font-black text-sm transition-colors duration-200"
+                                    :class="tsel[item.id] ? 'text-primary' : 'text-white/50'"
+                                    x-text="item.price.toFixed(2).replace('.',',')+'€'"></span>
+                                  <span class="text-white/35 text-[10px] ml-1" x-text="'/ '+item.unit"></span>
+                                </span>
+                              </template>
+                              <template x-if="item.surDevis">
+                                <span class="text-white/40 text-xs italic font-semibold">Sur devis</span>
+                              </template>
+                            </div>
+                          </div>
+                        </button>
+                      </template>
+                    </div>
+                  </div>
+
+                  <!-- TAB: À la Carte -->
+                  <div x-show="step2tab==='carte'">
+                    <p class="text-white/35 text-xs mb-6">Composez librement votre braséro — apéritifs et viandes au choix, prix par personne</p>
+                    <div class="space-y-8">
+                      <div>
+                        <div class="text-[9px] uppercase font-black tracking-widest text-primary/60 mb-3">Apéritifs</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <template x-for="item in D.carteAperitifs" :key="item.id">
+                            <button @click="toggleCarte('ap', item.id)"
+                              :class="carte.ap.includes(item.id)
+                                ? 'border-primary/60 bg-primary/10 text-primary'
+                                : 'border-white/10 text-white/50 hover:border-white/25 hover:text-white'"
+                              class="border p-3 text-left flex justify-between items-center transition-all duration-150 gap-3">
+                              <span class="text-xs font-bold leading-snug" x-text="item.name"></span>
+                              <span class="text-xs font-black shrink-0 opacity-70"
+                                x-text="item.price.toFixed(2).replace('.',',')+' €'"></span>
+                            </button>
+                          </template>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="text-[9px] uppercase font-black tracking-widest text-primary/60 mb-3">Viandes</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <template x-for="item in D.carteViandes" :key="item.id">
+                            <button @click="toggleCarte('vi', item.id)"
+                              :class="carte.vi.includes(item.id)
+                                ? 'border-primary/60 bg-primary/10 text-primary'
+                                : 'border-white/10 text-white/50 hover:border-white/25 hover:text-white'"
+                              class="border p-3 text-left flex justify-between items-center transition-all duration-150 gap-3 cursor-pointer">
+                              <span class="text-xs font-bold leading-snug" x-text="item.name"></span>
+                              <span class="text-xs font-black shrink-0 opacity-70"
+                                x-text="item.unit==='devis' ? 'Sur devis' : item.price.toFixed(2).replace('.',',')+' €'"></span>
+                            </button>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-between pt-2">
+                    <button @click="step=1;scrollToForm()" class="btn-ghost">← Retour</button>
+                    <button @click="if(ok2()){step=3;scrollToForm()}" :disabled="!ok2()"
+                      :class="ok2() ? 'btn-primary cursor-pointer' : 'btn-primary opacity-30 cursor-not-allowed'">
+                      Continuer →
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ──────────────────────────────────────────
+                   STEP 3 — Contact
+              ─────────────────────────────────────────── -->
+              <div x-show="step===3"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-x-6"
+                x-transition:enter-end="opacity-100 translate-x-0">
+                <div class="space-y-6">
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label class="f-label">Prénom</label>
+                      <input type="text" x-model="ct.prenom" placeholder="Jean" class="f-input placeholder-white/20" />
+                    </div>
+                    <div>
+                      <label class="f-label">Nom</label>
+                      <input type="text" x-model="ct.nom" placeholder="Dupont" class="f-input placeholder-white/20" />
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label class="f-label">Email</label>
+                      <input type="email" x-model="ct.email" placeholder="jean@email.com" class="f-input placeholder-white/20" />
+                    </div>
+                    <div>
+                      <label class="f-label">Téléphone</label>
+                      <input type="tel" x-model="ct.tel" placeholder="06 00 00 00 00" class="f-input placeholder-white/20" />
+                    </div>
+                  </div>
+
+                  <div class="flex justify-between pt-4">
+                    <button @click="step=2;scrollToForm()" class="btn-ghost">← Retour</button>
+                    <button @click="submit()" :disabled="!ok3()"
+                      :class="ok3() ? 'btn-primary cursor-pointer' : 'btn-primary opacity-30 cursor-not-allowed'">
+                      Envoyer ma demande →
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- ─── /FORM ───────────────────────────────── -->
+
+            <!-- ─── RÉCAP STICKY ────────────────────────── -->
+            <div class="xl:sticky xl:top-28">
+              <div class="bg-surface border border-white/10">
+
+                <div class="px-6 py-5 border-b border-white/10">
+                  <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">Récapitulatif estimatif</div>
+                </div>
+
+                <!-- Event -->
+                <div class="px-6 py-5 border-b border-white/10 space-y-2.5">
+                  <div class="flex justify-between text-sm gap-2">
+                    <span class="text-white/40 shrink-0">Événement</span>
+                    <span class="font-bold text-white text-right" x-text="ev.type||'—'"></span>
+                  </div>
+                  <div class="flex justify-between text-sm gap-2">
+                    <span class="text-white/40 shrink-0">Date</span>
+                    <span class="font-bold text-white text-right" x-text="ev.date ? fDate(ev.date) : '—'"></span>
+                  </div>
+                  <div class="flex justify-between text-sm gap-2">
+                    <span class="text-white/40 shrink-0">Convives</span>
+                    <span class="font-bold text-white text-right" x-text="ev.guests ? ev.guests+' pers.' : '—'"></span>
+                  </div>
+                  <div class="flex justify-between text-sm gap-2">
+                    <span class="text-white/40 shrink-0">Lieu</span>
+                    <span class="font-bold text-white text-right text-xs" x-text="ev.lieu||'—'"></span>
+                  </div>
+                </div>
+
+                <!-- Brazero -->
+                <div class="px-6 py-5 border-b border-white/10 min-h-[80px]">
+                  <div class="text-[9px] uppercase font-black tracking-widest text-secondary/50 mb-3">Formule Brazéro</div>
+                  <div x-show="!brazero" class="text-white/20 text-xs italic">Aucune formule sélectionnée</div>
+                  <template x-if="brazero">
+                    <div class="flex justify-between text-sm">
+                      <span class="text-white/80 font-bold" x-text="brazeroName()"></span>
+                      <span class="text-primary font-black" x-text="brazeroTotal()"></span>
+                    </div>
+                  </template>
+                </div>
+
+                <!-- À la Carte -->
+                <div class="px-6 py-5 border-b border-white/10 min-h-[60px]">
+                  <div class="text-[9px] uppercase font-black tracking-widest text-secondary/50 mb-3">À la Carte</div>
+                  <div x-show="!hasCarte()" class="text-white/20 text-xs italic">Aucune pièce sélectionnée</div>
+                  <div x-show="hasCarte()" class="space-y-1">
+                    <template x-for="id in carte.ap" :key="'a'+id">
+                      <div class="flex justify-between text-xs text-white/45 gap-2">
+                        <span x-text="carteName('ap',id)"></span>
+                        <span class="shrink-0" x-text="carteLineTotal('ap',id)"></span>
+                      </div>
+                    </template>
+                    <template x-for="id in carte.vi" :key="'v'+id">
+                      <div class="flex justify-between text-xs text-white/45 gap-2">
+                        <span x-text="carteName('vi',id)"></span>
+                        <span class="shrink-0" x-text="carteLineTotal('vi',id)"></span>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+
+                <!-- Traiteur -->
+                <div class="px-6 py-5 border-b border-white/10 min-h-[60px]">
+                  <div class="text-[9px] uppercase font-black tracking-widest text-secondary/50 mb-3">Extras Traiteur</div>
+                  <div x-show="!hasT()" class="text-white/20 text-xs italic">Aucun extra</div>
+                  <template x-for="item in D.traiteurItems" :key="item.id">
+                    <div x-show="tsel[item.id]" class="flex justify-between text-xs text-white/55 mb-1 gap-2">
+                      <span x-text="item.name"></span>
+                      <span class="shrink-0 italic" x-text="item.surDevis ? 'Sur devis' : (item.unit==='pers' ? fPricePP(item.price)+'/pers' : fPrice(item.price))"></span>
+                    </div>
+                  </template>
+                  <!-- Mention extras sur devis -->
+                  <div x-show="hasSurDevisT()" class="mt-3 pt-3 border-t border-white/5 text-[10px] text-primary/60 italic leading-relaxed">
+                    * Tarif calculé par Guillaume selon vos besoins
+                  </div>
+                </div>
+
+                <!-- Total -->
+                <div class="px-6 py-5">
+                  <div class="flex justify-between items-start gap-3">
+                    <div>
+                      <div class="text-[10px] uppercase font-black tracking-[0.3em] text-secondary">Estimation par personne</div>
+                      <div class="text-[10px] text-white/25 mt-0.5">Approximatif · hors déplacement</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-2xl font-black text-primary leading-none" x-text="totalPP()"></div>
+                      <div x-show="hasForfait()" class="text-[10px] text-white/40 mt-1" x-text="'+ '+fPrice(totalForfait())+' forfait'"></div>
+                      <div x-show="hasSurDevisT() || hasCarteDevis()" class="text-[10px] text-primary/50 italic mt-1">+ extras sur devis</div>
+                    </div>
+                  </div>
+                  <p class="text-[10px] text-white/20 mt-4 leading-relaxed">Estimation approximative. Guillaume vous enverra un devis précis après étude de votre projet.</p>
+                </div>
+
+              </div>
+            </div>
+            <!-- ─── /RÉCAP ───────────────────────────────── -->
+
+          </div>
+        </div><!-- /form -->
+      </div><!-- /tab form -->
+
+
+      <!-- ══════════════════════════════════════════════════
+           TAB ADMIN
+      ═════════════════════════════════════════════════════ -->
+      <div x-show="tab==='admin'" x-transition>
+
+        <!-- ── LOGIN ─────────────────────────────────────── -->
+        <div x-show="!adminAuth" class="max-w-sm mx-auto py-20">
+          <div class="mb-10">
+            <span class="section-label">Espace privé</span>
+            <h2 class="text-5xl font-serif italic leading-tight">Accès<br/>boucher</h2>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="f-label">Mot de passe</label>
+              <input type="password" x-model="adminPwd" @keyup.enter="checkAdmin()"
+                placeholder="••••••••••••" class="f-input placeholder-white/15" />
+            </div>
+            <div x-show="adminErr"
+              class="text-[10px] uppercase font-black tracking-[0.3em] text-primary/80 border-l-2 border-primary/60 pl-4 py-1">
+              Mot de passe incorrect
+            </div>
+            <button @click="checkAdmin()" class="btn-primary w-full text-center block mt-2">
+              Accéder →
+            </button>
+          </div>
+        </div>
+
+        <!-- ── DASHBOARD ──────────────────────────────────── -->
+        <div x-show="adminAuth">
+
+          <!-- Header -->
+          <div class="flex items-end justify-between mb-14 border-b border-white/10 pb-8 flex-wrap gap-4">
+            <div>
+              <span class="section-label">Espace boucher</span>
+              <h2 class="text-5xl md:text-6xl font-serif italic leading-none">Gestion des <span class="text-primary">devis</span></h2>
+            </div>
+            <button @click="adminAuth=false; adminPwd=''; loadDevis()"
+              class="flex items-center gap-3 text-[10px] uppercase font-black tracking-[0.3em] text-secondary hover:text-white transition-colors group">
+              <svg class="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              Déconnexion
+            </button>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 mb-14">
+            <!-- Total -->
+            <div class="bg-dark p-8 flex flex-col gap-3">
+              <div class="text-5xl font-black text-white tracking-tight" x-text="list.length"></div>
+              <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">Demandes reçues</div>
+            </div>
+            <!-- En attente -->
+            <div class="bg-dark p-8 flex flex-col gap-3 relative overflow-hidden">
+              <div class="absolute top-0 left-0 w-full h-0.5 bg-primary"></div>
+              <div class="text-5xl font-black text-primary tracking-tight" x-text="list.filter(d=>d.status==='pending').length"></div>
+              <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">En attente</div>
+            </div>
+            <!-- Répondus -->
+            <div class="bg-dark p-8 flex flex-col gap-3">
+              <div class="text-5xl font-black text-white/70 tracking-tight" x-text="list.filter(d=>d.status==='responded').length"></div>
+              <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">Répondus</div>
+            </div>
+            <!-- Acceptés -->
+            <div class="bg-dark p-8 flex flex-col gap-3">
+              <div class="text-5xl font-black text-white/70 tracking-tight" x-text="list.filter(d=>d.status==='accepted').length"></div>
+              <div class="text-[10px] uppercase font-black tracking-[0.4em] text-secondary">Acceptés</div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="flex flex-wrap items-center gap-0 mb-6 border border-white/10 w-fit">
+            <template x-for="f in ['all','pending','read','responded','accepted']" :key="f">
+              <button @click="aFilter=f"
+                :class="aFilter===f ? 'bg-primary text-dark' : 'text-secondary hover:text-white'"
+                class="px-6 py-2.5 text-[9px] uppercase font-black tracking-[0.35em] transition-all duration-150"
+                x-text="{'all':'Tous','pending':'En attente','read':'Lus','responded':'Répondus','accepted':'Acceptés'}[f]">
+              </button>
+            </template>
+          </div>
+
+          <!-- Count -->
+          <div class="text-[10px] uppercase font-black tracking-[0.3em] text-secondary/50 mb-4">
+            <span x-text="filteredList().length"></span> demande<span x-show="filteredList().length > 1">s</span>
+          </div>
+
+          <!-- Empty state -->
+          <div x-show="filteredList().length===0" class="py-24 border border-white/5 flex flex-col items-center justify-center gap-6">
+            <div class="w-12 h-px bg-primary/40"></div>
+            <div class="text-[10px] uppercase font-black tracking-[0.5em] text-secondary/40">Aucune demande pour ce filtre</div>
+            <div class="w-12 h-px bg-primary/40"></div>
+          </div>
+
+          <!-- Devis list -->
+          <div class="space-y-px">
+            <template x-for="d in filteredList()" :key="d.id">
+              <div class="bg-surface-2 transition-colors duration-200 border-l-2"
+                :class="openD===d.id ? 'border-l-primary' : (d.status==='pending' ? 'border-l-primary/40' : 'border-l-transparent hover:border-l-white/20')">
+
+                <!-- Row header -->
+                <button @click="openDevis(d)" class="w-full px-6 py-5 text-left flex items-center gap-5 flex-wrap">
+
+                  <!-- Status marker -->
+                  <div class="shrink-0 w-1.5 h-8 transition-colors duration-200"
+                    :class="{
+                      'bg-primary':       d.status==='pending',
+                      'bg-white/20':      d.status==='read',
+                      'bg-white/50':      d.status==='responded',
+                      'bg-primary/60':    d.status==='accepted'
+                    }">
+                  </div>
+
+                  <!-- Name + event -->
+                  <div class="flex-grow min-w-0">
+                    <div class="flex items-baseline gap-3 flex-wrap">
+                      <span class="font-black text-white text-[15px]" x-text="d.ct.prenom+' '+d.ct.nom"></span>
+                      <span class="text-[10px] uppercase font-black tracking-[0.2em] text-secondary/60" x-text="d.ev.type"></span>
+                    </div>
+                    <div class="text-[11px] text-secondary/60 mt-1 font-light tracking-wide"
+                      x-text="fDate(d.ev.date)+' · '+d.ev.guests+' convives · '+d.ev.lieu"></div>
+                  </div>
+
+                  <!-- Estimatif + date -->
+                  <div class="hidden md:block text-right shrink-0">
+                    <div class="font-black text-primary tracking-tight" x-text="d.estimatif"></div>
+                    <div class="text-[10px] text-secondary/40 mt-0.5" x-text="fDate(d.createdAt)"></div>
+                  </div>
+
+                  <!-- Status badge -->
+                  <div class="shrink-0 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.3em] border transition-colors duration-200"
+                    :class="{
+                      'border-primary/40 text-primary bg-primary/5':   d.status==='pending',
+                      'border-white/10 text-secondary/60':              d.status==='read',
+                      'border-white/20 text-white/60':                  d.status==='responded',
+                      'border-primary/20 text-primary/60':              d.status==='accepted'
+                    }"
+                    x-text="sLabel(d.status)">
+                  </div>
+
+                  <!-- Chevron -->
+                  <svg class="w-4 h-4 text-secondary/30 shrink-0 transition-transform duration-300"
+                    :class="openD===d.id ? 'rotate-180' : ''"
+                    fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+
+                <!-- Expanded detail -->
+                <div x-show="openD===d.id" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                  class="border-t border-white/5 bg-black/20">
+                  <div class="px-6 py-8 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
+
+                    <!-- ── Fiche client ── -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+
+                      <!-- Contact -->
+                      <div>
+                        <div class="a-label">Contact</div>
+                        <div class="space-y-2.5">
+                          <div>
+                            <div class="text-[10px] text-secondary/50 uppercase tracking-widest mb-0.5">Email</div>
+                            <a :href="'mailto:'+d.ct.email"
+                              class="text-sm text-white hover:text-primary transition-colors font-medium break-all"
+                              x-text="d.ct.email"></a>
+                          </div>
+                          <div>
+                            <div class="text-[10px] text-secondary/50 uppercase tracking-widest mb-0.5">Téléphone</div>
+                            <a :href="'tel:'+d.ct.tel"
+                              class="text-sm text-white hover:text-primary transition-colors font-medium"
+                              x-text="d.ct.tel"></a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Événement -->
+                      <div>
+                        <div class="a-label">Événement</div>
+                        <div class="space-y-1.5 text-sm">
+                          <div class="flex gap-2"><span class="text-secondary/50 shrink-0 w-16 text-[11px]">Type</span><span class="text-white" x-text="d.ev.type||'—'"></span></div>
+                          <div class="flex gap-2"><span class="text-secondary/50 shrink-0 w-16 text-[11px]">Date</span><span class="text-white" x-text="fDate(d.ev.date)"></span></div>
+                          <div class="flex gap-2"><span class="text-secondary/50 shrink-0 w-16 text-[11px]">Convives</span><span class="text-white" x-text="d.ev.guests+' pers.'"></span></div>
+                          <div class="flex gap-2"><span class="text-secondary/50 shrink-0 w-16 text-[11px]">Lieu</span><span class="text-white" x-text="d.ev.lieu||'—'"></span></div>
+                          <div x-show="d.ev.note" class="flex gap-2 pt-1">
+                            <span class="text-secondary/50 shrink-0 w-16 text-[11px]">Note</span>
+                            <span class="text-white/70 italic text-xs leading-relaxed" x-text="d.ev.note"></span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Prestations -->
+                      <div>
+                        <div class="a-label">Prestations</div>
+                        <div class="space-y-1.5 text-sm">
+                          <div x-show="d.brazero" class="font-bold text-white" x-text="d.brazero"></div>
+                          <template x-for="it in (d.carteAp||[])" :key="it">
+                            <div class="text-secondary/60 text-xs flex gap-2">
+                              <span class="text-primary/50 shrink-0">—</span><span x-text="it"></span>
+                            </div>
+                          </template>
+                          <template x-for="it in (d.carteVi||[])" :key="it">
+                            <div class="text-secondary/60 text-xs flex gap-2">
+                              <span class="text-primary/50 shrink-0">—</span><span x-text="it"></span>
+                            </div>
+                          </template>
+                          <template x-for="t in (d.traiteur||[])" :key="t.name">
+                            <div class="text-secondary/70 text-xs flex gap-2">
+                              <span class="text-primary/50 shrink-0">—</span>
+                              <span x-text="t.name+' ×'+t.qty"></span>
+                            </div>
+                          </template>
+                          <div x-show="!d.brazero && (!d.traiteur||d.traiteur.length===0)"
+                            class="text-secondary/30 italic text-xs">Aucune prestation renseignée</div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-white/5">
+                          <div class="text-[10px] text-secondary/40 uppercase tracking-widest mb-1">Estimation</div>
+                          <div class="font-black text-primary text-lg" x-text="d.estimatif"></div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!-- ── Actions boucher ── -->
+                    <div class="border-l border-white/5 pl-10 space-y-7">
+
+                      <!-- Statut -->
+                      <div>
+                        <div class="a-label">Modifier le statut</div>
+                        <div class="space-y-1.5">
+                          <template x-for="s in ['pending','read','responded','accepted']" :key="s">
+                            <button @click="setStatus(d,s)"
+                              class="w-full flex items-center justify-between px-4 py-2.5 border transition-all duration-150 text-left group"
+                              :class="d.status===s
+                                ? 'border-primary bg-primary/8 text-primary'
+                                : 'border-white/8 text-secondary/50 hover:border-white/15 hover:text-white/70'">
+                              <span class="text-[9px] uppercase font-black tracking-[0.3em]" x-text="sLabel(s)"></span>
+                              <svg x-show="d.status===s" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"/>
+                              </svg>
+                            </button>
+                          </template>
+                        </div>
+                      </div>
+
+                      <!-- Contacts rapides -->
+                      <div class="grid grid-cols-2 gap-2">
+                        <a :href="d.ct.email ? 'mailto:'+d.ct.email+'?subject=Votre devis - Boucherie Chez Guillaume&body=Bonjour '+d.ct.prenom+',' : '#'"
+                          :class="!d.ct.email && 'opacity-30 pointer-events-none'"
+                          class="btn-primary !py-3 !px-4 text-center flex items-center justify-center gap-2 !text-[9px]">
+                          <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                          </svg>
+                          Répondre
+                        </a>
+                        <a :href="d.ct.tel ? 'tel:'+d.ct.tel : '#'"
+                          :class="!d.ct.tel && 'opacity-30 pointer-events-none'"
+                          class="btn-ghost !py-3 !px-4 text-center flex items-center justify-center gap-2 !text-[9px]">
+                          <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                          </svg>
+                          Appeler
+                        </a>
+                      </div>
+
+                      <!-- Notes internes -->
+                      <div>
+                        <div class="a-label">Notes internes</div>
+                        <textarea x-model="d.note" rows="4"
+                          placeholder="Tarif négocié, remarques logistiques…"
+                          class="f-input resize-none placeholder-white/15 text-sm"></textarea>
+                        <button @click="saveList()"
+                          class="mt-3 inline-flex items-center gap-2 text-[10px] uppercase font-black tracking-[0.3em] text-primary hover:text-primary-dark transition-colors">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                          Sauvegarder
+                        </button>
+                      </div>
+
+                      <!-- Suppression -->
+                      <div class="pt-4 border-t border-white/5">
+                        <button @click="delDevis(d.id)"
+                          class="inline-flex items-center gap-2 text-[9px] uppercase font-black tracking-[0.3em] text-secondary/30 hover:text-secondary transition-colors">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                          </svg>
+                          Supprimer ce devis
+                        </button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </template>
+          </div>
+
+        </div><!-- /dashboard -->
+      </div><!-- /tab admin -->
+
+    </div>
+  </div>
+
+  <style is:inline>
+    .f-label {
+      display: block;
+      font-size: 10px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.4em;
+      color: #A0A0A0; margin-bottom: 10px;
+    }
+    .f-input {
+      width: 100%; background: #242424;
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #fff; padding: 12px 16px; font-size: 14px;
+      outline: none; transition: border-color 0.2s; display: block;
+    }
+    .f-input:focus { border-color: #F5C518; }
+    .a-label {
+      font-size: 9px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.4em;
+      color: rgba(160,160,160,0.55); margin-bottom: 10px;
+    }
+  </style>
+
+  <script is:inline>
+    function devisApp() {
+      const D = window.__D__;
+      return {
+        tab: 'form', step: 1, submitted: false, D,
+
+        /* form */
+        ev:  { type:'', date:'', guests:'', lieu:'', note:'' },
+        brazero: null,
+        openDetail: null,
+        step2tab: 'brasero',
+        carte: { ap:[], vi:[] },
+        tsel: {},
+        ct: { prenom:'', nom:'', email:'', tel:'' },
+
+        /* admin */
+        adminPwd:'', adminAuth:false, adminErr:false,
+        list:[], openD:null, aFilter:'all',
+
+        init() { this.loadDevis(); },
+
+        goStep(s) { if (s < this.step) { this.step = s; this.scrollToForm(); } },
+        scrollToForm() {
+          this.$nextTick(() => {
+            const el = document.getElementById('form-top');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        },
+
+        /* brazero */
+        pickBrazero(id) {
+          if (this.brazero === id) { this.brazero = null; }
+          else { this.brazero = id; this.openDetail = id; }
+        },
+
+        /* à la carte */
+        toggleCarte(cat, id) {
+          const arr = this.carte[cat];
+          const i = arr.indexOf(id);
+          i === -1 ? arr.push(id) : arr.splice(i, 1);
+        },
+        hasCarte() { return this.carte.ap.length > 0 || this.carte.vi.length > 0; },
+
+        /* traiteur */
+        toggleT(id) { this.tsel[id] = !this.tsel[id]; },
+        hasT() { return Object.values(this.tsel).some(v => v); },
+        hasSurDevisT() { return D.traiteurItems.filter(it => it.surDevis).some(it => this.tsel[it.id]); },
+        hasForfait() { return D.traiteurItems.filter(it => !it.surDevis && it.unit !== 'pers').some(it => this.tsel[it.id]); },
+        totalForfait() {
+          let t = 0;
+          D.traiteurItems.filter(it => !it.surDevis && it.unit !== 'pers').forEach(it => { if (this.tsel[it.id]) t += it.price; });
+          return t;
+        },
+        tLineTotal(item) {
+          if (item.surDevis || !this.tsel[item.id]) return 0;
+          return item.price;
+        },
+
+        /* recap */
+        brazeroName() {
+          const m = D.brazeroMenus.find(m => m.id === this.brazero);
+          return m ? m.title : '';
+        },
+        brazeroTotal() {
+          const m = D.brazeroMenus.find(m => m.id === this.brazero);
+          if (!m || m.priceNum === 0) return 'Sur devis';
+          return this.fPricePP(m.priceNum) + ' / pers';
+        },
+        carteName(cat, id) {
+          const src = cat==='ap' ? D.carteAperitifs : D.carteViandes;
+          const it = src.find(i=>i.id===id); return it ? it.name : '';
+        },
+        carteLineTotal(cat, id) {
+          const src = cat==='ap' ? D.carteAperitifs : D.carteViandes;
+          const it = src.find(i=>i.id===id);
+          if (!it || it.unit==='devis') return 'Sur devis';
+          return this.fPricePP(it.price) + ' / pers';
+        },
+        hasCarteDevis() {
+          return this.carte.vi.some(id => { const it = D.carteViandes.find(i=>i.id===id); return it && it.unit==='devis'; });
+        },
+        /* prix par personne = brazero + carte */
+        ppBase() {
+          let pp = 0;
+          if (this.brazero) {
+            const m = D.brazeroMenus.find(m=>m.id===this.brazero);
+            if (m && m.priceNum > 0) pp += m.priceNum;
+          }
+          this.carte.ap.forEach(id => { const it=D.carteAperitifs.find(i=>i.id===id); if(it) pp+=it.price; });
+          this.carte.vi.forEach(id => { const it=D.carteViandes.find(i=>i.id===id); if(it && it.unit!=='devis') pp+=it.price; });
+          D.traiteurItems.filter(it=>!it.surDevis && it.unit==='pers').forEach(it => { if (this.tsel[it.id]) pp += it.price; });
+          return pp;
+        },
+        totalPP() {
+          const pp = this.ppBase();
+          if (pp === 0 && !this.hasSurDevisT() && !this.hasCarteDevis() && !this.hasForfait()) return '—';
+          if (pp === 0) return 'Sur devis';
+          return this.fPricePP(pp) + ' / pers';
+        },
+        total() { return this.totalPP(); },
+        fPrice(n) {
+          return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
+        },
+        fPricePP(n) {
+          return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+        },
+        fDate(d) {
+          if (!d) return '—';
+          try { return new Date(d+'T00:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}); }
+          catch(e) { return d; }
+        },
+
+        ok1() { return this.ev.type && this.ev.date && this.ev.guests > 0 && this.ev.lieu; },
+        ok2() { return !!this.brazero || this.hasT() || this.hasCarte(); },
+        ok3() { return this.ct.prenom && this.ct.nom && this.ct.email && this.ct.tel; },
+
+        async submit() {
+          if (!this.ok3()) return;
+          const m = D.brazeroMenus.find(m=>m.id===this.brazero);
+
+          // Sauvegarde locale (back office simple)
+          const entry = {
+            id: Date.now().toString(),
+            createdAt: new Date().toISOString(),
+            status: 'pending',
+            ev: { ...this.ev },
+            brazero: m ? m.title : null,
+            carteAp: this.carte.ap.map(id => this.carteName('ap',id)),
+            carteVi: this.carte.vi.map(id => this.carteName('vi',id)),
+            traiteur: D.traiteurItems.filter(it=>this.tsel[it.id]).map(it=>({ name:it.name })),
+            ct: { ...this.ct },
+            estimatif: this.ppBase() > 0 ? this.fPricePP(this.ppBase())+'/pers' : 'Sur devis',
+            note: '',
+          };
+          const saved = JSON.parse(localStorage.getItem('chezgu_devis')||'[]');
+          saved.unshift(entry);
+          localStorage.setItem('chezgu_devis', JSON.stringify(saved));
+
+          // Construire le payload pour l'API Symfony
+          const options = [];
+          if (m) {
+            options.push({ slug: m.id, label: m.title, prix_base: m.priceNum, unite: 'par_personne' });
+          }
+          this.carte.ap.forEach(id => {
+            const item = D.carteAperitifs.find(a => a.id === id);
+            if (item) options.push({ slug: item.id, label: item.name, prix_base: item.price, unite: 'par_personne' });
+          });
+          this.carte.vi.forEach(id => {
+            const item = D.carteViandes.find(v => v.id === id);
+            if (item) options.push({ slug: item.id, label: item.name, prix_base: item.price, unite: 'par_personne' });
+          });
+          D.traiteurItems.filter(it => this.tsel[it.id]).forEach(it => {
+            options.push({ slug: it.id, label: it.name, prix_base: it.price, unite: it.surDevis ? 'sur_devis' : (it.unit === 'pers' ? 'par_personne' : 'forfait') });
+          });
+
+          const prestSlug = this.brazero ? 'brasero' : (this.hasCarte() ? 'carte' : 'traiteur');
+          const apiPayload = {
+            prestation_slug: prestSlug,
+            nb_personnes: parseInt(this.ev.guests) || 1,
+            client_nom: this.ct.nom,
+            client_prenom: this.ct.prenom,
+            client_email: this.ct.email,
+            client_telephone: this.ct.tel,
+            date_evenement: this.ev.date || null,
+            lieu: 'a_definir',
+            lieu_detail: this.ev.lieu || '',
+            client_message: [this.ev.type ? 'Événement : ' + this.ev.type : '', this.ev.note || ''].filter(Boolean).join('\n'),
+            options,
+          };
+
+          try {
+            const res = await fetch('https://admin.boucheriechezguillaume.fr/api/devis', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(apiPayload),
+            });
+            if (!res.ok) console.warn('API erreur', res.status);
+          } catch(e) {
+            console.warn('API indisponible, devis sauvegardé localement.', e);
+          }
+
+          this.submitted = true;
+        },
+
+        resetForm() {
+          this.submitted=false; this.step=1; this.step2tab='brasero';
+          this.ev={type:'',date:'',guests:'',lieu:'',note:''};
+          this.brazero=null; this.openDetail=null;
+          this.carte={ap:[],vi:[]};
+          this.tsel={};
+          this.ct={prenom:'',nom:'',email:'',tel:''};
+        },
+
+        /* admin */
+        checkAdmin() {
+          if (this.adminPwd==='Guillaume82') { this.adminAuth=true; this.adminErr=false; this.loadDevis(); }
+          else this.adminErr=true;
+        },
+        loadDevis() { this.list = JSON.parse(localStorage.getItem('chezgu_devis')||'[]'); },
+        saveList() { localStorage.setItem('chezgu_devis', JSON.stringify(this.list)); },
+        openDevis(d) {
+          if (this.openD===d.id) { this.openD=null; return; }
+          this.openD=d.id;
+          if (d.status==='pending') { d.status='read'; this.saveList(); }
+        },
+        setStatus(d,s) { d.status=s; this.saveList(); },
+        delDevis(id) {
+          if(!confirm('Supprimer ce devis ?')) return;
+          this.list=this.list.filter(d=>d.id!==id); this.saveList();
+          if(this.openD===id) this.openD=null;
+        },
+        filteredList() {
+          const l = this.aFilter==='all' ? this.list : this.list.filter(d=>d.status===this.aFilter);
+          return l.slice().sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+        },
+        sLabel(s) {
+          return {pending:'En attente',read:'Lu',responded:'Répondu',accepted:'Accepté'}[s]||s;
+        },
+      };
+    }
+  </script>
+</Layout>
